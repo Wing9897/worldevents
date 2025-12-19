@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>World Events Dashboard</title>
+    <meta name="description" content="互動式世界地圖事件追蹤系統，使用 Phantom 錢包登入">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- 模組化 CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/myevents.css">
+    <link rel="stylesheet" href="css/subscription.css">
+
+
+</head>
+
+<body>
+    <!-- 頂部導航欄 -->
+    <header class="navbar">
+        <div class="navbar-brand">
+            <span class="logo">🌍</span>
+            <h1 data-i18n="title">世界事件 Dashboard</h1>
+
+            <!-- 地圖主題切換 -->
+            <button class="theme-toggle" id="themeToggle" title="切換地圖主題">
+                <span class="theme-icon" id="themeIcon">☀️</span>
+            </button>
+        </div>
+
+        <!-- 語言選擇器已移至 walletInfo -->
+        <div class="navbar-center"></div>
+
+        <div class="navbar-wallet">
+            <button id="connectWallet" class="btn btn-primary">
+                <span class="wallet-icon">👻</span>
+                <span data-i18n="connectWallet">連接 Phantom 錢包</span>
+            </button>
+            <div id="walletInfo" class="wallet-info hidden">
+                <!-- 緊湊型語言選擇器 -->
+                <div class="lang-compact" id="langCompact">
+                    <button class="lang-btn-compact" id="langBtnCompact" title="選擇語言">
+                        <img class="flag-icon-sm" id="currentFlagCompact" src="" alt="" />
+                    </button>
+                    <div class="lang-dropdown-compact hidden" id="langDropdownCompact"></div>
+                </div>
+                <span id="walletAddress" class="wallet-address-full" title="點擊複製"></span>
+                <span id="eventLimit" class="event-limit"></span>
+                <button id="myEventsBtn" class="btn btn-outline hidden" data-i18n="managementCenter">⚙️ 管理中心</button>
+                <button id="disconnectWallet" class="btn btn-ghost" data-i18n="disconnect">斷開</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="main-container">
+        <!-- 過濾器面板收起按鈕 -->
+        <button class="panel-toggle" id="panelToggle" title="收起/展開過濾器">
+            <span class="toggle-icon" id="toggleIcon">◀</span>
+        </button>
+
+        <!-- 過濾器面板 -->
+        <aside class="filter-panel" id="filterPanel">
+            <div class="panel-header">
+                <h2 data-i18n="filters">🔍 過濾器</h2>
+                <button id="clearFilters" class="btn btn-ghost btn-sm" data-i18n="clear">清除</button>
+            </div>
+
+            <div class="filter-group">
+                <label data-i18n="timeRange">時間範圍</label>
+                <div class="quick-dates">
+                    <button class="quick-btn" data-range="1h" data-i18n="hour1">1小時</button>
+                    <button class="quick-btn" data-range="3h" data-i18n="hour3">3小時</button>
+                    <button class="quick-btn" data-range="6h" data-i18n="hour6">6小時</button>
+                    <button class="quick-btn" data-range="12h" data-i18n="hour12">12小時</button>
+                    <button class="quick-btn active" data-range="today" data-i18n="today">今日</button>
+                </div>
+                <div class="quick-dates">
+                    <button class="quick-btn" data-range="week" data-i18n="week">本週</button>
+                    <button class="quick-btn" data-range="month" data-i18n="month">本月</button>
+                    <button class="quick-btn" data-range="year" data-i18n="year">本年</button>
+                    <button class="quick-btn" data-range="all" data-i18n="all">全部</button>
+                </div>
+                <div class="date-inputs">
+                    <div class="date-field">
+                        <span class="date-label" data-i18n="from">從</span>
+                        <div class="date-input-wrapper">
+                            <input type="datetime-local" id="startDate" class="input date-input" required>
+                            <span class="date-placeholder" data-i18n="selectDateTime">選擇日期時間</span>
+                        </div>
+                    </div>
+                    <div class="date-field">
+                        <span class="date-label" data-i18n="to">至</span>
+                        <div class="date-input-wrapper">
+                            <input type="datetime-local" id="endDate" class="input date-input" required>
+                            <span class="date-placeholder" data-i18n="selectDateTime">選擇日期時間</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label data-i18n="filterMode">篩選模式</label>
+                <select id="dateFilterMode" class="input">
+                    <option value="start" data-i18n="modeStart">開始於</option>
+                    <option value="end" data-i18n="modeEnd">結束於</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label data-i18n="eventRegion">地區</label>
+                <div class="region-selector" id="regionSelector">
+                    <button class="region-btn" id="regionBtn">
+                        <img class="flag-icon" id="currentRegionFlag" src="" alt="" />
+                        <span id="currentRegionName" data-i18n="allRegions">全部地區</span>
+                        <span class="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="region-dropdown hidden" id="regionDropdown"></div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label data-i18n="keywords">關鍵字標籤</label>
+                <input type="text" id="eventTypeFilter" class="input" data-i18n-placeholder="keywordsPlaceholder"
+                    placeholder="輸入關鍵字...">
+                <p class="filter-hint" data-i18n="keywordsHint">多個關鍵字用逗號分隔</p>
+            </div>
+
+            <button id="applyFilters" class="btn btn-primary btn-block" data-i18n="applyFilters">套用過濾器</button>
+
+            <!-- 新增事件按鈕 -->
+            <div class="add-event-section">
+                <button id="showAddEvent" class="btn btn-accent btn-block" disabled data-i18n="addEvent">
+                    ➕ 新增事件
+                </button>
+                <p class="add-event-hint" data-i18n="addEventHint">連接錢包後，右鍵地圖可直接新增事件</p>
+            </div>
+
+            <!-- 社交媒體連結 (由 JS 動態生成) -->
+            <div id="socialLinks" class="social-links"></div>
+        </aside>
+
+        <!-- 地圖區域 -->
+        <div class="map-container">
+            <div id="map"></div>
+
+            <!-- 右鍵創建事件時的位置指針（簡潔版） -->
+            <div id="locationMarker" class="location-marker hidden">
+                <div class="marker-dot"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 右鍵選單 -->
+    <div id="contextMenu" class="context-menu hidden">
+        <div class="context-coords" id="contextCoords">
+            <span class="coords-label" data-i18n="lat">緯度</span>: <span id="contextLat">0.0000</span>
+            <span class="coords-label" data-i18n="lng">經度</span>: <span id="contextLng">0.0000</span>
+        </div>
+        <div class="context-menu-item" id="createEventHere">
+            <span class="context-icon">📍</span>
+            <span data-i18n="addEventHere">在此位置新增事件</span>
+        </div>
+    </div>
+
+    <!-- 事件詳情卡片 -->
+    <div id="eventCard" class="event-card hidden">
+        <button id="closeCard" class="card-close">✕</button>
+        <!-- 事件圖片 -->
+        <div class="card-image hidden" id="cardImage">
+            <img id="cardImg" src="" alt="事件圖片">
+        </div>
+        <div class="card-header">
+            <h3 id="cardTitle"></h3>
+        </div>
+        <div class="card-tags" id="cardTags"></div>
+        <div class="card-content">
+            <div class="card-meta">
+                <div class="meta-item start-date-item">
+                    <span class="meta-icon">📅</span>
+                    <div class="date-time-group">
+                        <span id="cardStartDateOnly" class="date-only"></span>
+                        <span id="cardStartTimeOnly" class="time-only"></span>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">📍</span>
+                    <span id="cardLocation"></span>
+                </div>
+                <div class="meta-item full-width">
+                    <span class="meta-icon">👛</span>
+                    <span id="cardUser" class="wallet-mono"></span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-icon">🌐</span>
+                    <span id="cardLanguage"></span>
+                </div>
+            </div>
+            <p id="cardDescription" class="card-description"></p>
+            <div class="card-end-time" id="cardEndTimeRow">
+                <!-- 動態填充，由 JavaScript 處理多語言 -->
+            </div>
+            <!-- Solana 交易連結 -->
+            <div class="card-solana-tx hidden" id="cardSolanaTx">
+                <a id="cardSolanaTxLink" href="" target="_blank" class="solana-tx-link">
+                    <span class="solana-icon">◎</span>
+                    <span data-i18n="viewOnSolana">在 Solana Explorer 查看</span>
+                </a>
+            </div>
+            <!-- 訂閱按鈕區域 -->
+            <div class="card-creator-actions" id="cardCreatorActions">
+                <div class="creator-info">
+                    <span class="creator-role-badge" id="cardCreatorRole"></span>
+                    <span class="creator-subscribers" id="cardSubscriberCount"></span>
+                </div>
+                <button id="cardSubscribeBtn" class="btn btn-subscribe" data-wallet="">
+                    <span data-i18n="subscribe">訂閱</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增事件彈窗 -->
+    <div id="addEventModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="addEventTitle">➕ 新增事件</h3>
+                <button id="closeModal" class="card-close">✕</button>
+            </div>
+            <form id="addEventForm" class="modal-form">
+                <div class="form-group">
+                    <label data-i18n="eventName">事件名稱 * <span class="char-limit onchain-only">(最多50字)</span></label>
+                    <input type="text" id="eventName" class="input" required
+                        data-i18n-placeholder="eventNamePlaceholder">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="description">描述 <span class="char-limit onchain-only">(最多100字)</span></label>
+                    <textarea id="eventDescription" class="input textarea"
+                        data-i18n-placeholder="eventDescPlaceholder"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="lat">緯度 *</label>
+                        <input type="number" id="eventLat" class="input" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="lng">經度 *</label>
+                        <input type="number" id="eventLng" class="input" step="any" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="startDateTime">開始日期與時間 *</label>
+                    <div class="datetime-input-wrapper">
+                        <input type="datetime-local" id="eventStartDate" class="input" required lang="en">
+                        <button type="button" class="datetime-btn" id="openStartDatePicker" title="選擇開始時間"
+                            data-i18n-title="selectStartTime">📅</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="endDateTime">結束日期與時間 (可選)</label>
+                    <div class="datetime-input-wrapper">
+                        <input type="datetime-local" id="eventEndDate" class="input" lang="en">
+                        <button type="button" class="datetime-btn" id="openEndDatePicker" title="選擇結束時間"
+                            data-i18n-title="selectEndTime">📅</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="keywords">關鍵字標籤</label>
+                    <input type="text" id="eventTags" class="input" data-i18n-placeholder="tagsPlaceholder"
+                        placeholder="會議, 科技, 區塊鏈...">
+                    <p class="filter-hint" data-i18n="keywordsHint">用逗號分隔多個關鍵字</p>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="language">語言</label>
+                    <select id="eventLanguage" class="input"></select>
+                </div>
+
+                <!-- 圖標選擇器 -->
+                <div class="form-group">
+                    <label data-i18n="selectIcon">選擇圖標</label>
+                    <div class="icon-picker" id="iconPicker">
+                        <!-- 由 JavaScript 生成 -->
+                    </div>
+                    <input type="hidden" id="eventIcon" value="📍">
+                </div>
+
+                <!-- IPFS 圖片 (未來功能) -->
+                <div class="form-group">
+                    <label>IPFS 圖片 <span class="badge-coming-soon">即將推出</span></label>
+                    <input type="text" id="eventIpfsHash" class="input" placeholder="Qm... 或 bafy..." disabled
+                        title="此功能正在開發中">
+                    <p class="filter-hint">支援 IPFS hash，圖片將永久存儲在去中心化網絡</p>
+                </div>
+
+                <!-- 圖片上傳 -->
+                <div class="form-group">
+                    <label data-i18n="uploadImage">上傳圖片 <span class="quota-info" id="imageQuotaInfo"></span></label>
+                    <div class="image-upload-area" id="imageUploadArea">
+                        <input type="file" id="eventImage" accept="image/*" class="hidden">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <span class="upload-icon">📷</span>
+                            <span data-i18n="clickToUpload">點擊或拖拽上傳圖片</span>
+                        </div>
+                        <div class="image-preview hidden" id="imagePreview">
+                            <img id="previewImg" src="" alt="預覽">
+                            <button type="button" class="remove-image" id="removeImage">✕</button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="eventImagePath" value="">
+                </div>
+
+                <!-- 儲存模式選擇 -->
+                <div class="form-group storage-mode-group">
+                    <label data-i18n="storageMode">儲存模式</label>
+                    <div class="storage-mode-options">
+                        <label class="storage-option">
+                            <input type="radio" name="storageMode" value="onchain" checked>
+                            <span class="option-content">
+                                <span class="option-icon">⛓️</span>
+                                <span class="option-text">
+                                    <strong data-i18n="storageOnchain">上鏈儲存</strong>
+                                    <small data-i18n="storageOnchainDesc">永久記錄在 Solana 區塊鏈 (字數限制)</small>
+                                </span>
+                            </span>
+                        </label>
+                        <label class="storage-option">
+                            <input type="radio" name="storageMode" value="local">
+                            <span class="option-content">
+                                <span class="option-icon">💾</span>
+                                <span class="option-text">
+                                    <strong data-i18n="storageLocal">本地儲存</strong>
+                                    <small data-i18n="storageLocalDesc">儲存在伺服器資料庫 (無字數限制)</small>
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="location-info" id="locationInfo">
+                    <span class="meta-icon">📍</span>
+                    <span id="locationText" data-i18n="locationNotSelected">尚未選擇位置</span>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelAdd" class="btn btn-ghost" data-i18n="cancel">取消</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="create">創建事件</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- 統一管理中心 Modal -->
+    <div id="managementModal" class="modal hidden">
+        <div class="modal-content management-modal">
+            <div class="modal-header">
+                <h3 data-i18n="managementCenter">⚙️ 管理中心</h3>
+                <button id="closeManagementModal" class="card-close">✕</button>
+            </div>
+
+            <!-- 分頁標籤 -->
+            <div class="management-tabs">
+                <button class="tab-btn active" data-tab="profile">
+                    <span>👤</span>
+                    <span data-i18n="profileTab">個人資料</span>
+                </button>
+                <button class="tab-btn" data-tab="myevents">
+                    <span>📋</span>
+                    <span data-i18n="myEventsTab">我的事件</span>
+                </button>
+                <button class="tab-btn" data-tab="subscriptions">
+                    <span>📌</span>
+                    <span data-i18n="subscriptionsTab">訂閱管理</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- 個人資料分頁 -->
+                <div id="profileTabContent" class="tab-content active">
+                    <div class="profile-section">
+                        <div class="profile-name-row">
+                            <span id="displayNameText" class="profile-name-display" data-i18n="noNameSet">未設定名稱</span>
+                            <button id="editNameBtn" class="icon-btn" title="編輯">✏️</button>
+                        </div>
+                        <div id="editNameRow" class="profile-name-edit hidden">
+                            <input type="text" id="displayNameInput" class="input"
+                                data-i18n-placeholder="displayNamePlaceholder" placeholder="輸入你的名稱..." maxlength="50">
+                            <button id="saveProfileBtn" class="icon-btn save" title="儲存">💾</button>
+                            <button id="cancelEditBtn" class="icon-btn cancel" title="取消">✕</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 我的事件分頁 -->
+                <div id="myeventsTabContent" class="tab-content">
+                    <div id="myEventsLoading" class="loading-spinner hidden">Loading...</div>
+                    <div id="myEventsList" class="my-events-list">
+                        <!-- 事件列表將動態插入這裡 -->
+                    </div>
+                    <div id="myEventsEmpty" class="empty-state hidden" data-i18n="noEvents">
+                        尚無建立的事件
+                    </div>
+                </div>
+
+                <!-- 訂閱管理分頁 -->
+                <div id="subscriptionsTabContent" class="tab-content">
+                    <div id="subscriptionsLoading" class="loading-spinner hidden">Loading...</div>
+
+                    <!-- 我的訂閱 -->
+                    <div class="subscriptions-section">
+                        <div class="section-header">
+                            <span class="section-icon">📌</span>
+                            <span data-i18n="mySubscriptions">我的訂閱</span>
+                        </div>
+                        <div class="add-subscription-row">
+                            <input type="text" id="subscribeWalletInput" class="input"
+                                data-i18n-placeholder="walletPlaceholder" placeholder="輸入錢包地址...">
+                            <button id="addSubscriptionBtn" class="btn btn-primary btn-sm">
+                                <span data-i18n="subscribe">訂閱</span>
+                            </button>
+                        </div>
+                        <div id="subscriptionsList" class="subscriptions-list">
+                            <!-- 訂閱列表將動態插入這裡 -->
+                        </div>
+                        <div id="subscriptionsEmpty" class="empty-hint hidden" data-i18n="noSubscriptions">
+                            尚無訂閱的帳號
+                        </div>
+                    </div>
+
+                    <!-- 推薦帳號 -->
+                    <div class="subscriptions-section">
+                        <div class="section-header">
+                            <span class="section-icon">🌟</span>
+                            <span data-i18n="recommendedAccounts">推薦帳號</span>
+                        </div>
+                        <div id="recommendedList" class="subscriptions-list">
+                            <!-- 推薦帳號將動態插入這裡 -->
+                        </div>
+                        <div id="recommendedLoadMore" class="load-more-container hidden">
+                            <button id="loadMoreRecommendedBtn" class="btn btn-secondary btn-sm"
+                                data-i18n="loadMore">加載更多</button>
+                        </div>
+                        <div id="recommendedEmpty" class="empty-hint hidden">
+                            暫無推薦
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部按鈕（訂閱分頁專用） -->
+            <div id="subscriptionFooter" class="modal-footer hidden">
+                <button id="cancelSubscriptionFilter" class="btn btn-ghost" data-i18n="cancel">取消</button>
+                <button id="applySubscriptionFilter" class="btn btn-primary" data-i18n="confirm">確定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示訊息 -->
+    <div id="toastContainer" class="toast-container"></div>
+    <div id="toast" class="toast hidden"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Solana Web3 -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
+    <!-- 模組化 JS -->
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/dom.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/solana.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/wallet.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/myevents.js"></script>
+    <script src="js/subscription.js"></script>
+    <script src="js/social.js"></script>
+
+    <!-- 主應用 -->
+    <script src="app.js"></script>
+</body>
+
+</html>
