@@ -5,6 +5,9 @@
 ![Solana](https://img.shields.io/badge/Blockchain-Solana-blue?style=for-the-badge&logo=solana)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
+## 🎮 Play!(Demo Link)
+https://worldevents.devents.tech/
+
 ## 💡 About The Project
 
 World Events Dashboard is a community-driven, interactive platform where users can explore, create, and manage events on a global map. Built for the **Solana Student Hackathon**, it bridges Web2 usability with Web3 identity.
