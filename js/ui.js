@@ -284,22 +284,18 @@ function initLangCompact() {
         }
     });
 
-    // 設置初始語言 (優先: localStorage > browser language > 預設)
-    const savedLang = localStorage.getItem('uiLang');
-    const browserLang = (navigator.language || navigator.userLanguage || 'zh-tw').toLowerCase();
-    const matchedBrowserLang = LANGUAGES.find(l => browserLang.startsWith(l.code.split('-')[0]));
-    const defaultLangCode = savedLang || currentUILang || (matchedBrowserLang ? matchedBrowserLang.code : 'zh-tw');
-    const defaultLang = LANGUAGES.find(l => l.code === defaultLangCode) || LANGUAGES[0];
+    // 設置初始語言國旗（必須與 currentUILang 同步）
+    // 注意：currentUILang 可能已經在 app.js 中通過 updateUILanguage 設置
+    // 我們需要確保國旗顯示與實際的 UI 語言一致
 
-    if (defaultLang && flagImg) {
-        flagImg.src = getFlagUrl(defaultLang.countryCode);
-        flagImg.alt = defaultLang.name;
-        // 如果沒有儲存的語言，設置並觸發 UI 更新
-        if (!savedLang && typeof updateUILanguage === 'function') {
-            currentUILang = defaultLang.code;
-            updateUILanguage(defaultLang.code);
+    // 等待 currentUILang 初始化完成，然後同步國旗
+    setTimeout(() => {
+        const activeLang = LANGUAGES.find(l => l.code === currentUILang);
+        if (activeLang && flagImg) {
+            flagImg.src = getFlagUrl(activeLang.countryCode);
+            flagImg.alt = activeLang.name;
         }
-    }
+    }, 100); // 短暫延遲以確保 currentUILang 已被 updateUILanguage 設置
 }
 
 /**
@@ -396,9 +392,19 @@ function initRegionFilter() {
         }
     });
 
-    // 設置初始為全部
-    if (flagImg) flagImg.src = getFlagUrl('un');
-    if (nameSpan) nameSpan.textContent = t('allRegions', '全部地區');
+    // 根據瀏覽器語言自動選擇初始地區
+    const browserLang = (typeof detectBrowserUILang === 'function') ? detectBrowserUILang() : '';
+    const matchedRegion = REGIONS.find(r => r.code === browserLang);
+
+    if (matchedRegion && matchedRegion.code) {
+        // 瀏覽器地區在支持列表中，自動選擇
+        selectRegion(matchedRegion);
+    } else {
+        // 不在支持列表中，設置為全部地區
+        if (flagImg) flagImg.src = getFlagUrl('un');
+        if (nameSpan) nameSpan.textContent = t('allRegions', '全部地區');
+        selectedRegion = '';
+    }
 }
 
 /**

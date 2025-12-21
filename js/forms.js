@@ -141,10 +141,6 @@ const Forms = {
             els.locationText.textContent = t('locationNotSelected');
             els.locationInfo.style.borderColor = 'rgba(245, 158, 11, 0.5)';
         }
-
-        if (typeof selectedLanguage !== 'undefined' && selectedLanguage && els.eventLanguage) {
-            els.eventLanguage.value = selectedLanguage;
-        }
     },
 
     closeAddModal() {
@@ -175,6 +171,12 @@ const Forms = {
             return;
         }
 
+        // 驗證地區已選擇
+        if (!els.eventLanguage.value || els.eventLanguage.value === '') {
+            showToast(t('pleaseSelectRegion') || '請選擇地區', 'error');
+            return;
+        }
+
         const storageModeInput = document.querySelector('input[name="storageMode"]:checked');
         const storageMode = storageModeInput ? storageModeInput.value : 'local';
 
@@ -190,7 +192,7 @@ const Forms = {
             user: walletAddress,
             tags: els.eventTags.value ? els.eventTags.value.split(',').map(t => t.trim()) : [],
             event_type: els.eventTags.value,
-            language: els.eventLanguage.value,
+            language: els.eventLanguage.value,  // 注意：欄位名為 language，但存的是地區代碼
             image_path: els.eventImagePath.value,
             icon: els.eventIcon.value || '📍'
         };

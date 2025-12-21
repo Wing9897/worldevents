@@ -17,9 +17,10 @@ async function loadEvents() {
     if (elements.dateFilterMode && elements.dateFilterMode.value) params.append('filter_mode', elements.dateFilterMode.value);
     if (elements.eventTypeFilter.value) params.append('event_type', elements.eventTypeFilter.value);
     // 地區過濾：使用 getSelectedRegion() 獲取選擇的地區
+    // 注意：API 參數名為 'language' 是為了向後兼容，但實際傳遞的是地區代碼
     if (typeof getSelectedRegion === 'function') {
         const region = getSelectedRegion();
-        if (region) params.append('language', region);
+        if (region) params.append('language', region);  // 參數名為 language，值為地區代碼
     }
 
     try {
@@ -133,7 +134,7 @@ function showEventCard(event) {
     const walletShort = (event.wallet_address || event.user || '').substring(0, 8) + '...';
     elements.cardUser.textContent = creatorName ? `${creatorName} (${walletShort})` : walletShort;
 
-    elements.cardLanguage.textContent = getLanguageName(event.language);
+    elements.cardLanguage.textContent = getRegionName(event.language);
     elements.cardDescription.textContent = event.description || t('noDescription');
 
     // 顯示圖片
@@ -274,9 +275,10 @@ function formatDisplayDate(dateStr) {
     return date.toLocaleDateString(currentUILang, options);
 }
 
-function getLanguageName(code) {
-    const lang = LANGUAGES.find(l => l.code === code);
-    return lang ? lang.name : code;
+function getRegionName(code) {
+    if (typeof REGIONS === 'undefined') return code;
+    const region = REGIONS.find(r => r.code === code);
+    return region ? t(region.nameKey) || region.nameKey : code;
 }
 
 // ===== 過濾器 =====
@@ -284,8 +286,6 @@ function clearFilters() {
     elements.startDate.value = '';
     elements.endDate.value = '';
     elements.eventTypeFilter.value = '';
-
-    selectedLanguage = '';
     document.querySelectorAll('.lang-filter-btn').forEach(btn => btn.classList.remove('active'));
 
     document.querySelectorAll('.quick-btn').forEach(btn => btn.classList.remove('active'));
