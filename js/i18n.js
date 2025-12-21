@@ -143,7 +143,9 @@ const I18N = {
         storageOnchainDesc: '永久記錄在 Solana 區塊鏈 (字數限制)',
         storageLocal: '本地儲存',
         storageLocalDesc: '儲存在伺服器資料庫 (無字數限制)',
-        joinCommunity: '加入社群'
+        joinCommunity: '加入社群',
+        region: '地區',
+        selectRegion: '-- 請選擇地區 --'
     },
     'zh-cn': {
         title: '世界事件 Dashboard',
@@ -283,7 +285,9 @@ const I18N = {
         storageOnchainDesc: '永久记录在 Solana 区块链 (字数限制)',
         storageLocal: '本地存储',
         storageLocalDesc: '存储在服务器数据库 (无字数限制)',
-        joinCommunity: '加入社群'
+        joinCommunity: '加入社群',
+        region: '地区',
+        selectRegion: '-- 请选择地区 --'
     },
     'en': {
         title: 'World Events Dashboard',
@@ -422,8 +426,10 @@ const I18N = {
         storageOnchain: 'On-Chain',
         storageOnchainDesc: 'Permanently recorded on Solana blockchain (character limit)',
         storageLocal: 'Local',
-        storageLocalDesc: 'Stored in server database (no character limit)',
-        joinCommunity: 'Join Community'
+        storageLocalDesc: 'Store in server database (no limit)',
+        joinCommunity: 'Join Community',
+        region: 'Region',
+        selectRegion: '-- Select Region --'
     },
     'ja': {
         title: 'ワールドイベント Dashboard',
@@ -564,8 +570,10 @@ const I18N = {
         storageOnchain: 'オンチェーン',
         storageOnchainDesc: 'Solanaブロックチェーンに永久記録 (文字数制限)',
         storageLocal: 'ローカル',
-        storageLocalDesc: 'サーバーデータベースに保存 (文字数制限なし)',
-        joinCommunity: 'コミュニティに参加'
+        storageLocalDesc: 'サーバーデータベースに保存（制限なし）',
+        joinCommunity: 'コミュニティに参加',
+        region: '地域',
+        selectRegion: '-- 地域を選択 --'
     },
     'ko': {
         title: '월드 이벤트 Dashboard',
@@ -706,8 +714,10 @@ const I18N = {
         storageOnchain: '온체인',
         storageOnchainDesc: 'Solana 블록체인에 영구 기록 (글자 수 제한)',
         storageLocal: '로컬',
-        storageLocalDesc: '서버 데이터베이스에 저장 (글자 수 제한 없음)',
-        joinCommunity: '커뮤니티 참여'
+        storageLocalDesc: '서버 데이터베이스에 저장 (제한 없음)',
+        joinCommunity: '커뮤니티 가입',
+        region: '지역',
+        selectRegion: '-- 지역 선택 --'
     },
     'es': {
         title: 'Panel de Eventos Mundiales',
@@ -847,7 +857,10 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Registro permanente en Solana (límite de caracteres)',
         storageLocal: 'Local',
-        storageLocalDesc: 'Base de datos del servidor (sin límite)'
+        storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
+        joinCommunity: 'Únete a la Comunidad',
+        region: 'Región',
+        selectRegion: '-- Seleccione Región --'
     },
     'fr': {
         title: 'Tableau de bord mondial',
@@ -893,7 +906,7 @@ const I18N = {
         regionCN: 'Chine',
         regionGB: 'Royaume-Uni',
         regionUS: 'États-Unis',
-        regionJP: 'Japon',
+        regionJP: 'Japón',
         regionKR: 'Corée du Sud',
         regionES: 'Espagne',
         regionFR: 'France',
@@ -987,8 +1000,10 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Stockage permanent Solana',
         storageLocal: 'Local',
-        storageLocalDesc: 'Base de données serveur',
-        joinCommunity: 'Rejoindre la communauté'
+        storageLocalDesc: 'Stocker dans la base de données du serveur (sans limite)',
+        joinCommunity: 'Rejoindre la Communauté',
+        region: 'Région',
+        selectRegion: '-- Sélectionnez la Région --'
     },
     'de': {
         title: 'Welt-Event-Dashboard',
@@ -1128,8 +1143,10 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Permanent auf Solana',
         storageLocal: 'Lokal',
-        storageLocalDesc: 'Server-Datenbank',
-        joinCommunity: 'Community beitreten'
+        storageLocalDesc: 'In Serverdatenbank speichern (kein Limit)',
+        joinCommunity: 'Der Community beitreten',
+        region: 'Region',
+        selectRegion: '-- Region auswählen --'
     },
     'pt': {
         title: 'Painel de Eventos Mundiais',
@@ -1269,8 +1286,10 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Armazenamento permanente Solana',
         storageLocal: 'Local',
-        storageLocalDesc: 'Banco de dados do servidor',
-        joinCommunity: 'Participe da comunidade'
+        storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
+        joinCommunity: 'Únete a la Comunidad',
+        region: 'Região',
+        selectRegion: '-- Selecione Região --'
     },
     'ru': {
         title: 'Панель мировых событий',
@@ -1410,8 +1429,10 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'На блокчейне Solana',
         storageLocal: 'Локально',
-        storageLocalDesc: 'В базе данных',
-        joinCommunity: 'Присоединяйтесь'
+        storageLocalDesc: 'Хранить в базе данных сервера (без ограничения)',
+        joinCommunity: 'Присоединиться к сообществу',
+        region: 'Регион',
+        selectRegion: '-- Выберите регион --'
     }
 };
 
@@ -1575,6 +1596,77 @@ function updateSpecificUI() {
     if (eventHint) {
         eventHint.textContent = walletAddress ? t('addEventHint') : t('addEventHintDisconnected');
     }
+
+    // 更新緊湊型 UI 語言切換器的國旗（同步 currentUILang）
+    if (elements.currentFlagCompact && typeof currentUILang !== 'undefined' && typeof LANGUAGES !== 'undefined') {
+        const currentLang = LANGUAGES.find(l => l.code === currentUILang);
+        if (currentLang) {
+            elements.currentFlagCompact.src = getFlagUrl(currentLang.countryCode);
+            elements.currentFlagCompact.alt = currentLang.name;
+        }
+    }
+
+    // 更新創建事件表單的地區選項文字
+    updateEventRegionOptions();
+
+    // 更新側邊欄地區過濾器的選項文字
+    updateRegionFilterOptions();
+}
+
+/**
+ * 更新創建事件表單的地區選項文字（多語言化）
+ */
+function updateEventRegionOptions() {
+    if (!elements.eventLanguage || typeof REGIONS === 'undefined') return;
+
+    const currentValue = elements.eventLanguage.value;
+    const options = elements.eventLanguage.querySelectorAll('option');
+
+    options.forEach(option => {
+        if (option.value === '') {
+            // 更新佔位符文字
+            option.textContent = t('selectRegion') || '-- 請選擇地區 --';
+        } else {
+            // 更新地區名稱
+            const region = REGIONS.find(r => r.code === option.value);
+            if (region) {
+                option.textContent = t(region.nameKey) || region.nameKey;
+            }
+        }
+    });
+
+    // 保持原選中值
+    elements.eventLanguage.value = currentValue;
+}
+
+/**
+ * 更新側邊欄地區過濾器的選項文字（多語言化）
+ */
+function updateRegionFilterOptions() {
+    if (!elements.regionDropdown || typeof REGIONS === 'undefined') return;
+
+    const regionOptions = elements.regionDropdown.querySelectorAll('.region-option');
+    regionOptions.forEach(option => {
+        const regionCode = option.dataset.region;
+        const region = REGIONS.find(r => r.code === regionCode);
+        if (region) {
+            const nameSpan = option.querySelector('.region-name');
+            if (nameSpan) {
+                nameSpan.textContent = t(region.nameKey) || region.nameKey;
+            }
+        }
+    });
+
+    // 更新當前選中的地區顯示
+    if (elements.currentRegionName && typeof selectedRegion !== 'undefined') {
+        const currentRegion = REGIONS.find(r => r.code === selectedRegion);
+        if (currentRegion) {
+            elements.currentRegionName.textContent = t(currentRegion.nameKey) || currentRegion.nameKey;
+        } else {
+            // 全部地區
+            elements.currentRegionName.textContent = t('allRegions') || '全部地區';
+        }
+    }
 }
 
 /**
@@ -1596,6 +1688,36 @@ function detectBrowserUILang() {
  * 初始化語言選擇器
  */
 function initLanguageSelector() {
+    // 先填充表單地區選項（改用 REGIONS）
+    if (typeof elements !== 'undefined' && elements.eventLanguage && typeof REGIONS !== 'undefined') {
+        elements.eventLanguage.innerHTML = '';
+
+        // 添加空白提示選項
+        const placeholderOption = document.createElement('option');
+        placeholderOption.value = '';
+        placeholderOption.textContent = t('selectRegion') || '-- 請選擇地區 --';
+        placeholderOption.disabled = true;
+        elements.eventLanguage.appendChild(placeholderOption);
+
+        // 排除「全部地區」選項 (code 為空字串的)
+        REGIONS.filter(r => r.code).forEach(region => {
+            const option = document.createElement('option');
+            option.value = region.code;
+            option.textContent = t(region.nameKey) || region.nameKey; // 使用翻譯後的地區名稱
+            elements.eventLanguage.appendChild(option);
+        });
+
+        // 根據瀏覽器語言設定預設地區（僅當該地區在列表中時）
+        const browserLang = detectBrowserUILang();
+        if (elements.eventLanguage.querySelector(`option[value="${browserLang}"]`)) {
+            elements.eventLanguage.value = browserLang;
+        } else {
+            // 瀏覽器地區不在支持列表中，保持空白提示
+            elements.eventLanguage.value = '';
+        }
+    }
+
+    // 再處理側邊欄語言切換器
     if (typeof elements === 'undefined' || !elements.languageDropdown) return;
 
     elements.languageDropdown.innerHTML = '';
@@ -1604,7 +1726,7 @@ function initLanguageSelector() {
 
     LANGUAGES.forEach(lang => {
         const option = document.createElement('div');
-        option.className = 'language-option' + (lang.code === selectedLanguage ? ' active' : '');
+        option.className = 'language-option' + (lang.code === currentUILang ? ' active' : '');
         option.dataset.lang = lang.code;
         option.innerHTML = `
             <img class="flag-icon" src="${getFlagUrl(lang.countryCode)}" alt="${lang.name}" />
@@ -1614,17 +1736,6 @@ function initLanguageSelector() {
         option.addEventListener('click', () => selectLanguage(lang));
         elements.languageDropdown.appendChild(option);
     });
-
-    // 填充事件語言下拉選單
-    if (elements.eventLanguage) {
-        elements.eventLanguage.innerHTML = '';
-        LANGUAGES.filter(l => l.code).forEach(lang => {
-            const option = document.createElement('option');
-            option.value = lang.code;
-            option.textContent = lang.name;
-            elements.eventLanguage.appendChild(option);
-        });
-    }
 
     // 初始國旗
     if (elements.currentFlagImg) {

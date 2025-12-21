@@ -1,13 +1,13 @@
 /**
  * Solana 區塊鏈整合
- * 使用 Testnet 進行 Memo 交易
+ * 使用 devnet 進行 Memo 交易
  */
 
 // Solana 配置
 const SOLANA_CONFIG = {
-    // 使用 Testnet
-    NETWORK: 'testnet',
-    RPC_URL: 'https://api.testnet.solana.com',
+    // 使用 devnet
+    NETWORK: 'devnet',
+    RPC_URL: 'https://api.devnet.solana.com',
 
     // SPL Memo Program v1 (更簡單，不需要 signer 在 keys 中)
     MEMO_PROGRAM_ID: 'Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo',
@@ -166,7 +166,7 @@ async function publishEventToSolana(eventData) {
         return {
             success: true,
             signature: signature,
-            explorer_url: `https://explorer.solana.com/tx/${signature}?cluster=testnet`
+            explorer_url: `https://explorer.solana.com/tx/${signature}?cluster=devnet`
         };
 
     } catch (error) {

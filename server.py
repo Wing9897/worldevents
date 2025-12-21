@@ -3,7 +3,7 @@ from flask_cors import CORS
 from database import (
     get_db, init_db, get_user_event_count, get_user_quota, 
     increment_user_event_count, decrement_user_event_count,
-    get_user_role, set_user_role, is_public_account,
+    get_user_role, set_user_role,
     subscribe, unsubscribe, get_subscriptions, is_subscribed, get_subscriber_count,
     get_user_display_name, set_user_display_name, get_user_profile
 )
@@ -36,6 +36,7 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_IMAGE_WIDTH = 400  # 符合 event card 寬度
 ALLOWED_ICONS = {'📍', '🎤', '🌟', '👥', '🎭', '🎨', '🎵', '🏃', '💻', '🎓', '🏺', '🎪'}
+ALLOWED_REGIONS = {'zh-tw', 'zh-cn', 'en', 'en-us', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'}
 
 # 確保上傳目錄存在
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -248,7 +249,7 @@ def get_events():
         query += ' AND e.event_type LIKE ?'
         params.append(f'%{event_type}%')
     
-    # 語言過濾
+    # 地區過濾（注意：language 欄位存的是地區代碼，非語言代碼）
     language = request.args.get('language')
     if language:
         query += ' AND e.language = ?'
@@ -296,6 +297,12 @@ def create_event():
     conn = get_db()
     cursor = conn.cursor()
     
+
+    # 驗證地區代碼（使用 language 欄位存儲）
+    region_code = data.get('language', 'en')
+    if region_code not in ALLOWED_REGIONS:
+        region_code = 'en'  # 默認英語地區
+    
     cursor.execute('''
         INSERT INTO events (name, description, lat, lng, date, start_date, end_date, user, wallet_address, event_type, language, image_path, icon, tx_signature, tx_network, storage_mode)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -310,7 +317,7 @@ def create_event():
         data['user'],
         wallet_address,
         data.get('event_type', ''),
-        data.get('language', 'en'),
+        region_code,  # 使用驗證後的地區代碼
         data.get('image_path', ''),
         data.get('icon') if data.get('icon') in ALLOWED_ICONS else '📍',
         data.get('tx_signature', ''),

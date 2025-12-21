@@ -17,7 +17,6 @@ let userEventCount = 0;
 let userQuota = 100;
 
 // ===== UI 狀態 =====
-let selectedLanguage = '';
 let currentUILang = 'zh-tw';
 let lastUILang = null;
 let isDarkTheme = false;
