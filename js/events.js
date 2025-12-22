@@ -141,15 +141,21 @@ function showEventCard(event) {
     if (event.image_path) {
         elements.cardImg.src = event.image_path;
         elements.cardImage.classList.remove('hidden');
+
+        // 添加點擊放大功能
+        elements.cardImg.onclick = () => {
+            showImageModal(event.image_path);
+        };
     } else {
         elements.cardImage.classList.add('hidden');
+        elements.cardImg.onclick = null;
     }
 
     // 顯示 Solana 交易連結 (如果是上鏈事件)
     const cardSolanaTx = document.getElementById('cardSolanaTx');
     const cardSolanaTxLink = document.getElementById('cardSolanaTxLink');
     if (event.tx_signature && event.storage_mode === 'onchain' && cardSolanaTx && cardSolanaTxLink) {
-        const network = event.tx_network || 'testnet';
+        const network = event.tx_network || 'devnet';
         const explorerUrl = `https://explorer.solana.com/tx/${event.tx_signature}?cluster=${network}`;
         cardSolanaTxLink.href = explorerUrl;
         cardSolanaTx.classList.remove('hidden');
@@ -161,6 +167,24 @@ function showEventCard(event) {
     loadCreatorInfo(event.wallet_address);
 
     elements.eventCard.classList.remove('hidden');
+}
+
+// ===== 圖片放大功能 =====
+function showImageModal(imageSrc) {
+    const imageModal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+
+    if (imageModal && modalImage) {
+        modalImage.src = imageSrc;
+        imageModal.classList.remove('hidden');
+    }
+}
+
+function closeImageModal() {
+    const imageModal = document.getElementById('imageModal');
+    if (imageModal) {
+        imageModal.classList.add('hidden');
+    }
 }
 
 // ===== 載入創建者資訊 =====
