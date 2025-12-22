@@ -62,8 +62,7 @@ def init_db():
     for migration in migrations:
         try:
             cursor.execute(migration)
-        except sqlite3.OperationalError:
-            # 欄位已存在，跳過
+        except:
             pass
     
     # 創建用戶配額表
@@ -80,22 +79,19 @@ def init_db():
     # 遷移：添加 quota 欄位
     try:
         cursor.execute(f'ALTER TABLE user_limits ADD COLUMN quota INTEGER DEFAULT {DEFAULT_USER_QUOTA}')
-    except sqlite3.OperationalError:
-        # 欄位已存在，跳過
+    except:
         pass
     
     # 遷移：添加 role 欄位
     try:
         cursor.execute("ALTER TABLE user_limits ADD COLUMN role TEXT DEFAULT 'user'")
-    except sqlite3.OperationalError:
-        # 欄位已存在，跳過
+    except:
         pass
     
     # 遷移：添加 display_name 欄位
     try:
         cursor.execute('ALTER TABLE user_limits ADD COLUMN display_name TEXT')
-    except sqlite3.OperationalError:
-        # 欄位已存在，跳過
+    except:
         pass
     
     # 創建訂閱表
@@ -297,8 +293,7 @@ def subscribe(subscriber_wallet, target_wallet):
         conn.commit()
         conn.close()
         return True
-    except sqlite3.IntegrityError:
-        # 已訂閱或違反唯一約束
+    except:
         conn.close()
         return False
 

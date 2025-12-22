@@ -111,10 +111,6 @@ function initEventListeners() {
     if (elements.closeCard) {
         elements.closeCard.addEventListener('click', () => {
             elements.eventCard.classList.add('hidden');
-            // 清除當前顯示的事件
-            if (typeof currentDisplayedEvent !== 'undefined') {
-                currentDisplayedEvent = null;
-            }
         });
     }
 
@@ -124,31 +120,4 @@ function initEventListeners() {
             if (targetWallet) toggleSubscribe(targetWallet); // js/events.js
         });
     }
-
-    // 圖片模態框
-    const closeImageModalBtn = document.getElementById('closeImageModal');
-    const imageModal = document.getElementById('imageModal');
-
-    if (closeImageModalBtn) {
-        closeImageModalBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            closeImageModal();
-        });
-    }
-
-    if (imageModal) {
-        // 點擊背景關閉
-        imageModal.addEventListener('click', (e) => {
-            if (e.target === imageModal) {
-                closeImageModal();
-            }
-        });
-    }
-
-    // ESC 鍵關閉圖片模態框
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && imageModal && !imageModal.classList.contains('hidden')) {
-            closeImageModal();
-        }
-    });
 }

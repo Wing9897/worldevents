@@ -4,16 +4,13 @@
 
 ![Solana](https://img.shields.io/badge/Blockchain-Solana-blue?style=for-the-badge&logo=solana)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20App-FF1493?style=for-the-badge&logo=vercel)](https://worldevents.devents.tech/)
 
-## 🎯 **[🚀 Live Demo](https://worldevents.devents.tech/)** 
-
-**Try it now!** Click the link above to experience the live demo with your Phantom Wallet.
-
----
+> 🚀 **Live Demo for Solana Student Hackathon:** [https://worldevents.devents.tech/](https://worldevents.devents.tech/)
 
 ## 💡 About The Project
 
-World Events Dashboard is a decentralized event tracking system built for the **Solana Student Hackathon**. This community-driven, interactive platform allows users to explore, create, and manage events on a global map, bridging Web2 usability with Web3 identity.
+World Events Dashboard is a community-driven, interactive platform where users can explore, create, and manage events on a global map. Built for the **Solana Student Hackathon**, it bridges Web2 usability with Web3 identity.
 
 **Why Solana?**
 Instead of traditional email/password logins, we use **Phantom Wallet** (Solana) for authentication. This proves:
@@ -33,31 +30,15 @@ Instead of traditional email/password logins, we use **Phantom Wallet** (Solana)
 - **📱 Responsive UI**: Beautiful, mobile-friendly interface with Dark/Light mode adaptation.
 - **🔗 Social Integration**: Connect your Discord, Telegram, YouTube, X (Twitter), and Facebook.
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Judge's Guide)
 
-### Option 1: Online Demo (Recommended)
+The easiest way to run the project is using Docker.
 
-**The fastest way to experience the project!** Visit our live demo:
-
-👉 **[https://worldevents.devents.tech/](https://worldevents.devents.tech/)**
-
-#### How to Use:
-1. Install the [Phantom Wallet Extension](https://phantom.app/) if you haven't already
-2. Click **"Connect Wallet"** (top right) to login
-3. **Right-click on the map** to create your first event
-4. Click **"Management Center"** to edit your profile
-
----
-
-### Option 2: Run Locally (Judges/Developers)
-
-If you want to run the project locally, use Docker:
-
-#### Prerequisites
+### Prerequisites
 - Docker & Docker Compose
-- [Phantom Wallet Extension](https://phantom.app/) installed in your browser
+- [Phantom Wallet Extension](https://phantom.app/) installed in your browser.
 
-#### 1. Clone & Configure
+### 1. Clone & Configure
 ```bash
 git clone https://github.com/your-username/worldevents.git
 cd worldevents
@@ -69,13 +50,13 @@ cp .env.example .env
 # Default settings work out-of-the-box for testing!
 ```
 
-#### 2. Launch
+### 2. Launch
 ```bash
 docker-compose up -d --build
 ```
 > Wait ~10 seconds for the containers to initialize.
 
-#### 3. Explore
+### 3. Explore
 Open **[http://localhost:9333](http://localhost:9333)** in your browser.
 
 - **Click "Connect Wallet"** (top right) to login.

@@ -74,14 +74,8 @@ function displayEvents(events) {
     });
 }
 
-// 保存當前顯示的事件（用於語言切換時更新）
-let currentDisplayedEvent = null;
-
 // ===== 顯示事件卡片 =====
 function showEventCard(event) {
-    // 保存當前事件供語言切換使用
-    currentDisplayedEvent = event;
-
     elements.cardTitle.textContent = event.name;
 
     const tags = event.event_type ? event.event_type.split(',').map(t => t.trim()).filter(t => t) : [];
@@ -147,14 +141,8 @@ function showEventCard(event) {
     if (event.image_path) {
         elements.cardImg.src = event.image_path;
         elements.cardImage.classList.remove('hidden');
-
-        // 添加點擊放大功能
-        elements.cardImg.onclick = () => {
-            showImageModal(event.image_path);
-        };
     } else {
         elements.cardImage.classList.add('hidden');
-        elements.cardImg.onclick = null;
     }
 
     // 顯示 Solana 交易連結 (如果是上鏈事件)
@@ -173,24 +161,6 @@ function showEventCard(event) {
     loadCreatorInfo(event.wallet_address);
 
     elements.eventCard.classList.remove('hidden');
-}
-
-// ===== 圖片放大功能 =====
-function showImageModal(imageSrc) {
-    const imageModal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-
-    if (imageModal && modalImage) {
-        modalImage.src = imageSrc;
-        imageModal.classList.remove('hidden');
-    }
-}
-
-function closeImageModal() {
-    const imageModal = document.getElementById('imageModal');
-    if (imageModal) {
-        imageModal.classList.add('hidden');
-    }
 }
 
 // ===== 載入創建者資訊 =====
@@ -303,65 +273,6 @@ function formatDisplayDate(dateStr) {
         minute: '2-digit'
     };
     return date.toLocaleDateString(currentUILang, options);
-}
-
-/**
- * 更新 Event Card 的語言顯示
- * 當 UI 語言切換時調用
- */
-function updateEventCardLanguage() {
-    if (!currentDisplayedEvent || elements.eventCard.classList.contains('hidden')) {
-        return; // 沒有打開的卡片
-    }
-
-    const event = currentDisplayedEvent;
-
-    // 更新地區名稱
-    if (elements.cardLanguage) {
-        elements.cardLanguage.textContent = getRegionName(event.language);
-    }
-
-    // 更新描述（如果為空）
-    if (elements.cardDescription) {
-        elements.cardDescription.textContent = event.description || t('noDescription');
-    }
-
-    // 更新日期時間，使用當前語言格式
-    const cardStartDateOnly = document.getElementById('cardStartDateOnly');
-    const cardStartTimeOnly = document.getElementById('cardStartTimeOnly');
-    if (cardStartDateOnly && cardStartTimeOnly && (event.start_date || event.date)) {
-        const startDateObj = new Date(event.start_date || event.date);
-        cardStartDateOnly.textContent = startDateObj.toLocaleDateString(currentUILang, {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
-        cardStartTimeOnly.textContent = startDateObj.toLocaleTimeString(currentUILang, {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    }
-
-    // 更新結束時間
-    const cardEndTimeRow = document.getElementById('cardEndTimeRow');
-    if (event.end_date && cardEndTimeRow) {
-        const endDateObj = new Date(event.end_date);
-        const endDateStr = endDateObj.toLocaleDateString(currentUILang, {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
-        const endTimeStr = endDateObj.toLocaleTimeString(currentUILang, {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-        cardEndTimeRow.innerHTML = `${t('endTimeLabel')} <span id="cardEndDateTime">${endDateStr} ${endTimeStr}</span>`;
-    }
-
-    // 重新載入創建者資訊（包含角色和訂閱者翻譯）
-    if (event.wallet_address) {
-        loadCreatorInfo(event.wallet_address);
-    }
 }
 
 function getRegionName(code) {

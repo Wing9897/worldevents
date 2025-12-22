@@ -17,7 +17,7 @@ async function openSubscriptionsModal() {
     }
 
     // 從 localStorage 恢復選定的訂閱
-    const savedSubscriptions = safeLocalStorage.getItem('selectedSubscriptions');
+    const savedSubscriptions = localStorage.getItem('selectedSubscriptions');
     if (savedSubscriptions) {
         selectedSubscriptions = savedSubscriptions.split(',').filter(w => w);
     }
@@ -85,7 +85,7 @@ function generateAccountsHTML(accounts, isMySubscriptions) {
         user: t('roleUser')
     };
 
-    const hasStoredSettings = safeLocalStorage.getItem('selectedSubscriptions') !== null;
+    const hasStoredSettings = localStorage.getItem('selectedSubscriptions') !== null;
 
     return accounts.map(account => {
         let isChecked;
@@ -176,20 +176,20 @@ async function handleQuickSubscribe(targetWallet) {
         const data = await response.json();
 
         if (data.success) {
-            showToast(t('subscribeSuccess') || '訂閱成功', 'success');
+            showToast(t('subscribeSuccess', 'Subscribed successfully'), 'success');
 
             if (!selectedSubscriptions.includes(targetWallet)) {
                 selectedSubscriptions.push(targetWallet);
-                safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+                localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             }
 
             openSubscriptionsModal();
         } else {
-            showToast(data.error || '訂閱失敗', 'error');
+            showToast(data.error || t('subscribeFailed', 'Subscription failed'), 'error');
         }
     } catch (err) {
         console.error('訂閱失敗:', err);
-        showToast('訂閱失敗', 'error');
+        showToast(t('subscribeFailed', 'Subscription failed'), 'error');
     }
 }
 
@@ -209,14 +209,14 @@ async function handleUnsubscribe(targetWallet) {
         if (data.success) {
             showToast(t('unsubscribeSuccess'), 'success');
             selectedSubscriptions = selectedSubscriptions.filter(w => w !== targetWallet);
-            safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+            localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             await openSubscriptionsModal();
         } else {
-            showToast(data.error || '取消訂閱失敗', 'error');
+            showToast(data.error || t('unsubscribeFailed', 'Unsubscription failed'), 'error');
         }
     } catch (err) {
         console.error('取消訂閱失敗:', err);
-        showToast('取消訂閱失敗', 'error');
+        showToast(t('unsubscribeFailed', 'Unsubscription failed'), 'error');
     }
 }
 
@@ -228,7 +228,7 @@ async function handleManualSubscribe() {
     if (!walletAddress) return;
 
     if (walletAddress.length < 32 || walletAddress.length > 44) {
-        showToast('無效的錢包地址', 'error');
+        showToast(t('invalidWalletAddress', 'Invalid wallet address'), 'error');
         return;
     }
 
@@ -242,21 +242,21 @@ async function handleManualSubscribe() {
         const data = await response.json();
 
         if (data.success) {
-            showToast('訂閱成功', 'success');
+            showToast(t('subscribeSuccess', 'Subscribed successfully'), 'success');
             input.value = '';
 
             if (!selectedSubscriptions.includes(walletAddress)) {
                 selectedSubscriptions.push(walletAddress);
-                safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+                localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             }
 
             openSubscriptionsModal();
         } else {
-            showToast(data.error || '訂閱失敗', 'error');
+            showToast(data.error || t('subscribeFailed', 'Subscription failed'), 'error');
         }
     } catch (err) {
         console.error('訂閱失敗:', err);
-        showToast('訂閱失敗', 'error');
+        showToast(t('subscribeFailed', 'Subscription failed'), 'error');
     }
 }
 
@@ -271,7 +271,7 @@ function applySubscriptionFilter() {
     ];
 
     selectedSubscriptions = allChecked;
-    safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+    localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
 
     closeSubscriptionsModal();
     loadEvents();
@@ -280,7 +280,7 @@ function applySubscriptionFilter() {
 
 // ===== 恢復選定的訂閱 =====
 function restoreSelectedSubscriptions() {
-    const savedSubscriptions = safeLocalStorage.getItem('selectedSubscriptions');
+    const savedSubscriptions = localStorage.getItem('selectedSubscriptions');
     if (savedSubscriptions) {
         selectedSubscriptions = savedSubscriptions.split(',').filter(w => w);
     }

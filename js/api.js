@@ -66,8 +66,8 @@ async function refreshAccessToken() {
                 refreshToken = data.refresh_token;
             }
             // 更新 localStorage
-            safeLocalStorage.setItem('accessToken', accessToken);
-            safeLocalStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
             return true;
         } else {
             // 刷新失敗，清除認證狀態
@@ -87,9 +87,9 @@ async function refreshAccessToken() {
  */
 async function loadTokensFromStorage() {
     // 從 localStorage 加載 Token
-    const storedAccessToken = safeLocalStorage.getItem('accessToken');
-    const storedRefreshToken = safeLocalStorage.getItem('refreshToken');
-    const storedWallet = safeLocalStorage.getItem('walletAddress');
+    const storedAccessToken = localStorage.getItem('accessToken');
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    const storedWallet = localStorage.getItem('walletAddress');
 
     if (storedAccessToken && storedRefreshToken && storedWallet) {
         accessToken = storedAccessToken;
@@ -131,9 +131,9 @@ function handleLogout() {
     refreshToken = null;
     walletAddress = null;
 
-    safeLocalStorage.removeItem('accessToken');
-    safeLocalStorage.removeItem('refreshToken');
-    safeLocalStorage.removeItem('walletAddress');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('walletAddress');
 
     // 通知 UI 更新
     if (typeof updateWalletUI === 'function') {

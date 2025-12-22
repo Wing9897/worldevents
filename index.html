@@ -38,7 +38,7 @@
             <h1 data-i18n="title">世界事件 Dashboard</h1>
 
             <!-- 地圖主題切換 -->
-            <button class="theme-toggle" id="themeToggle" title="切換地圖主題">
+            <button class="theme-toggle" id="themeToggle" data-i18n-title="toggleTheme" title="切換地圖主題">
                 <span class="theme-icon" id="themeIcon">☀️</span>
             </button>
         </div>
@@ -54,12 +54,12 @@
             <div id="walletInfo" class="wallet-info hidden">
                 <!-- 緊湊型語言選擇器 -->
                 <div class="lang-compact" id="langCompact">
-                    <button class="lang-btn-compact" id="langBtnCompact" title="選擇語言">
+                    <button class="lang-btn-compact" id="langBtnCompact" data-i18n-title="selectLanguage" title="選擇語言">
                         <img class="flag-icon-sm" id="currentFlagCompact" src="" alt="" />
                     </button>
                     <div class="lang-dropdown-compact hidden" id="langDropdownCompact"></div>
                 </div>
-                <span id="walletAddress" class="wallet-address-full" title="點擊複製"></span>
+                <span id="walletAddress" class="wallet-address-full" data-i18n-title="clickToCopy" title="點擊複製"></span>
                 <span id="eventLimit" class="event-limit"></span>
                 <button id="myEventsBtn" class="btn btn-outline hidden" data-i18n="managementCenter">⚙️ 管理中心</button>
                 <button id="disconnectWallet" class="btn btn-ghost" data-i18n="disconnect">斷開</button>
@@ -70,7 +70,7 @@
     <!-- 主要內容區 -->
     <main class="main-container">
         <!-- 過濾器面板收起按鈕 -->
-        <button class="panel-toggle" id="panelToggle" title="收起/展開過濾器">
+        <button class="panel-toggle" id="panelToggle" data-i18n-title="toggleFilterPanel" title="收起/展開過濾器">
             <span class="toggle-icon" id="toggleIcon">◀</span>
         </button>
 
@@ -137,7 +137,7 @@
             <div class="filter-group">
                 <label data-i18n="keywords">關鍵字標籤</label>
                 <input type="text" id="eventTypeFilter" class="input" data-i18n-placeholder="keywordsPlaceholder"
-                    placeholder="輸入關鍵字...">
+                    data-i18n-placeholder="keywordsPlaceholder" placeholder="輸入關鍵字...">
                 <p class="filter-hint" data-i18n="keywordsHint">多個關鍵字用逗號分隔</p>
             </div>
 
@@ -183,7 +183,7 @@
         <button id="closeCard" class="card-close">✕</button>
         <!-- 事件圖片 -->
         <div class="card-image hidden" id="cardImage">
-            <img id="cardImg" src="" alt="事件圖片" loading="lazy">
+            <img id="cardImg" src="" alt="事件圖片">
         </div>
         <div class="card-header">
             <h3 id="cardTitle"></h3>
@@ -471,10 +471,6 @@
     </div>
 
     <!-- 提示訊息 -->
-    <div id="imageModal" class="image-modal hidden">
-        <button id="closeImageModal" class="image-modal-close">✕</button>
-        <img id="modalImage" src="" alt="全尺寸圖片">
-    </div>
     <div id="toastContainer" class="toast-container"></div>
     <div id="toast" class="toast hidden"></div>
 
@@ -485,18 +481,17 @@
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
     <!-- 模組化 JS -->
-    <script src="js/storage.js"></script>
     <script src="js/config.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/state.js"></script>
     <script src="js/dom.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/api.js"></script>
-    <script src="js/solana.js?v=20250122"></script>
+    <script src="js/solana.js"></script>
     <script src="js/map.js"></script>
     <script src="js/wallet.js"></script>
-    <script src="js/forms.js?v=20250122"></script>
-    <script src="js/events.js?v=20250122"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/events.js"></script>
     <script src="js/myevents.js"></script>
     <script src="js/subscription.js"></script>
     <script src="js/social.js"></script>

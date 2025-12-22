@@ -134,8 +134,6 @@ const I18N = {
         recommendedAccounts: '推薦帳號',
         noSubscriptions: '尚無訂閱的帳號',
         confirmUnsubscribe: '確定要取消訂閱此帳號嗎？',
-        unsubscribeSuccess: '取消訂閱成功',
-        subscribeSuccess: '訂閱成功',
         loadMore: '加載更多',
         viewOnSolana: '在 Solana Explorer 查看',
         storageMode: '儲存模式',
@@ -146,8 +144,28 @@ const I18N = {
         joinCommunity: '加入社群',
         region: '地區',
         selectRegion: '-- 請選擇地區 --',
-        filtersCleared: '過濾器已清除',
-        pleaseSelectRegion: '請選擇地區'
+        // Forms
+        sendingToSolana: '正在發送到 Solana 區塊鏈...請勿離開頁面',
+        solanaModuleError: 'Solana 模組未加載',
+        txFailed: 'Solana 交易失敗: ',
+        txnConfirmed: '區塊鏈交易已確認!',
+        uploadingImage: '正在上傳圖片...',
+        savedToLocal: '已儲存到本地',
+        imageSelected: '圖片已選取，將在提交時上傳',
+        langSwitched: '語言已切換為 ',
+        // Errors
+        errorSignMessage: '無法獲取簽名訊息',
+        errorAuthFailed: '認證失敗',
+        errorLogoutAPI: '登出 API 調用失敗',
+        subscribeSuccess: '訂閱成功',
+        subscribeFailed: '訂閱失敗',
+        unsubscribeFailed: '取消訂閱失敗',
+        invalidWalletAddress: '無效的錢包地址',
+        errorSaveProfile: '儲存失敗',
+        errorNetwork: '網路錯誤',
+        errorConfirm: '確認錯誤',
+        errorParse: '解析錯誤',
+        addEventHintConnected: '右鍵地圖可直接新增事件'
     },
     'zh-cn': {
         title: '世界事件 Dashboard',
@@ -278,8 +296,6 @@ const I18N = {
         recommendedAccounts: '推荐账号',
         noSubscriptions: '尚无订阅的账号',
         confirmUnsubscribe: '确定要取消订阅此账号吗？',
-        unsubscribeSuccess: '取消订阅成功',
-        subscribeSuccess: '订阅成功',
         loadMore: '加载更多',
         viewOnSolana: '在 Solana Explorer 查看',
         storageMode: '存储模式',
@@ -290,8 +306,28 @@ const I18N = {
         joinCommunity: '加入社群',
         region: '地区',
         selectRegion: '-- 请选择地区 --',
-        filtersCleared: '过滤器已清除',
-        pleaseSelectRegion: '请选择地区'
+        // Forms
+        sendingToSolana: '正在发送到 Solana 区块链...请勿离开页面',
+        solanaModuleError: 'Solana 模块未加载',
+        txFailed: 'Solana 交易失败: ',
+        txnConfirmed: '区块链交易已确认!',
+        uploadingImage: '正在上传图片...',
+        savedToLocal: '已保存到本地',
+        imageSelected: '图片已选取，将在提交时上传',
+        langSwitched: '语言已切换为 ',
+        // Errors
+        errorSignMessage: '无法获取签名消息',
+        errorAuthFailed: '认证失败',
+        errorLogoutAPI: '登出 API 调用失败',
+        subscribeSuccess: '订阅成功',
+        subscribeFailed: '订阅失败',
+        unsubscribeFailed: '取消订阅失败',
+        invalidWalletAddress: '无效的钱包地址',
+        errorSaveProfile: '保存失败',
+        errorNetwork: '网络错误',
+        errorConfirm: '确认错误',
+        errorParse: '解析错误',
+        addEventHintConnected: '右键地图可直接新增事件'
     },
     'en': {
         title: 'World Events Dashboard',
@@ -422,8 +458,6 @@ const I18N = {
         recommendedAccounts: 'Recommended',
         noSubscriptions: 'No subscriptions yet',
         confirmUnsubscribe: 'Are you sure you want to unsubscribe?',
-        unsubscribeSuccess: 'Unsubscribed successfully',
-        subscribeSuccess: 'Subscribed successfully',
         loadMore: 'Load More',
         viewOnSolana: 'View on Solana Explorer',
         storageMode: 'Storage Mode',
@@ -434,8 +468,28 @@ const I18N = {
         joinCommunity: 'Join Community',
         region: 'Region',
         selectRegion: '-- Select Region --',
-        filtersCleared: 'Filters cleared',
-        pleaseSelectRegion: 'Please select a region'
+        // Forms
+        sendingToSolana: 'Sending to Solana blockchain... please do not leave page',
+        solanaModuleError: 'Solana module not loaded',
+        txFailed: 'Solana transaction failed: ',
+        txnConfirmed: 'Blockchain transaction confirmed!',
+        uploadingImage: 'Uploading image...',
+        savedToLocal: 'Saved to local',
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'ja': {
         title: 'ワールドイベント Dashboard',
@@ -580,8 +634,22 @@ const I18N = {
         joinCommunity: 'コミュニティに参加',
         region: '地域',
         selectRegion: '-- 地域を選択 --',
-        filtersCleared: 'フィルターがクリアされました',
-        pleaseSelectRegion: '地域を選択してください'
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'ko': {
         title: '월드 이벤트 Dashboard',
@@ -726,8 +794,22 @@ const I18N = {
         joinCommunity: '커뮤니티 가입',
         region: '지역',
         selectRegion: '-- 지역 선택 --',
-        filtersCleared: '필터가 지워졌습니다',
-        pleaseSelectRegion: '지역을 선택하십시오'
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'es': {
         title: 'Panel de Eventos Mundiales',
@@ -870,9 +952,23 @@ const I18N = {
         storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
         joinCommunity: 'Únete a la Comunidad',
         region: 'Región',
-        selectRegion: '-- Seleccionar Región --',
-        filtersCleared: 'Filtros borrados',
-        pleaseSelectRegion: 'Por favor seleccione una región'
+        selectRegion: '-- Seleccione Región --',
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'fr': {
         title: 'Tableau de bord mondial',
@@ -1015,9 +1111,23 @@ const I18N = {
         storageLocalDesc: 'Stocker dans la base de données du serveur (sans limite)',
         joinCommunity: 'Rejoindre la Communauté',
         region: 'Région',
-        selectRegion: '-- Sélectionner région --',
-        filtersCleared: 'Filtres effacés',
-        pleaseSelectRegion: 'Veuillez sélectionner une région'
+        selectRegion: '-- Sélectionnez la Région --',
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'de': {
         title: 'Welt-Event-Dashboard',
@@ -1160,9 +1270,23 @@ const I18N = {
         storageLocalDesc: 'In Serverdatenbank speichern (kein Limit)',
         joinCommunity: 'Der Community beitreten',
         region: 'Region',
-        selectRegion: '-- Region wählen --',
-        filtersCleared: 'Filter gelöscht',
-        pleaseSelectRegion: 'Bitte wählen Sie eine Region'
+        selectRegion: '-- Region auswählen --',
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'pt': {
         title: 'Painel de Eventos Mundiais',
@@ -1305,9 +1429,23 @@ const I18N = {
         storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
         joinCommunity: 'Únete a la Comunidad',
         region: 'Região',
-        selectRegion: '-- Selecione a região --',
-        filtersCleared: 'Filtros limpos',
-        pleaseSelectRegion: 'Por favor, selecione uma região'
+        selectRegion: '-- Selecione Região --',
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     },
     'ru': {
         title: 'Панель мировых событий',
@@ -1451,8 +1589,22 @@ const I18N = {
         joinCommunity: 'Присоединиться к сообществу',
         region: 'Регион',
         selectRegion: '-- Выберите регион --',
-        filtersCleared: 'Фильтры сброшены',
-        pleaseSelectRegion: 'Пожалуйста, выберите регион'
+        // Missing keys (English Fallback)
+        imageSelected: 'Image selected, will upload on submit',
+        langSwitched: 'Language switched to ',
+        // Errors
+        errorSignMessage: 'Failed to get signature message',
+        errorAuthFailed: 'Authentication failed',
+        errorLogoutAPI: 'Logout API call failed',
+        subscribeSuccess: 'Subscribed successfully',
+        subscribeFailed: 'Subscription failed',
+        unsubscribeFailed: 'Unsubscription failed',
+        invalidWalletAddress: 'Invalid wallet address',
+        errorSaveProfile: 'Save failed',
+        errorNetwork: 'Network error',
+        errorConfirm: 'Confirmation error',
+        errorParse: 'Parse error',
+        addEventHintConnected: 'Right-click on map to add event'
     }
 };
 
@@ -1479,16 +1631,16 @@ const LANGUAGES = [
  */
 const REGIONS = [
     { code: '', flag: 'un', nameKey: 'allRegions', countryCode: 'un' },
-    { code: 'zh-tw', flag: 'tw', nameKey: 'regionTW', countryCode: 'tw' },
-    { code: 'zh-cn', flag: 'cn', nameKey: 'regionCN', countryCode: 'cn' },
-    { code: 'en', flag: 'gb', nameKey: 'regionGB', countryCode: 'gb' },
-    { code: 'en-us', flag: 'us', nameKey: 'regionUS', countryCode: 'us' },
-    { code: 'ja', flag: 'jp', nameKey: 'regionJP', countryCode: 'jp' },
-    { code: 'ko', flag: 'kr', nameKey: 'regionKR', countryCode: 'kr' },
+    { code: 'tw', flag: 'tw', nameKey: 'regionTW', countryCode: 'tw' },
+    { code: 'cn', flag: 'cn', nameKey: 'regionCN', countryCode: 'cn' },
+    { code: 'gb', flag: 'gb', nameKey: 'regionGB', countryCode: 'gb' },
+    { code: 'us', flag: 'us', nameKey: 'regionUS', countryCode: 'us' },
+    { code: 'jp', flag: 'jp', nameKey: 'regionJP', countryCode: 'jp' },
+    { code: 'kr', flag: 'kr', nameKey: 'regionKR', countryCode: 'kr' },
     { code: 'es', flag: 'es', nameKey: 'regionES', countryCode: 'es' },
     { code: 'fr', flag: 'fr', nameKey: 'regionFR', countryCode: 'fr' },
     { code: 'de', flag: 'de', nameKey: 'regionDE', countryCode: 'de' },
-    { code: 'pt', flag: 'br', nameKey: 'regionBR', countryCode: 'br' },
+    { code: 'br', flag: 'br', nameKey: 'regionBR', countryCode: 'br' },
     { code: 'ru', flag: 'ru', nameKey: 'regionRU', countryCode: 'ru' }
 ];
 
@@ -1546,7 +1698,7 @@ function updateUILanguage(langCode) {
     } else {
         // 記錄選擇的語言
         if (typeof lastUILang !== 'undefined') lastUILang = langCode;
-        if (typeof localStorage !== 'undefined') safeLocalStorage.setItem('uiLang', langCode);
+        if (typeof localStorage !== 'undefined') localStorage.setItem('uiLang', langCode);
     }
 
     // 查找對應的翻譯（fallback 邏輯）
@@ -1631,9 +1783,6 @@ function updateSpecificUI() {
 
     // 更新側邊欄地區過濾器的選項文字
     updateRegionFilterOptions();
-
-    // 更新當前顯示的 Event Card（如果有打開的話）
-    updateEventCardLanguage();
 }
 
 /**

@@ -80,7 +80,7 @@ function prepareEventMemo(eventData) {
         ln: parseFloat(eventData.lng.toFixed(4)),  // longitude (4位小數)
         s: Math.floor(new Date(eventData.start_date).getTime() / 1000), // start timestamp
         ic: eventData.icon || '📍',   // icon
-        lang: eventData.language || 'zh-tw' // language
+        lang: eventData.language || 'en' // language (default to en)
     };
 
     // 可選欄位 - 結束時間
