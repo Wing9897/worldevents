@@ -187,12 +187,16 @@
     align-items: center;
     justify-content: center;
     transition: all var(--transition-fast);
+    z-index: 10;
+    /* 確保在圖片之上 */
 }
 
 .card-close:hover {
     background: var(--error);
     color: white;
     border-color: transparent;
+    transform: scale(1.1);
+    /* 添加懸停效果 */
 }
 
 .card-header {
@@ -420,12 +424,17 @@
     width: 100%;
     overflow: hidden;
     border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    position: relative;
+    z-index: 1;
+    /* 確保在關閉按鈕之下 */
 }
 
 .card-image img {
     width: 100%;
     max-height: 200px;
     object-fit: cover;
+    display: block;
+    /* 移除底部空白 */
 }
 
 /* 響應式 */

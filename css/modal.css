@@ -235,6 +235,7 @@
         opacity: 0;
         transform: scale(0.8);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -269,9 +270,17 @@
 /* Event Card 圖片懸停效果 */
 .card-image img {
     cursor: zoom-in;
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
 .card-image img:hover {
     transform: scale(1.02);
+    filter: brightness(1.05);
+    /* 添加亮度變化提示可點擊 */
+}
+
+/* 避免圖片覆蓋關閉按鈕區域 */
+.card-image {
+    /* 為關閉按鈕預留區域 */
+    padding-top: 0;
 }
