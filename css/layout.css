@@ -319,7 +319,7 @@
 .navbar-wallet {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
 }
 
 .wallet-info {
