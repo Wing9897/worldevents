@@ -244,7 +244,7 @@ const Forms = {
                 }
 
                 serverData.tx_signature = solanaResult.signature;
-                serverData.tx_network = 'testnet';
+                serverData.tx_network = typeof SOLANA_CONFIG !== 'undefined' ? SOLANA_CONFIG.NETWORK : 'devnet';
                 serverData.storage_mode = 'onchain';
             } else {
                 // Local 模式：提交時上傳圖片

@@ -183,7 +183,7 @@
         <button id="closeCard" class="card-close">✕</button>
         <!-- 事件圖片 -->
         <div class="card-image hidden" id="cardImage">
-            <img id="cardImg" src="" alt="事件圖片">
+            <img id="cardImg" src="" alt="事件圖片" loading="lazy">
         </div>
         <div class="card-header">
             <h3 id="cardTitle"></h3>
@@ -471,6 +471,10 @@
     </div>
 
     <!-- 提示訊息 -->
+    <div id="imageModal" class="image-modal hidden">
+        <button id="closeImageModal" class="image-modal-close">✕</button>
+        <img id="modalImage" src="" alt="全尺寸圖片">
+    </div>
     <div id="toastContainer" class="toast-container"></div>
     <div id="toast" class="toast hidden"></div>
 
@@ -481,6 +485,7 @@
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
     <!-- 模組化 JS -->
+    <script src="js/storage.js"></script>
     <script src="js/config.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/state.js"></script>
