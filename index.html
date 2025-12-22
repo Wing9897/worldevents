@@ -48,18 +48,19 @@
         <div class="navbar-center"></div>
 
         <div class="navbar-wallet">
+            <!-- 緊湊型語言選擇器 -->
+            <div class="lang-compact" id="langCompact">
+                <button class="lang-btn-compact" id="langBtnCompact" data-i18n-title="selectLanguage" title="選擇語言">
+                    <img class="flag-icon-sm" id="currentFlagCompact" src="" alt="" />
+                </button>
+                <div class="lang-dropdown-compact hidden" id="langDropdownCompact"></div>
+            </div>
+
             <button id="connectWallet" class="btn btn-primary">
                 <span class="wallet-icon">👻</span>
                 <span data-i18n="connectWallet">連接 Phantom 錢包</span>
             </button>
             <div id="walletInfo" class="wallet-info hidden">
-                <!-- 緊湊型語言選擇器 -->
-                <div class="lang-compact" id="langCompact">
-                    <button class="lang-btn-compact" id="langBtnCompact" data-i18n-title="selectLanguage" title="選擇語言">
-                        <img class="flag-icon-sm" id="currentFlagCompact" src="" alt="" />
-                    </button>
-                    <div class="lang-dropdown-compact hidden" id="langDropdownCompact"></div>
-                </div>
                 <span id="walletAddress" class="wallet-address-full" data-i18n-title="clickToCopy" title="點擊複製"></span>
                 <span id="eventLimit" class="event-limit"></span>
                 <button id="myEventsBtn" class="btn btn-outline hidden" data-i18n="managementCenter">⚙️ 管理中心</button>
