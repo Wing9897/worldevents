@@ -95,12 +95,6 @@ function initEventListeners() {
     // 個人資料（Profile）
     if (typeof initProfileEvents === 'function') initProfileEvents();
 
-    // 日期選擇器按鈕
-    const startDateBtn = document.getElementById('openStartDatePicker');
-    const endDateBtn = document.getElementById('openEndDatePicker');
-    if (startDateBtn && elements.eventStartDate) startDateBtn.addEventListener('click', () => elements.eventStartDate.showPicker());
-    if (endDateBtn && elements.eventEndDate) endDateBtn.addEventListener('click', () => elements.eventEndDate.showPicker());
-
     // Context Menu -> Add Event
     if (elements.createEventHere) {
         elements.createEventHere.addEventListener('click', () => {

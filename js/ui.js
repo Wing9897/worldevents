@@ -300,18 +300,19 @@ function initLangCompact() {
         }
     });
 
-    // 設置初始語言國旗（必須與 currentUILang 同步）
-    // 注意：currentUILang 可能已經在 app.js 中通過 updateUILanguage 設置
-    // 我們需要確保國旗顯示與實際的 UI 語言一致
-
-    // 等待 currentUILang 初始化完成，然後同步國旗
+    // 設置初始語言國旗並應用語言
+    // currentUILang 已在 restoreState() 中從 localStorage 恢復
     setTimeout(() => {
         const activeLang = LANGUAGES.find(l => l.code === currentUILang);
         if (activeLang && flagImg) {
             flagImg.src = getFlagUrl(activeLang.countryCode);
             flagImg.alt = activeLang.name;
         }
-    }, 100); // 短暫延遲以確保 currentUILang 已被 updateUILanguage 設置
+        // 應用保存的語言設定到整個頁面
+        if (typeof updateUILanguage === 'function') {
+            updateUILanguage(currentUILang);
+        }
+    }, 100);
 }
 
 /**

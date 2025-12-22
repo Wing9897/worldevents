@@ -1694,11 +1694,15 @@ function t(key) {
     // 確保 I18N 已加載
     if (typeof I18N === 'undefined') return key;
 
-    // 使用當前語言，若無則回退到英文或繁體中文
+    // 使用當前語言
     const langCode = (typeof currentUILang !== 'undefined') ? currentUILang : 'zh-tw';
-    const translations = I18N[langCode] || I18N['en'] || I18N['zh-tw'] || {};
 
-    return translations[key] || key;
+    // 優先從當前語言獲取，若無則依次回退到英文、繁體中文
+    const currentTranslations = I18N[langCode] || {};
+    const enTranslations = I18N['en'] || {};
+    const zhTranslations = I18N['zh-tw'] || {};
+
+    return currentTranslations[key] || enTranslations[key] || zhTranslations[key] || key;
 }
 
 /**
@@ -1740,7 +1744,7 @@ function updateUILanguage(langCode) {
     // 自動翻譯所有 data-i18n 元素
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
-        if (key && t(key) !== key) {
+        if (key) {
             el.textContent = t(key);
         }
     });
@@ -1748,7 +1752,7 @@ function updateUILanguage(langCode) {
     // 自動翻譯所有 data-i18n-placeholder 元素
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.dataset.i18nPlaceholder;
-        if (key && t(key) !== key) {
+        if (key) {
             el.placeholder = t(key);
         }
     });
@@ -1756,7 +1760,7 @@ function updateUILanguage(langCode) {
     // 自動翻譯所有 data-i18n-title 元素
     document.querySelectorAll('[data-i18n-title]').forEach(el => {
         const key = el.dataset.i18nTitle;
-        if (key && t(key) !== key) {
+        if (key) {
             el.title = t(key);
         }
     });
