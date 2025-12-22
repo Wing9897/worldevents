@@ -172,8 +172,7 @@ def logout():
             token_id = payload.get('jti')
             if token_id:
                 token_blacklist.add(token_id)  # 加入黑名單
-        except (jwt.InvalidTokenError, jwt.ExpiredSignatureError):
-            # Token 無效或已過期，忽略
+        except:
             pass
 
     return jsonify({'success': True, 'message': '登出成功'})
@@ -222,9 +221,8 @@ def token_optional(f):
                 payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
                 if payload.get('type') == 'access':
                     request.wallet_address = payload['wallet_address']
-            except (jwt.InvalidTokenError, jwt.ExpiredSignatureError):
-                # Token 無效或已過期時忽略，繼續但 wallet_address 為 None
-                pass
+            except:
+                pass  # Token 無效時忽略，繼續但 wallet_address 為 None
 
         return f(*args, **kwargs)
 

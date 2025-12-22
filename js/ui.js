@@ -307,15 +307,18 @@ function selectCompactLanguage(lang) {
         flagImg.src = getFlagUrl(lang.countryCode);
         flagImg.alt = lang.name;
     }
-    // 更新 UI 語言
+
+    // 1. 先更新全局狀態和存儲，確保後續邏輯讀取到最新語言
+    currentUILang = lang.code;
+    localStorage.setItem('uiLang', lang.code);
+
+    // 2. 更新全部地區下拉菜單 (依賴 currentUILang)
+    refreshRegionDropdown();
+
+    // 3. 更新全站 UI 文字並重新載入事件 (updateUILanguage 會調用 loadEvents)
     if (typeof updateUILanguage === 'function') {
         updateUILanguage(lang.code);
     }
-    currentUILang = lang.code;
-    safeLocalStorage.setItem('uiLang', lang.code);
-
-    // 刷新地區下拉選單以更新翻譯
-    refreshRegionDropdown();
 }
 
 /**
@@ -392,15 +395,39 @@ function initRegionFilter() {
         }
     });
 
-    // 根據瀏覽器語言自動選擇初始地區
-    const browserLang = (typeof detectBrowserUILang === 'function') ? detectBrowserUILang() : '';
-    const matchedRegion = REGIONS.find(r => r.code === browserLang);
+    // 智能分離默認設置：
+    // 雖然架構上完全分離，但為了提升 UX，初次加載時嘗試根據瀏覽器語言 "智能建議" 地區
+    // 如果匹配不到，則默認為 "全部地區"，保持中立
 
-    if (matchedRegion && matchedRegion.code) {
-        // 瀏覽器地區在支持列表中，自動選擇
+    let defaultRegionCode = '';
+    try {
+        const browserLang = navigator.language || navigator.userLanguage || '';
+        if (browserLang) {
+            const parts = browserLang.toLowerCase().split('-');
+            if (parts.length > 1) {
+                // 格式如 zh-tw, en-us: 直接取地區碼
+                defaultRegionCode = parts[1];
+            } else {
+                // 格式如 ja, ko, es: 嘗試映射到主要國家
+                const langMap = {
+                    'ja': 'jp', 'ko': 'kr', 'en': 'us',
+                    'pt': 'br', 'zh': 'cn'
+                };
+                defaultRegionCode = langMap[parts[0]] || parts[0];
+            }
+        }
+    } catch (e) {
+        console.warn('Auto-detect region failed:', e);
+    }
+
+    // 嘗試在支持的列表中尋找匹配
+    const matchedRegion = REGIONS.find(r => r.code === defaultRegionCode);
+
+    if (matchedRegion) {
+        // 命中！智能預選該地區
         selectRegion(matchedRegion);
     } else {
-        // 不在支持列表中，設置為全部地區
+        // 未命中 (或瀏覽器語言無法識別)，嚴格默認為「全部地區」
         if (flagImg) flagImg.src = getFlagUrl('un');
         if (nameSpan) nameSpan.textContent = t('allRegions', '全部地區');
         selectedRegion = '';

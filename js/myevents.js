@@ -164,11 +164,11 @@ async function saveProfile() {
             // 返回顯示模式
             hideEditMode();
         } else {
-            showToast('儲存失敗', 'error');
+            showToast(t('errorSaveProfile', 'Save failed'), 'error');
         }
     } catch (err) {
         console.error('儲存用戶資料失敗:', err);
-        showToast('網路錯誤', 'error');
+        showToast(t('errorNetwork', 'Network error'), 'error');
     } finally {
         saveBtn.disabled = false;
         saveBtn.innerHTML = originalText;

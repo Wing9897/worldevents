@@ -126,7 +126,7 @@ const Forms = {
         // 顯示剩餘配額
         if (els.imageQuotaInfo && typeof userQuota !== 'undefined') {
             const remaining = userQuota - (typeof userEventCount !== 'undefined' ? userEventCount : 0);
-            els.imageQuotaInfo.textContent = `(剩餘 ${remaining} 次)`;
+            els.imageQuotaInfo.textContent = `(${t('remaining')} ${remaining} ${t('times')})`;
             els.imageQuotaInfo.className = 'quota-info' + (remaining <= 3 ? ' low' : '') + (remaining <= 0 ? ' empty' : '');
         }
 
@@ -206,7 +206,7 @@ const Forms = {
 
             if (storageMode === 'onchain') {
                 // On-chain 模式：先執行 Solana 交易，成功後才上傳圖片
-                showToast('正在發送到 Solana 區塊鏈...請勿離開頁面', 'info');
+                showToast(t('sendingToSolana'), 'info');
 
                 // 添加頁面離開警告
                 const beforeUnloadHandler = (e) => {
@@ -218,7 +218,7 @@ const Forms = {
 
                 if (typeof publishEventToSolana !== 'function') {
                     window.removeEventListener('beforeunload', beforeUnloadHandler);
-                    showToast('Solana 模組未加載', 'error');
+                    showToast(t('solanaModuleError'), 'error');
                     return;
                 }
 
@@ -228,15 +228,15 @@ const Forms = {
                 window.removeEventListener('beforeunload', beforeUnloadHandler);
 
                 if (!solanaResult.success) {
-                    showToast('Solana 交易失敗: ' + solanaResult.error, 'error');
+                    showToast(t('txFailed') + solanaResult.error, 'error');
                     return; // On-chain 失敗，不上傳圖片
                 }
 
-                showToast('區塊鏈交易已確認!', 'success');
+                showToast(t('txnConfirmed'), 'success');
 
                 // Solana 成功後，上傳圖片（如果有）
                 if (this.pendingImageFile) {
-                    showToast('正在上傳圖片...', 'info');
+                    showToast(t('uploadingImage'), 'info');
                     const imagePath = await this.uploadPendingImage();
                     if (imagePath) {
                         serverData.image_path = imagePath;
@@ -244,12 +244,12 @@ const Forms = {
                 }
 
                 serverData.tx_signature = solanaResult.signature;
-                serverData.tx_network = typeof SOLANA_CONFIG !== 'undefined' ? SOLANA_CONFIG.NETWORK : 'devnet';
+                serverData.tx_network = 'devnet';
                 serverData.storage_mode = 'onchain';
             } else {
                 // Local 模式：提交時上傳圖片
                 if (this.pendingImageFile) {
-                    showToast('正在上傳圖片...', 'info');
+                    showToast(t('uploadingImage'), 'info');
                     const imagePath = await this.uploadPendingImage();
                     if (imagePath) {
                         serverData.image_path = imagePath;
@@ -275,7 +275,7 @@ const Forms = {
                 if (storageMode === 'onchain') {
                     showToast(t('eventCreated') + ' ⛓️ TX: ' + serverData.tx_signature.substring(0, 8) + '...', 'success');
                 } else {
-                    showToast(t('eventCreated') + ' 💾 已儲存到本地', 'success');
+                    showToast(t('eventCreated') + ' 💾 ' + t('savedToLocal'), 'success');
                 }
 
                 if (els.eventLimit) {
@@ -367,7 +367,7 @@ const Forms = {
         };
         reader.readAsDataURL(file);
 
-        showToast('圖片已選取，將在提交時上傳', 'info');
+        showToast(t('imageSelected'), 'info');
     },
 
     // 實際上傳圖片

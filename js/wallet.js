@@ -29,7 +29,7 @@ async function connectPhantom() {
         // 2. 請求 nonce
         const nonceResponse = await fetch(`${API_BASE}/auth/nonce/${address}`);
         if (!nonceResponse.ok) {
-            throw new Error('無法獲取簽名訊息');
+            throw new Error(t('errorSignMessage', 'Failed to get signature message'));
         }
         const { nonce, message } = await nonceResponse.json();
 
@@ -57,12 +57,12 @@ async function connectPhantom() {
             refreshToken = authData.refresh_token;
 
             // 儲存到 localStorage
-            safeLocalStorage.setItem('accessToken', accessToken);
-            safeLocalStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
 
             handleWalletConnected(address);
         } else {
-            throw new Error(authData.error || '認證失敗');
+            throw new Error(authData.error || t('errorAuthFailed', 'Authentication failed'));
         }
 
     } catch (err) {
@@ -76,7 +76,7 @@ async function handleWalletConnected(address) {
     walletAddress = address;
 
     // 儲存到 localStorage
-    safeLocalStorage.setItem('walletAddress', address);
+    localStorage.setItem('walletAddress', address);
 
     elements.connectWallet.classList.add('hidden');
     elements.walletInfo.classList.remove('hidden');
@@ -113,7 +113,7 @@ async function handleWalletConnected(address) {
         elements.showAddEvent.disabled = false;
     }
 
-    document.querySelector('.add-event-hint').textContent = t('addEventHint').replace('連接錢包後，', '');
+    document.querySelector('.add-event-hint').textContent = t('addEventHintConnected', 'Right-click on map to add event');
     showToast(t('walletConnected'), 'success');
 }
 
@@ -128,7 +128,7 @@ async function disconnectPhantom() {
                 body: JSON.stringify({ refresh_token: refreshToken })
             });
         } catch (err) {
-            console.error('登出 API 調用失敗:', err);
+            console.error(t('errorLogoutAPI', 'Logout API call failed') + ':', err);
         }
     }
 
@@ -151,10 +151,10 @@ async function disconnectPhantom() {
     selectedSubscriptions = [];
 
     // 清除 localStorage
-    safeLocalStorage.removeItem('accessToken');
-    safeLocalStorage.removeItem('refreshToken');
-    safeLocalStorage.removeItem('walletAddress');
-    safeLocalStorage.removeItem('selectedSubscriptions');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('walletAddress');
+    localStorage.removeItem('selectedSubscriptions');
 
     // 更新 UI
     elements.connectWallet.classList.remove('hidden');

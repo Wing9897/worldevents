@@ -35,16 +35,8 @@ init_db()
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_IMAGE_WIDTH = 400  # 符合 event card 寬度
-# 與前端 MARKER_ICONS 完全一致的圖標列表
-ALLOWED_ICONS = {
-    '📍', '🎉', '🎵', '🏆', '🎪', '🎭', '📌', '⭐', '🔥', '💡',
-    '🎯', '🏁', '🎈', '🎊', '🎤', '🏟️', '🎨', '📸', '🎬', '🎮',
-    '🚀', '✈️', '🚗', '🚢', '🏠', '🏢', '🏫', '🏥', '⛪', '🕌',
-    '🗼', '🗽', '🌋', '🏔️', '🌊', '🌲', '🌸', '🌺', '🍀', '🎄',
-    '⚽', '🏀', '🎾', '🏈', '⚾', '🎳', '🏊', '🚴', '🧗', '🎿',
-    '🍕', '🍔', '🍣', '🍰', '🍿', '☕', '🍺', '🍷', '🥳', '💻'
-}
-ALLOWED_REGIONS = {'zh-tw', 'zh-cn', 'en', 'en-us', 'ja', 'ko', 'es', 'fr', 'de', 'pt', 'ru'}
+ALLOWED_ICONS = {'📍', '🎤', '🌟', '👥', '🎭', '🎨', '🎵', '🏃', '💻', '🎓', '🏺', '🎪'}
+ALLOWED_REGIONS = {'tw', 'cn', 'gb', 'us', 'jp', 'kr', 'es', 'fr', 'de', 'br', 'ru', 'en'}
 
 # 確保上傳目錄存在
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
