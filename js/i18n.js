@@ -145,7 +145,9 @@ const I18N = {
         storageLocalDesc: '儲存在伺服器資料庫 (無字數限制)',
         joinCommunity: '加入社群',
         region: '地區',
-        selectRegion: '-- 請選擇地區 --'
+        selectRegion: '-- 請選擇地區 --',
+        filtersCleared: '過濾器已清除',
+        pleaseSelectRegion: '請選擇地區'
     },
     'zh-cn': {
         title: '世界事件 Dashboard',
@@ -287,7 +289,9 @@ const I18N = {
         storageLocalDesc: '存储在服务器数据库 (无字数限制)',
         joinCommunity: '加入社群',
         region: '地区',
-        selectRegion: '-- 请选择地区 --'
+        selectRegion: '-- 请选择地区 --',
+        filtersCleared: '过滤器已清除',
+        pleaseSelectRegion: '请选择地区'
     },
     'en': {
         title: 'World Events Dashboard',
@@ -429,7 +433,9 @@ const I18N = {
         storageLocalDesc: 'Store in server database (no limit)',
         joinCommunity: 'Join Community',
         region: 'Region',
-        selectRegion: '-- Select Region --'
+        selectRegion: '-- Select Region --',
+        filtersCleared: 'Filters cleared',
+        pleaseSelectRegion: 'Please select a region'
     },
     'ja': {
         title: 'ワールドイベント Dashboard',
@@ -573,7 +579,9 @@ const I18N = {
         storageLocalDesc: 'サーバーデータベースに保存（制限なし）',
         joinCommunity: 'コミュニティに参加',
         region: '地域',
-        selectRegion: '-- 地域を選択 --'
+        selectRegion: '-- 地域を選択 --',
+        filtersCleared: 'フィルターがクリアされました',
+        pleaseSelectRegion: '地域を選択してください'
     },
     'ko': {
         title: '월드 이벤트 Dashboard',
@@ -717,7 +725,9 @@ const I18N = {
         storageLocalDesc: '서버 데이터베이스에 저장 (제한 없음)',
         joinCommunity: '커뮤니티 가입',
         region: '지역',
-        selectRegion: '-- 지역 선택 --'
+        selectRegion: '-- 지역 선택 --',
+        filtersCleared: '필터가 지워졌습니다',
+        pleaseSelectRegion: '지역을 선택하십시오'
     },
     'es': {
         title: 'Panel de Eventos Mundiales',
@@ -860,7 +870,9 @@ const I18N = {
         storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
         joinCommunity: 'Únete a la Comunidad',
         region: 'Región',
-        selectRegion: '-- Seleccione Región --'
+        selectRegion: '-- Seleccionar Región --',
+        filtersCleared: 'Filtros borrados',
+        pleaseSelectRegion: 'Por favor seleccione una región'
     },
     'fr': {
         title: 'Tableau de bord mondial',
@@ -1003,7 +1015,9 @@ const I18N = {
         storageLocalDesc: 'Stocker dans la base de données du serveur (sans limite)',
         joinCommunity: 'Rejoindre la Communauté',
         region: 'Région',
-        selectRegion: '-- Sélectionnez la Région --'
+        selectRegion: '-- Sélectionner région --',
+        filtersCleared: 'Filtres effacés',
+        pleaseSelectRegion: 'Veuillez sélectionner une région'
     },
     'de': {
         title: 'Welt-Event-Dashboard',
@@ -1146,7 +1160,9 @@ const I18N = {
         storageLocalDesc: 'In Serverdatenbank speichern (kein Limit)',
         joinCommunity: 'Der Community beitreten',
         region: 'Region',
-        selectRegion: '-- Region auswählen --'
+        selectRegion: '-- Region wählen --',
+        filtersCleared: 'Filter gelöscht',
+        pleaseSelectRegion: 'Bitte wählen Sie eine Region'
     },
     'pt': {
         title: 'Painel de Eventos Mundiais',
@@ -1289,7 +1305,9 @@ const I18N = {
         storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
         joinCommunity: 'Únete a la Comunidad',
         region: 'Região',
-        selectRegion: '-- Selecione Região --'
+        selectRegion: '-- Selecione a região --',
+        filtersCleared: 'Filtros limpos',
+        pleaseSelectRegion: 'Por favor, selecione uma região'
     },
     'ru': {
         title: 'Панель мировых событий',
@@ -1432,7 +1450,9 @@ const I18N = {
         storageLocalDesc: 'Хранить в базе данных сервера (без ограничения)',
         joinCommunity: 'Присоединиться к сообществу',
         region: 'Регион',
-        selectRegion: '-- Выберите регион --'
+        selectRegion: '-- Выберите регион --',
+        filtersCleared: 'Фильтры сброшены',
+        pleaseSelectRegion: 'Пожалуйста, выберите регион'
     }
 };
 
@@ -1526,7 +1546,7 @@ function updateUILanguage(langCode) {
     } else {
         // 記錄選擇的語言
         if (typeof lastUILang !== 'undefined') lastUILang = langCode;
-        if (typeof localStorage !== 'undefined') localStorage.setItem('uiLang', langCode);
+        if (typeof localStorage !== 'undefined') safeLocalStorage.setItem('uiLang', langCode);
     }
 
     // 查找對應的翻譯（fallback 邏輯）

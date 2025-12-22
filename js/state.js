@@ -32,23 +32,23 @@ let shownRecommendedCount = 0;
  */
 function restoreState() {
     // 恢復認證資訊
-    const savedAccessToken = localStorage.getItem('accessToken');
-    const savedRefreshToken = localStorage.getItem('refreshToken');
-    const savedWalletAddress = localStorage.getItem('walletAddress');
+    const savedAccessToken = safeLocalStorage.getItem('accessToken');
+    const savedRefreshToken = safeLocalStorage.getItem('refreshToken');
+    const savedWalletAddress = safeLocalStorage.getItem('walletAddress');
 
     if (savedAccessToken) accessToken = savedAccessToken;
     if (savedRefreshToken) refreshToken = savedRefreshToken;
     if (savedWalletAddress) walletAddress = savedWalletAddress;
 
     // 恢復 UI 設定
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeLocalStorage.getItem('theme');
     if (savedTheme) isDarkTheme = savedTheme === 'dark';
 
-    const savedUILang = localStorage.getItem('uiLang');
+    const savedUILang = safeLocalStorage.getItem('uiLang');
     if (savedUILang) currentUILang = savedUILang;
 
     // 恢復訂閱選擇
-    const savedSubscriptions = localStorage.getItem('selectedSubscriptions');
+    const savedSubscriptions = safeLocalStorage.getItem('selectedSubscriptions');
     if (savedSubscriptions) {
         selectedSubscriptions = savedSubscriptions.split(',').filter(w => w);
     }
@@ -58,13 +58,13 @@ function restoreState() {
  * 保存狀態到 localStorage
  */
 function saveState() {
-    if (accessToken) localStorage.setItem('accessToken', accessToken);
-    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-    if (walletAddress) localStorage.setItem('walletAddress', walletAddress);
+    if (accessToken) safeLocalStorage.setItem('accessToken', accessToken);
+    if (refreshToken) safeLocalStorage.setItem('refreshToken', refreshToken);
+    if (walletAddress) safeLocalStorage.setItem('walletAddress', walletAddress);
 
-    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
-    localStorage.setItem('uiLang', currentUILang);
-    localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+    safeLocalStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+    safeLocalStorage.setItem('uiLang', currentUILang);
+    safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
 }
 
 /**
@@ -74,7 +74,7 @@ function clearAuthState() {
     accessToken = null;
     refreshToken = null;
     walletAddress = null;
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('walletAddress');
+    safeLocalStorage.removeItem('accessToken');
+    safeLocalStorage.removeItem('refreshToken');
+    safeLocalStorage.removeItem('walletAddress');
 }

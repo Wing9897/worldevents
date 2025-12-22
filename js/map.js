@@ -7,7 +7,7 @@
 function initMap() {
     // 檢測瀏覽器主題偏好
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const savedTheme = localStorage.getItem('theme');
+    const savedTheme = safeLocalStorage.getItem('theme');
     isDarkTheme = savedTheme ? (savedTheme === 'dark') : prefersDark;
 
     // 應用主題
@@ -104,7 +104,7 @@ function toggleMapTheme() {
     }).addTo(map);
 
     document.body.classList.toggle('dark-theme', isDarkTheme);
-    localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+    safeLocalStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
 
     elements.themeIcon.textContent = isDarkTheme ? '☀️' : '🌙';
 }

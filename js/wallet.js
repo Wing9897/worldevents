@@ -57,8 +57,8 @@ async function connectPhantom() {
             refreshToken = authData.refresh_token;
 
             // 儲存到 localStorage
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
+            safeLocalStorage.setItem('accessToken', accessToken);
+            safeLocalStorage.setItem('refreshToken', refreshToken);
 
             handleWalletConnected(address);
         } else {
@@ -76,7 +76,7 @@ async function handleWalletConnected(address) {
     walletAddress = address;
 
     // 儲存到 localStorage
-    localStorage.setItem('walletAddress', address);
+    safeLocalStorage.setItem('walletAddress', address);
 
     elements.connectWallet.classList.add('hidden');
     elements.walletInfo.classList.remove('hidden');
@@ -151,10 +151,10 @@ async function disconnectPhantom() {
     selectedSubscriptions = [];
 
     // 清除 localStorage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('walletAddress');
-    localStorage.removeItem('selectedSubscriptions');
+    safeLocalStorage.removeItem('accessToken');
+    safeLocalStorage.removeItem('refreshToken');
+    safeLocalStorage.removeItem('walletAddress');
+    safeLocalStorage.removeItem('selectedSubscriptions');
 
     // 更新 UI
     elements.connectWallet.classList.remove('hidden');
