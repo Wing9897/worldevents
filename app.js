@@ -111,6 +111,10 @@ function initEventListeners() {
     if (elements.closeCard) {
         elements.closeCard.addEventListener('click', () => {
             elements.eventCard.classList.add('hidden');
+            // 清除當前顯示的事件
+            if (typeof currentDisplayedEvent !== 'undefined') {
+                currentDisplayedEvent = null;
+            }
         });
     }
 

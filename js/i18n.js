@@ -1611,6 +1611,9 @@ function updateSpecificUI() {
 
     // 更新側邊欄地區過濾器的選項文字
     updateRegionFilterOptions();
+
+    // 更新當前顯示的 Event Card（如果有打開的話）
+    updateEventCardLanguage();
 }
 
 /**
