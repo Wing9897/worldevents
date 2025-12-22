@@ -1675,7 +1675,6 @@ const LANGUAGES = [
     { code: 'zh-tw', flag: 'tw', name: '繁體中文', countryCode: 'tw' },
     { code: 'zh-cn', flag: 'cn', name: '简体中文', countryCode: 'cn' },
     { code: 'en', flag: 'gb', name: 'English', countryCode: 'gb' },
-    { code: 'en-us', flag: 'us', name: 'English (US)', countryCode: 'us' },
     { code: 'ja', flag: 'jp', name: '日本語', countryCode: 'jp' },
     { code: 'ko', flag: 'kr', name: '한국어', countryCode: 'kr' },
     { code: 'es', flag: 'es', name: 'Español', countryCode: 'es' },
