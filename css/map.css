@@ -187,6 +187,8 @@
     align-items: center;
     justify-content: center;
     transition: all var(--transition-fast);
+    z-index: 10;
+    /* 確保關閉按鈕在圖片之上 */
 }
 
 .card-close:hover {

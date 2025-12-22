@@ -61,11 +61,8 @@ function switchTab(tabName) {
 // ===== 載入訂閱數據（委託給 subscription.js） =====
 function loadSubscriptionsData() {
     // 觸發訂閱模組的載入邏輯
-    if (typeof openSubscriptionsModal_internal === 'function') {
-        openSubscriptionsModal_internal();
-    } else {
-        // 直接呼叫原有邏輯
-        loadSubscriptionsList();
+    if (typeof openSubscriptionsModal === 'function') {
+        openSubscriptionsModal();
     }
 }
 

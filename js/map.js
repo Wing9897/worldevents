@@ -24,7 +24,7 @@ function initMap() {
         worldCopyJump: true
     });
 
-    const tileUrl = isDarkTheme ? MAP_TILES.dark : MAP_TILES.light;
+    const tileUrl = isDarkTheme ? CONFIG.MAP_TILES.dark : CONFIG.MAP_TILES.light;
     currentTileLayer = L.tileLayer(tileUrl, {
         attribution: '&copy; OpenStreetMap contributors',
         subdomains: 'abcd',
@@ -97,7 +97,7 @@ function toggleMapTheme() {
         map.removeLayer(currentTileLayer);
     }
 
-    const tileUrl = isDarkTheme ? MAP_TILES.dark : MAP_TILES.light;
+    const tileUrl = isDarkTheme ? CONFIG.MAP_TILES.dark : CONFIG.MAP_TILES.light;
     currentTileLayer = L.tileLayer(tileUrl, {
         attribution: '&copy; Contributors',
         maxZoom: 20
@@ -122,4 +122,11 @@ function togglePanel() {
         panelToggle.classList.toggle('collapsed', isPanelCollapsed);
     }
     elements.toggleIcon.textContent = isPanelCollapsed ? '▶' : '◀';
+
+    // 等待 CSS 過渡動畫完成後，通知 Leaflet 重新計算地圖尺寸
+    setTimeout(() => {
+        if (map) {
+            map.invalidateSize();
+        }
+    }, 350); // 略大於 CSS transition duration (通常 300ms)
 }

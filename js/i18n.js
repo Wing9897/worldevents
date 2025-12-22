@@ -141,6 +141,16 @@ const I18N = {
         storageOnchainDesc: '永久記錄在 Solana 區塊鏈 (字數限制)',
         storageLocal: '本地儲存',
         storageLocalDesc: '儲存在伺服器資料庫 (無字數限制)',
+        noSubscriptions: '尚無訂閱的帳號',
+        confirmUnsubscribe: '確定要取消訂閱此帳號嗎？',
+        unsubscribeSuccess: '取消訂閱成功',
+
+        // IPFS
+        ipfsImage: 'IPFS 圖片',
+        comingSoon: '即將推出',
+        ipfsPlaceholder: 'Qm... 或 bafy...',
+        ipfsHint: '支援 IPFS hash，圖片將永久存儲在去中心化網絡',
+        featureInDev: '此功能正在開發中',
         joinCommunity: '加入社群',
         region: '地區',
         selectRegion: '-- 請選擇地區 --',
@@ -303,6 +313,13 @@ const I18N = {
         storageOnchainDesc: '永久记录在 Solana 区块链 (字数限制)',
         storageLocal: '本地存储',
         storageLocalDesc: '存储在服务器数据库 (无字数限制)',
+
+        // IPFS
+        ipfsImage: 'IPFS 图片',
+        comingSoon: '即将推出',
+        ipfsPlaceholder: 'Qm... 或 bafy...',
+        ipfsHint: '支持 IPFS hash，图片将永久存储在去中心化网络',
+        featureInDev: '此功能正在开发中',
         joinCommunity: '加入社群',
         region: '地区',
         selectRegion: '-- 请选择地区 --',
@@ -465,6 +482,13 @@ const I18N = {
         storageOnchainDesc: 'Permanently recorded on Solana blockchain (character limit)',
         storageLocal: 'Local',
         storageLocalDesc: 'Store in server database (no limit)',
+
+        // IPFS
+        ipfsImage: 'IPFS Image',
+        comingSoon: 'Coming Soon',
+        ipfsPlaceholder: 'Qm... or bafy...',
+        ipfsHint: 'Supports IPFS hash, images stored permanently on decentralized network',
+        featureInDev: 'Feature under development',
         joinCommunity: 'Join Community',
         region: 'Region',
         selectRegion: '-- Select Region --',
@@ -631,6 +655,12 @@ const I18N = {
         storageOnchainDesc: 'Solanaブロックチェーンに永久記録 (文字数制限)',
         storageLocal: 'ローカル',
         storageLocalDesc: 'サーバーデータベースに保存（制限なし）',
+        // IPFS
+        ipfsImage: 'IPFS画像',
+        comingSoon: '近日公開',
+        ipfsPlaceholder: 'Qm... または bafy...',
+        ipfsHint: 'IPFSハッシュに対応、画像は分散型ネットワークに永久保存されます',
+        featureInDev: '開発中の機能',
         joinCommunity: 'コミュニティに参加',
         region: '地域',
         selectRegion: '-- 地域を選択 --',
@@ -791,6 +821,12 @@ const I18N = {
         storageOnchainDesc: 'Solana 블록체인에 영구 기록 (글자 수 제한)',
         storageLocal: '로컬',
         storageLocalDesc: '서버 데이터베이스에 저장 (제한 없음)',
+        // IPFS
+        ipfsImage: 'IPFS 이미지',
+        comingSoon: '출시 예정',
+        ipfsPlaceholder: 'Qm... 또는 bafy...',
+        ipfsHint: 'IPFS 해시 지원, 이미지는 탈중앙화 네트워크에 영구 저장됩니다',
+        featureInDev: '개발 중인 기능',
         joinCommunity: '커뮤니티 가입',
         region: '지역',
         selectRegion: '-- 지역 선택 --',
@@ -950,6 +986,12 @@ const I18N = {
         storageOnchainDesc: 'Registro permanente en Solana (límite de caracteres)',
         storageLocal: 'Local',
         storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
+        // IPFS
+        ipfsImage: 'Imagen IPFS',
+        comingSoon: 'Próximamente',
+        ipfsPlaceholder: 'Qm... o bafy...',
+        ipfsHint: 'Soporta hash IPFS, las imágenes se almacenan permanentemente en red descentralizada',
+        featureInDev: 'Función en desarrollo',
         joinCommunity: 'Únete a la Comunidad',
         region: 'Región',
         selectRegion: '-- Seleccione Región --',
@@ -1109,6 +1151,12 @@ const I18N = {
         storageOnchainDesc: 'Stockage permanent Solana',
         storageLocal: 'Local',
         storageLocalDesc: 'Stocker dans la base de données du serveur (sans limite)',
+        // IPFS
+        ipfsImage: 'Image IPFS',
+        comingSoon: 'Bientôt disponible',
+        ipfsPlaceholder: 'Qm... ou bafy...',
+        ipfsHint: 'Supporte le hash IPFS, images stockées en permanence sur réseau décentralisé',
+        featureInDev: 'Fonctionnalité en développement',
         joinCommunity: 'Rejoindre la Communauté',
         region: 'Région',
         selectRegion: '-- Sélectionnez la Région --',
@@ -1268,6 +1316,12 @@ const I18N = {
         storageOnchainDesc: 'Permanent auf Solana',
         storageLocal: 'Lokal',
         storageLocalDesc: 'In Serverdatenbank speichern (kein Limit)',
+        // IPFS
+        ipfsImage: 'IPFS Bild',
+        comingSoon: 'Demnächst',
+        ipfsPlaceholder: 'Qm... oder bafy...',
+        ipfsHint: 'Unterstützt IPFS-Hash, Bilder dauerhaft im dezentralen Netzwerk gespeichert',
+        featureInDev: 'Funktion in Entwicklung',
         joinCommunity: 'Der Community beitreten',
         region: 'Region',
         selectRegion: '-- Region auswählen --',
@@ -1426,7 +1480,13 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Armazenamento permanente Solana',
         storageLocal: 'Local',
-        storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
+        storageLocalDesc: 'Armazenar no banco de dados do servidor (sem limite)',
+        // IPFS
+        ipfsImage: 'Imagem IPFS',
+        comingSoon: 'Em breve',
+        ipfsPlaceholder: 'Qm... ou bafy...',
+        ipfsHint: 'Suporta hash IPFS, imagens armazenadas permanentemente na rede descentralizada',
+        featureInDev: 'Funcionalidade em desenvolvimento',
         joinCommunity: 'Únete a la Comunidad',
         region: 'Região',
         selectRegion: '-- Selecione Região --',
@@ -1622,47 +1682,7 @@ const LANGUAGES = [
     { code: 'fr', flag: 'fr', name: 'Français', countryCode: 'fr' },
     { code: 'de', flag: 'de', name: 'Deutsch', countryCode: 'de' },
     { code: 'pt', flag: 'br', name: 'Português', countryCode: 'br' },
-    { code: 'ru', flag: 'ru', name: 'Русский', countryCode: 'ru' }
 ];
-
-/**
- * 地區配置列表 (包含「全部」選項，用於過濾)
- * name 為 i18n key 或原生名稱
- */
-const REGIONS = [
-    { code: '', flag: 'un', nameKey: 'allRegions', countryCode: 'un' },
-    { code: 'tw', flag: 'tw', nameKey: 'regionTW', countryCode: 'tw' },
-    { code: 'cn', flag: 'cn', nameKey: 'regionCN', countryCode: 'cn' },
-    { code: 'gb', flag: 'gb', nameKey: 'regionGB', countryCode: 'gb' },
-    { code: 'us', flag: 'us', nameKey: 'regionUS', countryCode: 'us' },
-    { code: 'jp', flag: 'jp', nameKey: 'regionJP', countryCode: 'jp' },
-    { code: 'kr', flag: 'kr', nameKey: 'regionKR', countryCode: 'kr' },
-    { code: 'es', flag: 'es', nameKey: 'regionES', countryCode: 'es' },
-    { code: 'fr', flag: 'fr', nameKey: 'regionFR', countryCode: 'fr' },
-    { code: 'de', flag: 'de', nameKey: 'regionDE', countryCode: 'de' },
-    { code: 'br', flag: 'br', nameKey: 'regionBR', countryCode: 'br' },
-    { code: 'ru', flag: 'ru', nameKey: 'regionRU', countryCode: 'ru' }
-];
-
-/**
- * 可選圖標列表
- */
-const MARKER_ICONS = [
-    '📍', '🎉', '🎵', '🏆', '🎪', '🎭', '📌', '⭐', '🔥', '💡',
-    '🎯', '🏁', '🎈', '🎊', '🎤', '🏟️', '🎨', '📸', '🎬', '🎮',
-    '🚀', '✈️', '🚗', '🚢', '🏠', '🏢', '🏫', '🏥', '⛪', '🕌',
-    '🗼', '🗽', '🌋', '🏔️', '🌊', '🌲', '🌸', '🌺', '🍀', '🎄',
-    '⚽', '🏀', '🎾', '🏈', '⚾', '🎳', '🏊', '🚴', '🧗', '🎿',
-    '🍕', '🍔', '🍣', '🍰', '🍿', '☕', '🍺', '🍷', '🥳', '💻'
-];
-
-/**
- * 地圖圖層配置
- */
-const MAP_TILES = {
-    dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-    light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-};
 
 // ===== 國際化邏輯 =====
 
@@ -1875,7 +1895,9 @@ function initLanguageSelector() {
         REGIONS.filter(r => r.code).forEach(region => {
             const option = document.createElement('option');
             option.value = region.code;
-            option.textContent = t(region.nameKey) || region.nameKey; // 使用翻譯後的地區名稱
+            // 添加國旗 emoji 前綴
+            const flagEmoji = getFlagEmoji(region.flag);
+            option.textContent = flagEmoji + ' ' + (t(region.nameKey) || region.nameKey);
             elements.eventLanguage.appendChild(option);
         });
 
