@@ -144,20 +144,3 @@ function handleLogout() {
         showToast(t('walletDisconnected'), 'info');
     }
 }
-
-/**
- * 驗證當前 token 是否有效
- * @returns {Promise<boolean>}
- */
-async function validateToken() {
-    if (!accessToken) return false;
-
-    try {
-        const response = await fetch(`${API_BASE}/auth/validate`, {
-            headers: { 'Authorization': `Bearer ${accessToken}` }
-        });
-        return response.ok;
-    } catch {
-        return false;
-    }
-}

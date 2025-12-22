@@ -10,6 +10,9 @@ const RECOMMENDED_BATCH_SIZE = (typeof CONFIG !== 'undefined') ? CONFIG.RECOMMEN
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', async () => {
+    // 0. 恢復全局狀態
+    if (typeof restoreState === 'function') restoreState(); // js/state.js
+
     // 1. 初始化基礎模組
     initMap(); // js/map.js
     initLanguageSelector(); // js/i18n.js

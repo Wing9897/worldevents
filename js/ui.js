@@ -327,6 +327,7 @@ function selectCompactLanguage(lang) {
     // 1. 先更新全局狀態和存儲，確保後續邏輯讀取到最新語言
     currentUILang = lang.code;
     localStorage.setItem('uiLang', lang.code);
+    if (typeof saveState === 'function') saveState(); // js/state.js
 
     // 2. 更新全部地區下拉菜單 (依賴 currentUILang)
     refreshRegionDropdown();
