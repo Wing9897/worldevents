@@ -105,6 +105,7 @@ function toggleMapTheme() {
 
     document.body.classList.toggle('dark-theme', isDarkTheme);
     localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
+    if (typeof saveState === 'function') saveState(); // js/state.js
 
     elements.themeIcon.textContent = isDarkTheme ? '☀️' : '🌙';
 }

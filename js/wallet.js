@@ -150,10 +150,14 @@ async function disconnectPhantom() {
     refreshToken = null;
     selectedSubscriptions = [];
 
-    // 清除 localStorage
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('walletAddress');
+    // 清除認證狀態（使用集中式函數）
+    if (typeof clearAuthState === 'function') {
+        clearAuthState(); // js/state.js
+    } else {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('walletAddress');
+    }
     localStorage.removeItem('selectedSubscriptions');
 
     // 更新 UI
@@ -164,9 +168,4 @@ async function disconnectPhantom() {
 
     showToast(t('walletDisconnected'), 'success');
     loadEvents();
-}
-
-// ===== 格式化錢包地址 =====
-function formatAddress(address) {
-    return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '';
 }
