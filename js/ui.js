@@ -91,6 +91,22 @@ function getFlagUrl(countryCode) {
 }
 
 /**
+ * 將國家/地區代碼轉換為 Emoji 國旗
+ * @param {string} countryCode - 2 字母國家代碼 (ISO 3166-1 alpha-2)
+ * @returns {string} 國旗 emoji 或地球符號
+ */
+function getFlagEmoji(countryCode) {
+    if (!countryCode || countryCode === 'earth' || countryCode === 'un') {
+        return '🌐'; // 地球表示「全部地區」
+    }
+    const code = countryCode.toUpperCase();
+    // 將字母轉換為區域指示符號 (例如 'TW' -> 🇹🇼)
+    return String.fromCodePoint(
+        ...code.split('').map(char => 0x1F1E6 - 65 + char.charCodeAt(0))
+    );
+}
+
+/**
  * 格式化日期時間
  * @param {string} dateStr - ISO 日期字串
  * @param {boolean} includeTime - 是否包含時間
@@ -363,12 +379,12 @@ function initRegionFilter() {
             const option = document.createElement('div');
             option.className = 'region-option';
             option.dataset.region = region.code;
-            option.dataset.flag = region.countryCode;
+            option.dataset.flag = region.flag;
             option.dataset.nameKey = region.nameKey;
 
             const displayName = t(region.nameKey, region.nameKey);
             option.innerHTML = `
-                <img class="flag-icon" src="${getFlagUrl(region.countryCode)}" alt="${displayName}">
+                <img class="flag-icon" src="${getFlagUrl(region.flag)}" alt="${displayName}">
                 <span class="region-name">${displayName}</span>
             `;
             option.addEventListener('click', () => {
@@ -442,7 +458,7 @@ function selectRegion(region) {
     const nameSpan = elements.currentRegionName;
     const displayName = t(region.nameKey, region.nameKey);
 
-    if (flagImg) flagImg.src = getFlagUrl(region.countryCode);
+    if (flagImg) flagImg.src = getFlagUrl(region.flag);
     if (nameSpan) nameSpan.textContent = displayName;
 
     selectedRegion = region.code;
@@ -462,3 +478,39 @@ function selectRegion(region) {
 function getSelectedRegion() {
     return selectedRegion;
 }
+// ===== Lightbox (Image Zoom) =====
+function openLightbox(imageSrc) {
+    const lightbox = document.getElementById('lightboxModal');
+    const lightboxImg = document.getElementById('lightboxImage');
+
+    if (lightbox && lightboxImg) {
+        lightboxImg.src = imageSrc;
+        lightbox.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+
+        // Close on background click
+        lightbox.onclick = (e) => {
+            if (e.target === lightbox) closeLightbox();
+        };
+    }
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightboxModal');
+    if (lightbox) {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+}
+
+// Global listeners for lightbox
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('lightboxClose');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeLightbox);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+});

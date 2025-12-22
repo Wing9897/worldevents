@@ -141,8 +141,12 @@ function showEventCard(event) {
     if (event.image_path) {
         elements.cardImg.src = event.image_path;
         elements.cardImage.classList.remove('hidden');
+
+        // 點擊放大
+        elements.cardImg.onclick = () => openLightbox(event.image_path);
     } else {
         elements.cardImage.classList.add('hidden');
+        elements.cardImg.onclick = null;
     }
 
     // 顯示 Solana 交易連結 (如果是上鏈事件)

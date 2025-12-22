@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="css/map.css">
     <link rel="stylesheet" href="css/myevents.css">
     <link rel="stylesheet" href="css/subscription.css">
+    <link rel="stylesheet" href="css/lightbox.css">
 
 
 </head>
@@ -301,10 +302,12 @@
 
                 <!-- IPFS 圖片 (未來功能) -->
                 <div class="form-group">
-                    <label>IPFS 圖片 <span class="badge-coming-soon">即將推出</span></label>
-                    <input type="text" id="eventIpfsHash" class="input" placeholder="Qm... 或 bafy..." disabled
-                        title="此功能正在開發中">
-                    <p class="filter-hint">支援 IPFS hash，圖片將永久存儲在去中心化網絡</p>
+                    <label data-i18n="ipfsImage">IPFS 圖片 <span class="badge-coming-soon"
+                            data-i18n="comingSoon">即將推出</span></label>
+                    <input type="text" id="eventIpfsHash" class="input" placeholder="Qm... or bafy..."
+                        data-i18n-placeholder="ipfsPlaceholder" disabled title="Feature under development"
+                        data-i18n-title="featureInDev">
+                    <p class="filter-hint" data-i18n="ipfsHint">支援 IPFS hash，圖片將永久存儲在去中心化網絡</p>
                 </div>
 
                 <!-- 圖片上傳 -->
@@ -474,8 +477,15 @@
     <div id="toastContainer" class="toast-container"></div>
     <div id="toast" class="toast hidden"></div>
 
+    <!-- 圖片放大 Lightbox -->
+    <div id="lightboxModal" class="lightbox-modal hidden">
+        <span class="lightbox-close" id="lightboxClose">&times;</span>
+        <img class="lightbox-content" id="lightboxImage">
+    </div>
+
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 
     <!-- Solana Web3 -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>

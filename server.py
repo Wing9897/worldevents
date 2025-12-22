@@ -35,7 +35,14 @@ init_db()
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 MAX_IMAGE_WIDTH = 400  # 符合 event card 寬度
-ALLOWED_ICONS = {'📍', '🎤', '🌟', '👥', '🎭', '🎨', '🎵', '🏃', '💻', '🎓', '🏺', '🎪'}
+ALLOWED_ICONS = {
+    '📍', '🎉', '🎵', '🏆', '🎪', '🎭', '📌', '⭐', '🔥', '💡',
+    '🎯', '🏁', '🎈', '🎊', '🎤', '🏟️', '🎨', '📸', '🎬', '🎮',
+    '🚀', '✈️', '🚗', '🚢', '🏠', '🏢', '🏫', '🏥', '⛪', '🕌',
+    '🗼', '🗽', '🌋', '🏔️', '🌊', '🌲', '🌸', '🌺', '🍀', '🎄',
+    '⚽', '🏀', '🎾', '🏈', '⚾', '🎳', '🏊', '🚴', '🧗', '🎿',
+    '🍕', '🍔', '🍣', '🍰', '🍿', '☕', '🍺', '🍷', '🥳', '💻'
+}
 ALLOWED_REGIONS = {'tw', 'cn', 'gb', 'us', 'jp', 'kr', 'es', 'fr', 'de', 'br', 'ru', 'en'}
 
 # 確保上傳目錄存在
@@ -600,7 +607,7 @@ def get_user_subscriptions():
 
 @app.route('/api/user/profile/<wallet_address>', methods=['GET'])
 @token_optional
-def get_user_profile(wallet_address):
+def get_public_user_profile(wallet_address):
     """獲取用戶公開資料"""
     role = get_user_role(wallet_address)
     subscriber_count = get_subscriber_count(wallet_address)
