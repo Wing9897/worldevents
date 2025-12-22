@@ -17,7 +17,7 @@ async function openSubscriptionsModal() {
     }
 
     // 從 localStorage 恢復選定的訂閱
-    const savedSubscriptions = localStorage.getItem('selectedSubscriptions');
+    const savedSubscriptions = safeLocalStorage.getItem('selectedSubscriptions');
     if (savedSubscriptions) {
         selectedSubscriptions = savedSubscriptions.split(',').filter(w => w);
     }
@@ -85,7 +85,7 @@ function generateAccountsHTML(accounts, isMySubscriptions) {
         user: t('roleUser')
     };
 
-    const hasStoredSettings = localStorage.getItem('selectedSubscriptions') !== null;
+    const hasStoredSettings = safeLocalStorage.getItem('selectedSubscriptions') !== null;
 
     return accounts.map(account => {
         let isChecked;
@@ -180,7 +180,7 @@ async function handleQuickSubscribe(targetWallet) {
 
             if (!selectedSubscriptions.includes(targetWallet)) {
                 selectedSubscriptions.push(targetWallet);
-                localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+                safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             }
 
             openSubscriptionsModal();
@@ -209,7 +209,7 @@ async function handleUnsubscribe(targetWallet) {
         if (data.success) {
             showToast(t('unsubscribeSuccess'), 'success');
             selectedSubscriptions = selectedSubscriptions.filter(w => w !== targetWallet);
-            localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+            safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             await openSubscriptionsModal();
         } else {
             showToast(data.error || '取消訂閱失敗', 'error');
@@ -247,7 +247,7 @@ async function handleManualSubscribe() {
 
             if (!selectedSubscriptions.includes(walletAddress)) {
                 selectedSubscriptions.push(walletAddress);
-                localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+                safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             }
 
             openSubscriptionsModal();
@@ -271,7 +271,7 @@ function applySubscriptionFilter() {
     ];
 
     selectedSubscriptions = allChecked;
-    localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
+    safeLocalStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
 
     closeSubscriptionsModal();
     loadEvents();
@@ -280,7 +280,7 @@ function applySubscriptionFilter() {
 
 // ===== 恢復選定的訂閱 =====
 function restoreSelectedSubscriptions() {
-    const savedSubscriptions = localStorage.getItem('selectedSubscriptions');
+    const savedSubscriptions = safeLocalStorage.getItem('selectedSubscriptions');
     if (savedSubscriptions) {
         selectedSubscriptions = savedSubscriptions.split(',').filter(w => w);
     }

@@ -312,7 +312,7 @@ function selectCompactLanguage(lang) {
         updateUILanguage(lang.code);
     }
     currentUILang = lang.code;
-    localStorage.setItem('uiLang', lang.code);
+    safeLocalStorage.setItem('uiLang', lang.code);
 
     // 刷新地區下拉選單以更新翻譯
     refreshRegionDropdown();
