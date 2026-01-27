@@ -262,6 +262,13 @@ def get_events():
         query += ' AND e.language = ?'
         params.append(language)
     
+    # 上鏈狀態過濾
+    onchain_filter = request.args.get('onchain')
+    if onchain_filter == 'onchain':
+        query += " AND e.tx_signature IS NOT NULL AND e.tx_signature != ''"
+    elif onchain_filter == 'local':
+        query += " AND (e.tx_signature IS NULL OR e.tx_signature = '')"
+    
     query += ' ORDER BY e.date DESC'
     
     cursor.execute(query, params)
@@ -311,8 +318,8 @@ def create_event():
         region_code = 'en'  # 默認英語地區
     
     cursor.execute('''
-        INSERT INTO events (name, description, lat, lng, date, start_date, end_date, user, wallet_address, event_type, language, image_path, icon, tx_signature, tx_network, storage_mode)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO events (name, description, lat, lng, date, start_date, end_date, user, wallet_address, event_type, language, image_path, icon, tx_signature, tx_network, storage_mode, ipfs_hash)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         data['name'],
         data.get('description', ''),
@@ -329,7 +336,8 @@ def create_event():
         data.get('icon') if data.get('icon') in ALLOWED_ICONS else '📍',
         data.get('tx_signature', ''),
         data.get('tx_network', ''),
-        data.get('storage_mode', 'local')
+        data.get('storage_mode', 'local'),
+        data.get('ipfs_hash', '')
     ))
     
     event_id = cursor.lastrowid

@@ -1,24 +1,73 @@
 /**
  * Solana 區塊鏈整合
- * 使用 devnet 進行 Memo 交易
+ * 支援 Mainnet / Devnet / Testnet 網路切換
  */
 
-// Solana 配置
-const SOLANA_CONFIG = {
-    // 使用 devnet
-    NETWORK: 'devnet',
-    RPC_URL: 'https://api.devnet.solana.com',
+// Solana 網路配置
+const SOLANA_NETWORKS = {
+    mainnet: {
+        name: 'Mainnet',
+        rpcUrl: 'https://api.mainnet-beta.solana.com',
+        explorerUrl: 'https://explorer.solana.com/tx/',
+        cluster: ''
+    },
+    devnet: {
+        name: 'Devnet',
+        rpcUrl: 'https://api.devnet.solana.com',
+        explorerUrl: 'https://explorer.solana.com/tx/',
+        cluster: 'devnet'
+    },
+    testnet: {
+        name: 'Testnet',
+        rpcUrl: 'https://api.testnet.solana.com',
+        explorerUrl: 'https://explorer.solana.com/tx/',
+        cluster: 'testnet'
+    }
+};
 
+// 當前使用的網路配置
+let currentNetwork = 'devnet';
+
+// Solana 配置 (動態)
+const SOLANA_CONFIG = {
     // SPL Memo Program v1 (更簡單，不需要 signer 在 keys 中)
     MEMO_PROGRAM_ID: 'Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo',
 
     // 應用識別符
     APP_ID: 'world-events',
-    APP_VERSION: 1
+    APP_VERSION: 1,
+
+    // 動態取得當前網路配置
+    get NETWORK() { return currentNetwork; },
+    get RPC_URL() { return SOLANA_NETWORKS[currentNetwork].rpcUrl; },
+    get EXPLORER_URL() { return SOLANA_NETWORKS[currentNetwork].explorerUrl; },
+    get CLUSTER() { return SOLANA_NETWORKS[currentNetwork].cluster; }
 };
 
 // Solana 連接實例
 let solanaConnection = null;
+
+/**
+ * 設定 Solana 網路
+ * @param {string} network - 網路名稱 (mainnet, devnet, testnet)
+ */
+function setSolanaNetwork(network) {
+    if (SOLANA_NETWORKS[network]) {
+        currentNetwork = network;
+        solanaConnection = null; // 重置連接以使用新的 RPC
+        console.log(`[Solana] 已切換至 ${SOLANA_NETWORKS[network].name}`);
+        return true;
+    }
+    console.error(`[Solana] 未知網路: ${network}`);
+    return false;
+}
+
+/**
+ * 取得當前網路名稱
+ */
+function getCurrentNetwork() {
+    return currentNetwork;
+}
 
 /**
  * 初始化 Solana 連接
@@ -115,7 +164,7 @@ async function publishEventToSolana(eventData) {
     try {
         // 檢查 Phantom 錢包
         if (!window.solana || !window.solana.isPhantom) {
-            throw new Error('請安裝 Phantom 錢包');
+            throw new Error(t('installPhantom'));
         }
 
         if (!window.solana.isConnected) {
@@ -125,7 +174,7 @@ async function publishEventToSolana(eventData) {
         // 初始化連接
         const connection = initSolanaConnection();
         if (!connection) {
-            throw new Error('無法連接到 Solana 網絡');
+            throw new Error(t('networkError'));
         }
 
         // 準備 Memo 數據
@@ -166,7 +215,10 @@ async function publishEventToSolana(eventData) {
         return {
             success: true,
             signature: signature,
-            explorer_url: `https://explorer.solana.com/tx/${signature}?cluster=devnet`
+            network: currentNetwork,
+            explorer_url: SOLANA_CONFIG.CLUSTER
+                ? `${SOLANA_CONFIG.EXPLORER_URL}${signature}?cluster=${SOLANA_CONFIG.CLUSTER}`
+                : `${SOLANA_CONFIG.EXPLORER_URL}${signature}`
         };
 
     } catch (error) {
@@ -177,15 +229,15 @@ async function publishEventToSolana(eventData) {
         const errorStr = error.message || error.toString();
 
         if (errorStr.includes('User rejected') || errorStr.includes('user rejected')) {
-            errorMessage = '用戶取消了交易';
+            errorMessage = t('errorUserRejected', 'User rejected transaction');
         } else if (errorStr.includes('Unexpected error')) {
-            errorMessage = '錢包錯誤，請嘗試刷新頁面或重新連接錢包';
+            errorMessage = t('walletConnectionError') + 'Unknown error';
         } else if (errorStr.includes('insufficient')) {
-            errorMessage = '餘額不足，請從 Faucet 獲取測試 SOL';
+            errorMessage = t('errorInsufficientBalance', 'Insufficient balance');
         } else if (errorStr.includes('blockhash')) {
-            errorMessage = '網絡繁忙，請稍後再試';
+            errorMessage = t('errorNetworkBusy', 'Network busy');
         } else if (errorStr.includes('not connected')) {
-            errorMessage = '請先連接 Phantom 錢包';
+            errorMessage = t('pleaseConnectWallet');
         } else {
             errorMessage = errorStr;
         }
@@ -231,8 +283,113 @@ async function checkSolanaNetwork() {
     }
 }
 
+/**
+ * 發送 SOL 打賞
+ * @param {string} recipientWallet - 接收者錢包地址
+ * @param {number} amountSOL - SOL 金額
+ * @returns {Promise<{success: boolean, signature?: string, error?: string}>}
+ */
+async function sendTip(recipientWallet, amountSOL) {
+    try {
+        // 檢查 Phantom 錢包
+        if (!window.solana || !window.solana.isPhantom) {
+            throw new Error(t('installPhantom'));
+        }
+
+        if (!window.solana.isConnected) {
+            await window.solana.connect();
+        }
+
+        // 驗證接收者地址
+        let recipientPubkey;
+        try {
+            recipientPubkey = new solanaWeb3.PublicKey(recipientWallet);
+        } catch (e) {
+            throw new Error('無效的接收者錢包地址');
+        }
+
+        // 初始化連接
+        const connection = initSolanaConnection();
+        if (!connection) {
+            throw new Error('無法連接到 Solana 網絡');
+        }
+
+        // 計算 lamports (1 SOL = 10^9 lamports)
+        const lamports = Math.round(amountSOL * 1_000_000_000);
+
+        if (lamports <= 0) {
+            throw new Error(t('errorTipAmountTooSmall', 'Tip amount must be > 0'));
+        }
+
+        // 創建轉帳指令
+        const transaction = new solanaWeb3.Transaction().add(
+            solanaWeb3.SystemProgram.transfer({
+                fromPubkey: window.solana.publicKey,
+                toPubkey: recipientPubkey,
+                lamports: lamports
+            })
+        );
+
+        // 獲取最新區塊哈希
+        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = window.solana.publicKey;
+
+        // 簽名並發送
+        const signedTransaction = await window.solana.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
+            skipPreflight: false,
+            preflightCommitment: 'confirmed'
+        });
+
+        // 等待確認
+        const confirmation = await connection.confirmTransaction({
+            signature,
+            blockhash,
+            lastValidBlockHeight
+        }, 'confirmed');
+
+        if (confirmation.value.err) {
+            throw new Error('交易確認失敗');
+        }
+
+        return {
+            success: true,
+            signature: signature,
+            explorer_url: SOLANA_CONFIG.CLUSTER
+                ? `${SOLANA_CONFIG.EXPLORER_URL}${signature}?cluster=${SOLANA_CONFIG.CLUSTER}`
+                : `${SOLANA_CONFIG.EXPLORER_URL}${signature}`
+        };
+
+    } catch (error) {
+        console.error('打賞失敗:', error);
+
+        let errorMessage = '打賞失敗';
+        const errorStr = error.message || error.toString();
+
+        if (errorStr.includes('User rejected') || errorStr.includes('user rejected')) {
+            errorMessage = t('errorUserRejected', 'User rejected');
+        } else if (errorStr.includes('insufficient')) {
+            errorMessage = t('errorInsufficientBalance', 'Insufficient balance');
+        } else if (errorStr.includes('not connected')) {
+            errorMessage = t('pleaseConnectWallet');
+        } else {
+            errorMessage = errorStr;
+        }
+
+        return {
+            success: false,
+            error: errorMessage
+        };
+    }
+}
+
 // 導出到全局
+window.SOLANA_NETWORKS = SOLANA_NETWORKS;
 window.SOLANA_CONFIG = SOLANA_CONFIG;
+window.setSolanaNetwork = setSolanaNetwork;
+window.getCurrentNetwork = getCurrentNetwork;
 window.publishEventToSolana = publishEventToSolana;
 window.getSolanaTransaction = getSolanaTransaction;
 window.checkSolanaNetwork = checkSolanaNetwork;
+window.sendTip = sendTip;

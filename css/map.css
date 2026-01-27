@@ -233,7 +233,7 @@
     padding: var(--spacing-lg);
     padding-top: var(--spacing-md);
     padding-bottom: calc(var(--spacing-lg) + 1.5rem);
-    overflow: hidden;
+    /* overflow: hidden; Removed to allow tip dropdown */
 }
 
 .card-meta {
@@ -317,6 +317,20 @@
     bottom: var(--spacing-md);
     left: var(--spacing-lg);
     font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.poe-badge {
+    color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 4px;
+    padding: 1px 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: help;
 }
 
 .solana-tx-link {

@@ -2,6 +2,8 @@
 
 > **Decentralized Event Tracking System powered by Solana & Phantom Wallet**
 
+![World Events Dashboard](images/readme_hero.png)
+
 ![Solana](https://img.shields.io/badge/Blockchain-Solana-blue?style=for-the-badge&logo=solana)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20App-FF1493?style=for-the-badge&logo=vercel)](https://worldevents.devents.tech/)
@@ -9,15 +11,25 @@
 > 🚀 **Live Demo for Solana Student Hackathon:** [https://worldevents.devents.tech/](https://worldevents.devents.tech/)
 > Youtube video Demo : https://www.youtube.com/watch?v=d7KggUksrnY
 
+[English](README.md) | [中文](README_ZH.md)
+
 ## 💡 About The Project
 
 World Events Dashboard is a community-driven, interactive platform where users can explore, create, and manage events on a global map. Built for the **Solana Student Hackathon**, it bridges Web2 usability with Web3 identity.
 
 **Why Solana?**
-Instead of traditional email/password logins, we use **Phantom Wallet** (Solana) for authentication. This proves:
-1.  **Identity**: "Login with Wallet" - no database passwords to leak.
-2.  **Immutability**: Options to store critical event metadata on-chain (Devnet/Mainnet ready).
-3.  **Ownership**: Users truly own their profiles and event history via their wallet address.
+We chose Solana for three critical reasons essential for a **Decentralized Event Network**:
+
+1.  **🚫 Censorship Resistance & Proof of Event (PoE)**:
+    Events are stored safely on-chain or IPFS, creating an immutable **"Proof of Event"**.
+    > *"Prevents state-level revisionism. Once it's on-chain, history cannot be rewritten."*
+
+2.  **💸 Creator Economy (創作者經濟)**:
+    Direct **P2P Tipping** with 0% platform fees.
+    Unlike Web2 platforms taking 30%, we use Solana to ensure 100% of the value goes to the creator.
+
+3.  **⚡ High Speed & Low Cost**:
+    Instant event usage and micro-tipping (0.0001 SOL) made possible only by Solana's low gas fees.
 
 ## ✨ Key Features
 
@@ -29,6 +41,9 @@ Instead of traditional email/password logins, we use **Phantom Wallet** (Solana)
   - **Official Wallet Sync**: Verified "Official" badges synced securely from server config.
 - **🌍 Internationalization**: Fully localized in **10 languages** (English, Chinese, Japanese, Korean, Spanish, French, German, Portuguese, Russian).
 - **📱 Responsive UI**: Beautiful, mobile-friendly interface with Dark/Light mode adaptation.
+- **🔍 Advanced Filtering**:
+  - Filter by **Event Source** (Official, Subscribed, or My Events).
+  - Search by specific **Creator Name** or **Wallet Address**.
 - **🔗 Social Integration**: Connect your Discord, Telegram, YouTube, X (Twitter), and Facebook.
 
 ## 🚀 Quick Start (Judge's Guide)

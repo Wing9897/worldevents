@@ -3,8 +3,8 @@
     /* 光亮主題（預設）*/
     --bg-primary: #f8fafc;
     --bg-secondary: #ffffff;
-    --bg-card: rgba(255, 255, 255, 0.95);
-    --bg-glass: rgba(0, 0, 0, 0.05);
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-glass: rgba(255, 255, 255, 0.65);
 
     --text-primary: #1e293b;
     --text-secondary: #64748b;
@@ -18,8 +18,9 @@
     --warning: #f59e0b;
     --error: #ef4444;
 
-    --border-color: rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    --border-color: rgba(255, 255, 255, 0.3);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.12);
 
     /* 間距 */
     --spacing-xs: 0.25rem;
