@@ -91,8 +91,8 @@ function displayEvents(events) {
             icon: L.divIcon({
                 className: 'custom-marker-svg', // Changed class name
                 html: eventIcon,
-                iconSize: [32, 32], // Slightly larger for SVG
-                iconAnchor: [16, 32]
+                iconSize: [30, 30], // Adjusted to 30x30 (User Request: "Smaller again")
+                iconAnchor: [15, 30]
             })
         });
 
