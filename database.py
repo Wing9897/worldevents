@@ -4,13 +4,15 @@ import os
 # ===== 配置常數 =====
 DEFAULT_USER_QUOTA = 30  # 新用戶預設配額
 
-# 預設官方帳號列表（逗號分隔的錢包地址）
-# 可透過環境變數覆蓋：OFFICIAL_WALLETS=addr1,addr2,addr3
-OFFICIAL_WALLETS = [
-    w.strip() for w in 
-    os.environ.get('OFFICIAL_WALLETS', '').split(',') 
-    if w.strip()
-]
+# ENV Helper
+def get_env_wallets(key):
+    return [w.strip() for w in os.environ.get(key, '').split(',') if w.strip()]
+
+# 載入各類特殊帳號配置
+OFFICIAL_WALLETS = get_env_wallets('OFFICIAL_WALLETS')
+VERIFIED_WALLETS = get_env_wallets('VERIFIED_WALLETS')
+COMMUNITY_WALLETS = get_env_wallets('COMMUNITY_WALLETS')
+INSTITUTION_WALLETS = get_env_wallets('INSTITUTION_WALLETS')
 
 # 數據庫存放在 data 目錄中（便於 Docker 掛載）
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -76,7 +78,7 @@ def init_db():
             display_name TEXT
         )
     ''')
-
+    
     # 遷移：添加 quota 欄位
     try:
         cursor.execute(f'ALTER TABLE user_limits ADD COLUMN quota INTEGER DEFAULT {DEFAULT_USER_QUOTA}')
@@ -108,31 +110,39 @@ def init_db():
     
     conn.commit()
     
-    # 初始化官方帳號（從環境變數 OFFICIAL_WALLETS 讀取）
-    # 1. 確保名單中的帳號為 official
-    for wallet in OFFICIAL_WALLETS:
-        cursor.execute('''
-            INSERT OR IGNORE INTO user_limits (wallet_address, role, quota)
-            VALUES (?, 'official', 1000)
-        ''', (wallet,))
-        cursor.execute('''
-            UPDATE user_limits SET role = 'official', quota = 1000 
-            WHERE wallet_address = ?
-        ''', (wallet,))
-    
-    # 2. 安全機制：撤銷不在名單中的官方帳號權限 (Strict Sync)
-    # 這確保修改 .env 並重啟後，舊的官方帳號會自動失去權限
-    if OFFICIAL_WALLETS:
-        placeholders = ','.join('?' for _ in OFFICIAL_WALLETS)
+    # 同步角色權限 Helper
+    def sync_role_from_env(wallet_list, role_name, quota_limit):
+        if not wallet_list:
+             # 如果列表為空，則打印警告但不執行大規模刪除，避免配置錯誤導致權限全失
+             # 僅針對 Official 這樣做？或者一致性？
+             # 為了安全，如果列表為空，我們不自動降級該角色，除非明確是空列表（split邏輯已處理空字串）
+             # 但如果我們想通過清空 Env 來移除權限？ 
+             # 權衡：防止誤操作優先。
+             return
+
+        for wallet in wallet_list:
+            cursor.execute(f'''
+                INSERT OR IGNORE INTO user_limits (wallet_address, role, quota)
+                VALUES (?, ?, ?)
+            ''', (wallet, role_name, quota_limit))
+            cursor.execute(f'''
+                UPDATE user_limits SET role = ?, quota = ? 
+                WHERE wallet_address = ?
+            ''', (role_name, quota_limit, wallet))
+        
+        # 移除不在清單中的該角色用戶 (Strict Sync)
+        placeholders = ','.join('?' for _ in wallet_list)
         cursor.execute(f'''
             UPDATE user_limits 
             SET role = 'user', quota = {DEFAULT_USER_QUOTA}
-            WHERE role = 'official' AND wallet_address NOT IN ({placeholders})
-        ''', OFFICIAL_WALLETS)
-    else:
-        # 如果名單為空，且為了安全，不自動刪除所有官方帳號（避免配置錯誤導致全滅）
-        # 僅印出警告，或者可以選擇也執行刪除。這裡選擇保守策略。
-        print("[Database] Warning: No OFFICIAL_WALLETS configured. Existing officials will retain access.")
+            WHERE role = ? AND wallet_address NOT IN ({placeholders})
+        ''', (role_name, *wallet_list))
+
+    # 執行各角色的同步
+    sync_role_from_env(OFFICIAL_WALLETS, 'official', 1000)
+    sync_role_from_env(VERIFIED_WALLETS, 'verified', 500)
+    sync_role_from_env(COMMUNITY_WALLETS, 'community', 200)
+    sync_role_from_env(INSTITUTION_WALLETS, 'institution', 500)
     
     conn.commit()
     

@@ -202,23 +202,23 @@ def get_events():
         # 取得當前登入用戶的錢包地址
         current_user_wallet = request.wallet_address
         
-        # 預設顯示：官方帳號 + 自己的事件 + 選定的訂閱帳號
+        # 為了增加豐富度：總是顯示 最新 150 筆事件 (不論來源)
+        # 基礎可見性：官方帳號 OR 最新150筆 OR 自己的事件 OR 訂閱的帳號
+        visibility_logic = [
+            "ul.role = 'official'",
+            "e.id IN (SELECT id FROM events ORDER BY id DESC LIMIT 150)"  # Global Recent 150
+        ]
+        
+        if current_user_wallet:
+            visibility_logic.append("e.wallet_address = ?")
+            params.append(current_user_wallet)
+            
         if selected_list:
             placeholders = ','.join(['?' for _ in selected_list])
-            if current_user_wallet:
-                query += f" AND (ul.role = 'official' OR e.wallet_address = ? OR e.wallet_address IN ({placeholders}))"
-                params.append(current_user_wallet)
-            else:
-                query += f" AND (ul.role = 'official' OR e.wallet_address IN ({placeholders}))"
+            visibility_logic.append(f"e.wallet_address IN ({placeholders})")
             params.extend(selected_list)
-        else:
-            if current_user_wallet:
-                # 顯示官方帳號 + 自己的事件
-                query += " AND (ul.role = 'official' OR e.wallet_address = ?)"
-                params.append(current_user_wallet)
-            else:
-                # 未登入時只顯示官方帳號
-                query += " AND ul.role = 'official'"
+        
+        query += f" AND ({' OR '.join(visibility_logic)})"
     
     # 時間範圍過濾
     start_date = request.args.get('start_date')
