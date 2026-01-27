@@ -20,6 +20,7 @@ const I18N = {
         addEventHint: '右鍵地圖可直接新增事件',
         addEventHintDisconnected: '連接錢包後，右鍵地圖可直接新增事件',
         connectWallet: '連接 Phantom 錢包',
+        connectWalletShort: '連接',
         disconnect: '斷開',
         lat: '緯度',
         lng: '經度',
@@ -63,6 +64,8 @@ const I18N = {
         month: '本月',
         year: '本年',
         all: '全部',
+        eventList: '事件列表',
+        noEventsFound: '尚無事件',
         hour1: '1小時',
         hour3: '3小時',
         hour6: '6小時',
@@ -140,7 +143,7 @@ const I18N = {
         storageOnchain: '上鏈儲存',
         storageOnchainDesc: '永久記錄在 Solana 區塊鏈 (字數限制)',
         storageLocal: '本地儲存',
-        storageLocalDesc: '儲存在伺服器資料庫 (無字數限制)',
+        storageLocalDesc: '儲存在伺服器資料庫 (大容量)',
         noSubscriptions: '尚無訂閱的帳號',
         confirmUnsubscribe: '確定要取消訂閱此帳號嗎？',
         unsubscribeSuccess: '取消訂閱成功',
@@ -175,7 +178,43 @@ const I18N = {
         errorNetwork: '網路錯誤',
         errorConfirm: '確認錯誤',
         errorParse: '解析錯誤',
-        addEventHintConnected: '右鍵地圖可直接新增事件'
+        addEventHintConnected: '右鍵地圖可直接新增事件',
+        // New Solana Errors
+        errorUserRejected: '用戶取消了交易',
+        errorInsufficientBalance: '餘額不足，請從 Faucet 獲取測試 SOL',
+        errorNetworkBusy: '網絡繁忙，請稍後再試',
+        errorTipAmountTooSmall: '打賞金額必須大於 0',
+        // Network & On-chain filter
+        onchainStatus: '上鏈狀態',
+        filterAll: '全部',
+        filterOnchain: '已上鏈',
+        filterLocal: '僅本地',
+        selectNetwork: '選擇網路',
+        networkMainnet: '🌐 Mainnet (正式網)',
+        networkDevnet: '🧪 Devnet (測試網)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'Devnet 使用測試 SOL，無需真實費用',
+        filtersCleared: '過濾器已清除',
+        // Tipping
+        tip: '打賞',
+        sendingTip: '正在發送打賞...',
+        tipSuccess: '打賞成功！',
+        // Event Source Filter
+        eventSource: '事件來源',
+        sourceOfficial: '官方/認證',
+        sourceSubscribed: '已訂閱',
+        sourceMy: '我的事件',
+        subscribe: '訂閱',
+        unsubscribe: '取消訂閱',
+        subscribed: '已訂閱',
+        subscribers: '訂閱者',
+        roleOfficial: '官方',
+        roleVerified: '認證',
+        roleCommunity: '社群',
+        roleInstitution: '機構',
+        roleUser: '用戶',
+        filterCreator: '創作者',
+        creatorPlaceholder: '輸入名稱或錢包地址...'
     },
     'zh-cn': {
         title: '世界事件 Dashboard',
@@ -194,6 +233,7 @@ const I18N = {
         addEventHint: '右键地图可直接新增事件',
         addEventHintDisconnected: '连接钱包后，右键地图可直接新增事件',
         connectWallet: '连接 Phantom 钱包',
+        connectWalletShort: '连接',
         disconnect: '断开',
         lat: '纬度',
         lng: '经度',
@@ -236,6 +276,8 @@ const I18N = {
         month: '本月',
         year: '本年',
         all: '全部',
+        eventList: '事件列表',
+        noEventsFound: '暂无事件',
         hour1: '1小时',
         hour3: '3小时',
         hour6: '6小时',
@@ -312,7 +354,7 @@ const I18N = {
         storageOnchain: '上链存储',
         storageOnchainDesc: '永久记录在 Solana 区块链 (字数限制)',
         storageLocal: '本地存储',
-        storageLocalDesc: '存储在服务器数据库 (无字数限制)',
+        storageLocalDesc: '存储在服务器数据库 (大容量)',
 
         // IPFS
         ipfsImage: 'IPFS 图片',
@@ -344,7 +386,22 @@ const I18N = {
         errorNetwork: '网络错误',
         errorConfirm: '确认错误',
         errorParse: '解析错误',
-        addEventHintConnected: '右键地图可直接新增事件'
+        addEventHintConnected: '右键地图可直接新增事件',
+        // Network & On-chain filter
+        onchainStatus: '上链状态',
+        filterAll: '全部',
+        filterOnchain: '已上链',
+        filterLocal: '仅本地',
+        selectNetwork: '选择网络',
+        networkMainnet: '🌐 Mainnet (正式网)',
+        networkDevnet: '🧪 Devnet (测试网)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'Devnet 使用测试 SOL，无需真实费用',
+        filtersCleared: '过滤器已清除',
+        // Tipping
+        tip: '打赏',
+        sendingTip: '正在发送打赏...',
+        tipSuccess: '打赏成功！'
     },
     'en': {
         title: 'World Events Dashboard',
@@ -363,6 +420,7 @@ const I18N = {
         addEventHint: 'Right-click map to add event',
         addEventHintDisconnected: 'Connect wallet, then right-click map to add',
         connectWallet: 'Connect Phantom',
+        connectWalletShort: 'Connect',
         disconnect: 'Disconnect',
         lat: 'Lat',
         lng: 'Lng',
@@ -405,6 +463,8 @@ const I18N = {
         month: 'Month',
         year: 'Year',
         all: 'All',
+        eventList: 'Event List',
+        noEventsFound: 'No events found',
         hour1: '1h',
         hour3: '3h',
         hour6: '6h',
@@ -481,7 +541,7 @@ const I18N = {
         storageOnchain: 'On-Chain',
         storageOnchainDesc: 'Permanently recorded on Solana blockchain (character limit)',
         storageLocal: 'Local',
-        storageLocalDesc: 'Store in server database (no limit)',
+        storageLocalDesc: 'Store in server database (Large capacity)',
 
         // IPFS
         ipfsImage: 'IPFS Image',
@@ -513,7 +573,27 @@ const I18N = {
         errorNetwork: 'Network error',
         errorConfirm: 'Confirmation error',
         errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        addEventHintConnected: 'Right-click on map to add event',
+        // New Solana Errors
+        errorUserRejected: 'User rejected transaction',
+        errorInsufficientBalance: 'Insufficient balance',
+        errorNetworkBusy: 'Network busy, please try again later',
+        errorTipAmountTooSmall: 'Tip amount must be > 0',
+        // Network & On-chain filter
+        onchainStatus: 'On-Chain Status',
+        filterAll: 'All',
+        filterOnchain: 'On-Chain',
+        filterLocal: 'Local Only',
+        selectNetwork: 'Select Network',
+        networkMainnet: '🌐 Mainnet (Production)',
+        networkDevnet: '🧪 Devnet (Testing)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'Devnet uses test SOL, no real fees required',
+        filtersCleared: 'Filters cleared',
+        // Tipping
+        tip: 'Tip',
+        sendingTip: 'Sending tip...',
+        tipSuccess: 'Tip sent successfully!'
     },
     'ja': {
         title: 'ワールドイベント Dashboard',
@@ -532,6 +612,7 @@ const I18N = {
         addEventHint: '右クリックでイベント追加',
         addEventHintDisconnected: 'ウォレット接続後、右クリックで追加',
         connectWallet: 'Phantom 接続',
+        connectWalletShort: '接続',
         disconnect: '切断',
         lat: '緯度',
         lng: '経度',
@@ -575,6 +656,8 @@ const I18N = {
         month: '今月',
         year: '今年',
         all: '全て',
+        eventList: 'イベント一覧',
+        noEventsFound: 'イベントが見つかりません',
         hour1: '1時間',
         hour3: '3時間',
         hour6: '6時間',
@@ -654,7 +737,7 @@ const I18N = {
         storageOnchain: 'オンチェーン',
         storageOnchainDesc: 'Solanaブロックチェーンに永久記録 (文字数制限)',
         storageLocal: 'ローカル',
-        storageLocalDesc: 'サーバーデータベースに保存（制限なし）',
+        storageLocalDesc: 'サーバーデータベースに保存（大容量）',
         // IPFS
         ipfsImage: 'IPFS画像',
         comingSoon: '近日公開',
@@ -664,22 +747,37 @@ const I18N = {
         joinCommunity: 'コミュニティに参加',
         region: '地域',
         selectRegion: '-- 地域を選択 --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: '画像が選択されました。送信時にアップロードされます',
+        langSwitched: '言語を切り替えました: ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: '署名メッセージの取得に失敗しました',
+        errorAuthFailed: '認証に失敗しました',
+        errorLogoutAPI: 'ログアウトAPI呼び出しに失敗しました',
+        subscribeSuccess: 'フォローしました',
+        subscribeFailed: 'フォローに失敗しました',
+        unsubscribeFailed: 'フォロー解除に失敗しました',
+        invalidWalletAddress: '無効なウォレットアドレス',
+        errorSaveProfile: '保存に失敗しました',
+        errorNetwork: 'ネットワークエラー',
+        errorConfirm: '確認エラー',
+        errorParse: '解析エラー',
+        addEventHintConnected: '地図を右クリックしてイベントを追加できます',
+        // Network & On-chain filter
+        onchainStatus: 'オンチェーン状態',
+        filterAll: 'すべて',
+        filterOnchain: 'オンチェーン済',
+        filterLocal: 'ローカルのみ',
+        selectNetwork: 'ネットワーク選択',
+        networkMainnet: '🌐 Mainnet (本番)',
+        networkDevnet: '🧪 Devnet (テスト)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'DevnetはテストSOLを使用、費用は発生しません',
+        filtersCleared: 'フィルターをクリアしました',
+        // Tipping
+        tip: '投げ銭',
+        sendingTip: '投げ銭を送信中...',
+        tipSuccess: '投げ銭に成功しました！'
     },
     'ko': {
         title: '월드 이벤트 Dashboard',
@@ -698,6 +796,7 @@ const I18N = {
         addEventHint: '우클릭으로 이벤트 추가',
         addEventHintDisconnected: '지갑 연결 후 우클릭으로 추가',
         connectWallet: 'Phantom 연결',
+        connectWalletShort: '연결',
         disconnect: '연결 해제',
         lat: '위도',
         lng: '경도',
@@ -741,6 +840,8 @@ const I18N = {
         month: '이번 달',
         year: '올해',
         all: '전체',
+        eventList: '이벤트 목록',
+        noEventsFound: '이벤트가 없습니다',
         hour1: '1시간',
         hour3: '3시간',
         hour6: '6시간',
@@ -820,7 +921,7 @@ const I18N = {
         storageOnchain: '온체인',
         storageOnchainDesc: 'Solana 블록체인에 영구 기록 (글자 수 제한)',
         storageLocal: '로컬',
-        storageLocalDesc: '서버 데이터베이스에 저장 (제한 없음)',
+        storageLocalDesc: '서버 데이터베이스에 저장 (대용량)',
         // IPFS
         ipfsImage: 'IPFS 이미지',
         comingSoon: '출시 예정',
@@ -830,22 +931,36 @@ const I18N = {
         joinCommunity: '커뮤니티 가입',
         region: '지역',
         selectRegion: '-- 지역 선택 --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: '이미지가 선택되었습니다. 제출 시 업로드됩니다',
+        langSwitched: '언어가 변경되었습니다: ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: '서명 메시지를 가져오지 못했습니다',
+        errorAuthFailed: '인증 실패',
+        errorLogoutAPI: '로그아웃 API 호출 실패',
+        subscribeSuccess: '구독되었습니다',
+        subscribeFailed: '구독 실패',
+        unsubscribeFailed: '구독 취소 실패',
+        invalidWalletAddress: '유효하지 않은 지갑 주소',
+        errorSaveProfile: '저장 실패',
+        errorNetwork: '네트워크 오류',
+        errorConfirm: '확인 오류',
+        errorParse: '파싱 오류',
+        addEventHintConnected: '지도에서 우클릭하여 이벤트 추가',
+        // Network & On-chain filter
+        onchainStatus: '온체인 상태',
+        filterAll: '전체',
+        filterOnchain: '온체인 저장',
+        filterLocal: '로컬 전용',
+        selectNetwork: '네트워크 선택',
+        networkMainnet: 'Mainnet (운영)',
+        networkDevnet: 'Devnet (테스트)',
+        networkHint: 'Devnet은 테스트 SOL을 사용하며 비용이 들지 않습니다',
+        filtersCleared: '필터가 초기화되었습니다',
+        // Tipping
+        tip: '팁 보내기',
+        sendingTip: '팁 전송 중...',
+        tipSuccess: '팁 전송 성공!'
     },
     'es': {
         title: 'Panel de Eventos Mundiales',
@@ -985,7 +1100,7 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Registro permanente en Solana (límite de caracteres)',
         storageLocal: 'Local',
-        storageLocalDesc: 'Almacenar en base de datos del servidor (sin límite)',
+        storageLocalDesc: 'Almacenar en base de datos del servidor (Gran capacidad)',
         // IPFS
         ipfsImage: 'Imagen IPFS',
         comingSoon: 'Próximamente',
@@ -995,22 +1110,36 @@ const I18N = {
         joinCommunity: 'Únete a la Comunidad',
         region: 'Región',
         selectRegion: '-- Seleccione Región --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: 'Imagen seleccionada, se subirá al enviar',
+        langSwitched: 'Idioma cambiado a: ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: 'Fallo al obtener mensaje de firma',
+        errorAuthFailed: 'Autenticación fallida',
+        errorLogoutAPI: 'Fallo en llamada API de cierre de sesión',
+        subscribeSuccess: 'Suscrito con éxito',
+        subscribeFailed: 'Fallo en suscripción',
+        unsubscribeFailed: 'Fallo al darse de baja',
+        invalidWalletAddress: 'Dirección de billetera inválida',
+        errorSaveProfile: 'Guardado fallido',
+        errorNetwork: 'Error de red',
+        errorConfirm: 'Error de confirmación',
+        errorParse: 'Error de análisis',
+        addEventHintConnected: 'Clic derecho en el mapa para agregar evento',
+        // Network & On-chain filter
+        onchainStatus: 'Estado On-chain',
+        filterAll: 'Todos',
+        filterOnchain: 'Solo On-chain',
+        filterLocal: 'Solo Local',
+        selectNetwork: 'Seleccionar Red',
+        networkMainnet: 'Mainnet (Producción)',
+        networkDevnet: 'Devnet (Pruebas)',
+        networkHint: 'Devnet usa SOL de prueba, sin costo real',
+        filtersCleared: 'Filtros borrados',
+        // Tipping
+        tip: 'Propina',
+        sendingTip: 'Enviando propina...',
+        tipSuccess: '¡Propina enviada con éxito!'
     },
     'fr': {
         title: 'Tableau de bord mondial',
@@ -1150,7 +1279,7 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Stockage permanent Solana',
         storageLocal: 'Local',
-        storageLocalDesc: 'Stocker dans la base de données du serveur (sans limite)',
+        storageLocalDesc: 'Stocker dans la base de données du serveur (Grande capacité)',
         // IPFS
         ipfsImage: 'Image IPFS',
         comingSoon: 'Bientôt disponible',
@@ -1160,22 +1289,36 @@ const I18N = {
         joinCommunity: 'Rejoindre la Communauté',
         region: 'Région',
         selectRegion: '-- Sélectionnez la Région --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: 'Image sélectionnée, sera téléchargée lors de l\'envoi',
+        langSwitched: 'Langue changée : ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: 'Échec de la récupération du message de signature',
+        errorAuthFailed: 'Authentification échouée',
+        errorLogoutAPI: 'Échec de l\'appel API de déconnexion',
+        subscribeSuccess: 'Abonné avec succès',
+        subscribeFailed: 'Échec de l\'abonnement',
+        unsubscribeFailed: 'Échec du désabonnement',
+        invalidWalletAddress: 'Adresse de portefeuille invalide',
+        errorSaveProfile: 'Échec de l\'enregistrement',
+        errorNetwork: 'Erreur réseau',
+        errorConfirm: 'Erreur de confirmation',
+        errorParse: 'Erreur d\'analyse',
+        addEventHintConnected: 'Clic droit sur la carte pour ajouter un événement',
+        // Network & On-chain filter
+        onchainStatus: 'Statut On-chain',
+        filterAll: 'Tous',
+        filterOnchain: 'On-chain',
+        filterLocal: 'Local',
+        selectNetwork: 'Réseau',
+        networkMainnet: 'Mainnet (Prod)',
+        networkDevnet: 'Devnet (Test)',
+        networkHint: 'Devnet utilise des SOL de test, sans frais réels',
+        filtersCleared: 'Filtres effacés',
+        // Tipping
+        tip: 'Pourboire',
+        sendingTip: 'Envoi du pourboire...',
+        tipSuccess: 'Pourboire envoyé avec succès !'
     },
     'de': {
         title: 'Welt-Event-Dashboard',
@@ -1315,7 +1458,8 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Permanent auf Solana',
         storageLocal: 'Lokal',
-        storageLocalDesc: 'In Serverdatenbank speichern (kein Limit)',
+        storageLocalDesc: 'In Serverdatenbank speichern (Große Kapazität)',
+
         // IPFS
         ipfsImage: 'IPFS Bild',
         comingSoon: 'Demnächst',
@@ -1325,22 +1469,37 @@ const I18N = {
         joinCommunity: 'Der Community beitreten',
         region: 'Region',
         selectRegion: '-- Region auswählen --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: 'Bild ausgewählt, wird beim Absenden hochgeladen',
+        langSwitched: 'Sprache gewechselt zu: ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: 'Signaturnachricht konnte nicht abgerufen werden',
+        errorAuthFailed: 'Authentifizierung fehlgeschlagen',
+        errorLogoutAPI: 'Logout-API-Aufruf fehlgeschlagen',
+        subscribeSuccess: 'Erfolgreich abonniert',
+        subscribeFailed: 'Abonnement fehlgeschlagen',
+        unsubscribeFailed: 'Kündigung fehlgeschlagen',
+        invalidWalletAddress: 'Ungültige Wallet-Adresse',
+        errorSaveProfile: 'Speichern fehlgeschlagen',
+        errorNetwork: 'Netzwerkfehler',
+        errorConfirm: 'Bestätigungsfehler',
+        errorParse: 'Parsing-Fehler',
+        addEventHintConnected: 'Rechtsklick auf Karte zum Hinzufügen',
+        // Network & On-chain filter
+        onchainStatus: 'On-Chain-Status',
+        filterAll: 'Alle',
+        filterOnchain: 'On-Chain',
+        filterLocal: 'Lokal',
+        selectNetwork: 'Netzwerk',
+        networkMainnet: '🌐 Mainnet (Prod)',
+        networkDevnet: '🧪 Devnet (Test)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'Devnet nutzt Test-SOL, keine echten Kosten',
+        filtersCleared: 'Filter gelöscht',
+        // Tipping
+        tip: 'Trinkgeld',
+        sendingTip: 'Sende Trinkgeld...',
+        tipSuccess: 'Trinkgeld erfolgreich gesendet!'
     },
     'pt': {
         title: 'Painel de Eventos Mundiais',
@@ -1480,7 +1639,8 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'Armazenamento permanente Solana',
         storageLocal: 'Local',
-        storageLocalDesc: 'Armazenar no banco de dados do servidor (sem limite)',
+        storageLocalDesc: 'Armazenar no banco de dados do servidor (Alta capacidade)',
+
         // IPFS
         ipfsImage: 'Imagem IPFS',
         comingSoon: 'Em breve',
@@ -1490,22 +1650,37 @@ const I18N = {
         joinCommunity: 'Únete a la Comunidad',
         region: 'Região',
         selectRegion: '-- Selecione Região --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: 'Imagem selecionada, será enviada ao submeter',
+        langSwitched: 'Idioma alterado para: ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: 'Falha ao obter mensagem de assinatura',
+        errorAuthFailed: 'Autenticação falhou',
+        errorLogoutAPI: 'Falha na chamada API de logout',
+        subscribeSuccess: 'Inscrito com sucesso',
+        subscribeFailed: 'Falha na inscrição',
+        unsubscribeFailed: 'Falha ao cancelar inscrição',
+        invalidWalletAddress: 'Endereço de carteira inválido',
+        errorSaveProfile: 'Falha ao salvar',
+        errorNetwork: 'Erro de rede',
+        errorConfirm: 'Erro de confirmação',
+        errorParse: 'Erro de análise',
+        addEventHintConnected: 'Clique com botão direito no mapa para adicionar',
+        // Network & On-chain filter
+        onchainStatus: 'Status On-Chain',
+        filterAll: 'Todos',
+        filterOnchain: 'On-Chain',
+        filterLocal: 'Local',
+        selectNetwork: 'Rede',
+        networkMainnet: '🌐 Mainnet (Prod)',
+        networkDevnet: '🧪 Devnet (Teste)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'Devnet usa SOL de teste, sem custos reais',
+        filtersCleared: 'Filtros limpos',
+        // Tipping
+        tip: 'Gorjeta',
+        sendingTip: 'Enviando gorjeta...',
+        tipSuccess: 'Gorjeta enviada com sucesso!'
     },
     'ru': {
         title: 'Панель мировых событий',
@@ -1645,26 +1820,42 @@ const I18N = {
         storageOnchain: 'On-chain',
         storageOnchainDesc: 'На блокчейне Solana',
         storageLocal: 'Локально',
-        storageLocalDesc: 'Хранить в базе данных сервера (без ограничения)',
+        storageLocalDesc: 'Хранить в базе данных сервера (Большая емкость)',
+
         joinCommunity: 'Присоединиться к сообществу',
         region: 'Регион',
         selectRegion: '-- Выберите регион --',
-        // Missing keys (English Fallback)
-        imageSelected: 'Image selected, will upload on submit',
-        langSwitched: 'Language switched to ',
+        // Missing keys (English Fallback) -> Translated
+        imageSelected: 'Изображение выбрано, будет загружено при отправке',
+        langSwitched: 'Язык изменен на: ',
         // Errors
-        errorSignMessage: 'Failed to get signature message',
-        errorAuthFailed: 'Authentication failed',
-        errorLogoutAPI: 'Logout API call failed',
-        subscribeSuccess: 'Subscribed successfully',
-        subscribeFailed: 'Subscription failed',
-        unsubscribeFailed: 'Unsubscription failed',
-        invalidWalletAddress: 'Invalid wallet address',
-        errorSaveProfile: 'Save failed',
-        errorNetwork: 'Network error',
-        errorConfirm: 'Confirmation error',
-        errorParse: 'Parse error',
-        addEventHintConnected: 'Right-click on map to add event'
+        errorSignMessage: 'Не удалось получить сообщение подписи',
+        errorAuthFailed: 'Ошибка аутентификации',
+        errorLogoutAPI: 'Ошибка API выхода',
+        subscribeSuccess: 'Успешно подписаны',
+        subscribeFailed: 'Ошибка подписки',
+        unsubscribeFailed: 'Ошибка отписки',
+        invalidWalletAddress: 'Неверный адрес кошелька',
+        errorSaveProfile: 'Ошибка сохранения',
+        errorNetwork: 'Ошибка сети',
+        errorConfirm: 'Ошибка подтверждения',
+        errorParse: 'Ошибка обработки',
+        addEventHintConnected: 'ПКМ на карте чтобы добавить событие',
+        // Network & On-chain filter
+        onchainStatus: 'Статус On-chain',
+        filterAll: 'Все',
+        filterOnchain: 'On-chain',
+        filterLocal: 'Локально',
+        selectNetwork: 'Сеть',
+        networkMainnet: '🌐 Mainnet (Прод)',
+        networkDevnet: '🧪 Devnet (Тест)',
+        networkTestnet: '🔬 Testnet',
+        networkHint: 'Devnet использует тестовые SOL, бесплатно',
+        filtersCleared: 'Фильтры сброшены',
+        // Tipping
+        tip: 'Донат',
+        sendingTip: 'Отправка доната...',
+        tipSuccess: 'Донат успешно отправлен!'
     }
 };
 
@@ -1681,6 +1872,7 @@ const LANGUAGES = [
     { code: 'fr', flag: 'fr', name: 'Français', countryCode: 'fr' },
     { code: 'de', flag: 'de', name: 'Deutsch', countryCode: 'de' },
     { code: 'pt', flag: 'br', name: 'Português', countryCode: 'br' },
+    { code: 'ru', flag: 'ru', name: 'Русский', countryCode: 'ru' },
 ];
 
 // ===== 國際化邏輯 =====
@@ -1767,6 +1959,11 @@ function updateUILanguage(langCode) {
 
     // 更新特定 UI 元素
     updateSpecificUI();
+
+    // 更新日期輸入框的語言屬性 (嘗試強制瀏覽器使用對應格式)
+    document.querySelectorAll('input[type="datetime-local"], input[type="date"]').forEach(el => {
+        el.setAttribute('lang', uiLang);
+    });
 }
 
 /**

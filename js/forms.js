@@ -11,6 +11,7 @@ const Forms = {
         this.cacheElements();
         this.bindEvents();
         this.initStorageModeToggle();
+        this.initNetworkSelector();
         this.initIconPicker();
         this.initImageUpload();
     },
@@ -51,6 +52,10 @@ const Forms = {
             // Icon picker
             iconPicker: document.getElementById('iconPicker'),
 
+            // Network selector
+            networkSelectorGroup: document.getElementById('networkSelectorGroup'),
+            networkSelector: document.getElementById('networkSelector'),
+
             // Limits
             eventLimit: document.getElementById('eventLimit'),
             imageQuotaInfo: document.getElementById('imageQuotaInfo')
@@ -80,16 +85,19 @@ const Forms = {
         const form = this.elements.addEventForm;
         const nameInput = this.elements.eventName;
         const descInput = this.elements.eventDescription;
+        const networkGroup = this.elements.networkSelectorGroup;
 
         const updateCharLimits = (mode) => {
             if (mode === 'onchain') {
                 if (nameInput) nameInput.maxLength = 50;
                 if (descInput) descInput.maxLength = 100;
                 if (form) form.classList.add('storage-onchain');
+                if (networkGroup) networkGroup.classList.remove('hidden');
             } else {
                 if (nameInput) nameInput.removeAttribute('maxLength');
                 if (descInput) descInput.removeAttribute('maxLength');
                 if (form) form.classList.remove('storage-onchain');
+                if (networkGroup) networkGroup.classList.add('hidden');
             }
         };
 
@@ -104,7 +112,19 @@ const Forms = {
         }
     },
 
-    openAddModal(latlng) {
+    initNetworkSelector() {
+        const networkSelector = this.elements.networkSelector;
+        if (!networkSelector) return;
+
+        // 監聽網路選擇變化
+        networkSelector.addEventListener('change', (e) => {
+            if (typeof setSolanaNetwork === 'function') {
+                setSolanaNetwork(e.target.value);
+            }
+        });
+    },
+
+    async openAddModal(latlng) {
         if (!walletAddress) {
             showToast(t('pleaseConnectWallet'), 'error');
             return;
@@ -117,10 +137,8 @@ const Forms = {
         const now = new Date();
         if (typeof formatDateTimeForInput === 'function') {
             els.eventStartDate.value = formatDateTimeForInput(now);
-        } else {
-            // Fallback if imported function not available
-            // (Should be in ui.js ideally but currently in app.js - wait, I need to move date helpers too)
-            // Temporarily define here or assume global
+            // 同步結束時間（默認為開始時間+1小時，可選）
+            // els.eventEndDate.value = formatDateTimeForInput(new Date(now.getTime() + 60*60*1000));
         }
 
         // 顯示剩餘配額
@@ -135,11 +153,34 @@ const Forms = {
             els.eventLng.value = latlng.lng.toFixed(6);
             els.locationText.textContent = `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`;
             els.locationInfo.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+
+            // 自動偵測地區 (BigDataCloud Free API)
+            try {
+                const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latlng.lat}&longitude=${latlng.lng}&localityLanguage=en`);
+                const data = await response.json();
+                if (data && data.countryCode) {
+                    const countryCode = data.countryCode.toLowerCase();
+                    // 映射到我們支援的地區代碼
+                    const supportedRegions = ['tw', 'cn', 'gb', 'us', 'jp', 'kr', 'es', 'fr', 'de', 'br', 'ru'];
+                    if (supportedRegions.includes(countryCode)) {
+                        els.eventLanguage.value = countryCode;
+                        console.log(`[Auto-Detect] Region set to: ${countryCode}`);
+                    } else {
+                        els.eventLanguage.value = 'en'; // 默認英語區
+                        console.log(`[Auto-Detect] Region not supported (${countryCode}), defaulting to 'en'`);
+                    }
+                }
+            } catch (err) {
+                console.warn('[Auto-Detect] Failed to fetch region:', err);
+                els.eventLanguage.value = 'en';
+            }
+
         } else {
             els.eventLat.value = '';
             els.eventLng.value = '';
             els.locationText.textContent = t('locationNotSelected');
             els.locationInfo.style.borderColor = 'rgba(245, 158, 11, 0.5)';
+            els.eventLanguage.value = 'en'; // 默認
         }
     },
 
@@ -171,10 +212,9 @@ const Forms = {
             return;
         }
 
-        // 驗證地區已選擇
-        if (!els.eventLanguage.value || els.eventLanguage.value === '') {
-            showToast(t('pleaseSelectRegion') || '請選擇地區', 'error');
-            return;
+        // 驗證地區已自動偵測或默認
+        if (!els.eventLanguage.value) {
+            els.eventLanguage.value = 'en';
         }
 
         const storageModeInput = document.querySelector('input[name="storageMode"]:checked');
@@ -206,6 +246,13 @@ const Forms = {
 
             if (storageMode === 'onchain') {
                 // On-chain 模式：先執行 Solana 交易，成功後才上傳圖片
+
+                // 先設置正確的網路（重要：必須在交易前設置）
+                const selectedNetwork = this.elements.networkSelector ? this.elements.networkSelector.value : 'devnet';
+                if (typeof setSolanaNetwork === 'function') {
+                    setSolanaNetwork(selectedNetwork);
+                }
+
                 showToast(t('sendingToSolana'), 'info');
 
                 // 添加頁面離開警告
@@ -244,7 +291,7 @@ const Forms = {
                 }
 
                 serverData.tx_signature = solanaResult.signature;
-                serverData.tx_network = 'devnet';
+                serverData.tx_network = selectedNetwork;
                 serverData.storage_mode = 'onchain';
             } else {
                 // Local 模式：提交時上傳圖片

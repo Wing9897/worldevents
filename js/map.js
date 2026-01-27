@@ -13,7 +13,7 @@ function initMap() {
     // 應用主題
     document.body.classList.toggle('dark-theme', isDarkTheme);
     if (elements.themeIcon) {
-        elements.themeIcon.textContent = isDarkTheme ? '☀️' : '🌙';
+        elements.themeIcon.innerHTML = isDarkTheme ? ICONS.sun : ICONS.moon;
     }
 
     map = L.map('map', {
@@ -107,7 +107,9 @@ function toggleMapTheme() {
     localStorage.setItem('theme', isDarkTheme ? 'dark' : 'light');
     if (typeof saveState === 'function') saveState(); // js/state.js
 
-    elements.themeIcon.textContent = isDarkTheme ? '☀️' : '🌙';
+    if (elements.themeIcon) {
+        elements.themeIcon.innerHTML = isDarkTheme ? ICONS.sun : ICONS.moon;
+    }
 }
 
 // ===== 面板收起/展開 =====
@@ -122,7 +124,10 @@ function togglePanel() {
     if (panelToggle) {
         panelToggle.classList.toggle('collapsed', isPanelCollapsed);
     }
-    elements.toggleIcon.textContent = isPanelCollapsed ? '▶' : '◀';
+
+    if (elements.toggleIcon) {
+        elements.toggleIcon.innerHTML = isPanelCollapsed ? ICONS.chevronRight : ICONS.chevronLeft;
+    }
 
     // 等待 CSS 過渡動畫完成後，通知 Leaflet 重新計算地圖尺寸
     setTimeout(() => {

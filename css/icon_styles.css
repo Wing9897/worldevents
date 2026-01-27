@@ -1,0 +1,22 @@
+/* Navbar Icon Buttons */
+.icon-only-btn {
+    padding: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    transition: all var(--transition-fast);
+}
+
+.icon-only-btn:hover {
+    background: var(--bg-hover);
+    transform: scale(1.05);
+}
+
+.icon-only-btn svg {
+    width: 22px;
+    height: 22px;
+}

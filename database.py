@@ -57,7 +57,8 @@ def init_db():
         'ALTER TABLE events ADD COLUMN end_date TEXT',
         'ALTER TABLE events ADD COLUMN tx_signature TEXT',
         'ALTER TABLE events ADD COLUMN tx_network TEXT',
-        "ALTER TABLE events ADD COLUMN storage_mode TEXT DEFAULT 'local'"
+        "ALTER TABLE events ADD COLUMN storage_mode TEXT DEFAULT 'local'",
+        'ALTER TABLE events ADD COLUMN ipfs_hash TEXT'
     ]
     for migration in migrations:
         try:

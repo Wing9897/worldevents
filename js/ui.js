@@ -5,6 +5,14 @@
 
 const MAX_TOASTS = 3;  // 最多同時顯示 3 個 toast
 
+const ICONS = {
+    globe: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+    sun: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`,
+    moon: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`,
+    chevronLeft: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>`,
+    chevronRight: `<svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>`
+};
+
 /**
  * 顯示 Toast 通知
  * @param {string} message - 通知訊息
@@ -91,13 +99,13 @@ function getFlagUrl(countryCode) {
 }
 
 /**
- * 將國家/地區代碼轉換為 Emoji 國旗
+ * 將國家/地區代碼轉換為 SVG 圖標
  * @param {string} countryCode - 2 字母國家代碼 (ISO 3166-1 alpha-2)
- * @returns {string} 國旗 emoji 或地球符號
+ * @returns {string} SVG string
  */
 function getFlagEmoji(countryCode) {
     if (!countryCode || countryCode === 'earth' || countryCode === 'un') {
-        return '🌐'; // 地球表示「全部地區」
+        return ICONS.globe; // 使用 SVG 地球
     }
     const code = countryCode.toUpperCase();
     // 將字母轉換為區域指示符號 (例如 'TW' -> 🇹🇼)
@@ -414,42 +422,18 @@ function initRegionFilter() {
     });
 
     // 智能分離默認設置：
-    // 雖然架構上完全分離，但為了提升 UX，初次加載時嘗試根據瀏覽器語言 "智能建議" 地區
-    // 如果匹配不到，則默認為 "全部地區"，保持中立
+    // 雖然可以根據瀏覽器語言預選，但在地圖應用中，默認顯示「全部地區」體驗更好
+    // 因此此處不再自動預選特定地區，而是默認顯示所有事件
 
-    let defaultRegionCode = '';
-    try {
-        const browserLang = navigator.language || navigator.userLanguage || '';
-        if (browserLang) {
-            const parts = browserLang.toLowerCase().split('-');
-            if (parts.length > 1) {
-                // 格式如 zh-tw, en-us: 直接取地區碼
-                defaultRegionCode = parts[1];
-            } else {
-                // 格式如 ja, ko, es: 嘗試映射到主要國家
-                const langMap = {
-                    'ja': 'jp', 'ko': 'kr', 'en': 'us',
-                    'pt': 'br', 'zh': 'cn'
-                };
-                defaultRegionCode = langMap[parts[0]] || parts[0];
-            }
-        }
-    } catch (e) {
-        console.warn('Auto-detect region failed:', e);
-    }
+    // 默認為「全部地區」
+    if (flagImg) flagImg.src = getFlagUrl('un');
+    if (nameSpan) nameSpan.textContent = t('allRegions', '全部地區');
+    selectedRegion = '';
 
-    // 嘗試在支持的列表中尋找匹配
-    const matchedRegion = REGIONS.find(r => r.code === defaultRegionCode);
-
-    if (matchedRegion) {
-        // 命中！智能預選該地區
-        selectRegion(matchedRegion);
-    } else {
-        // 未命中 (或瀏覽器語言無法識別)，嚴格默認為「全部地區」
-        if (flagImg) flagImg.src = getFlagUrl('un');
-        if (nameSpan) nameSpan.textContent = t('allRegions', '全部地區');
-        selectedRegion = '';
-    }
+    // 高亮「全部」選項(如果有的話)
+    elements.regionDropdown?.querySelectorAll('.region-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
 }
 
 /**
@@ -515,4 +499,81 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeLightbox();
     });
+
+    // 打賞按鈕事件
+    initTipButton();
 });
+
+/**
+ * 初始化打賞按鈕
+ */
+function initTipButton() {
+    const tipBtn = document.getElementById('cardTipBtn');
+    const tipOptions = document.getElementById('tipOptions');
+
+    if (!tipBtn || !tipOptions) return;
+
+    // 點擊打賞按鈕顯示/隱藏選項
+    tipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        if (!walletAddress) {
+            showToast(t('pleaseConnectWallet'), 'error');
+            return;
+        }
+
+        tipOptions.classList.toggle('hidden');
+    });
+
+    // 點擊金額選項
+    tipOptions.querySelectorAll('.tip-option').forEach(option => {
+        option.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const amount = parseFloat(option.dataset.amount);
+            const recipientWallet = tipBtn.dataset.wallet;
+
+            if (!recipientWallet) {
+                showToast(t('errorNetwork'), 'error');
+                return;
+            }
+
+            tipOptions.classList.add('hidden');
+            showToast(t('sendingTip'), 'info');
+
+            const result = await sendTip(recipientWallet, amount);
+
+            if (result.success) {
+                // 🎉 Visual Feedback: Confetti
+                if (window.confetti) {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+                showToast(t('tipSuccess'), 'success');
+            } else {
+                showToast(result.error, 'error');
+            }
+        });
+    });
+
+    // 點擊外部關閉
+    document.addEventListener('click', (e) => {
+        if (!document.getElementById('tipDropdown')?.contains(e.target)) {
+            tipOptions.classList.add('hidden');
+        }
+    });
+
+    // 分享到 X 按鈕
+    const shareBtn = document.getElementById('cardShareBtn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            const eventName = shareBtn.dataset.eventName || '';
+            const shareText = `${eventName} - World Events Dashboard`;
+            const shareUrl = window.location.href;
+            const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+            window.open(twitterUrl, '_blank', 'width=600,height=400');
+        });
+    }
+}
