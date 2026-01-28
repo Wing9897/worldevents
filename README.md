@@ -46,6 +46,16 @@ We chose Solana for three critical reasons essential for a **Decentralized Event
   - Search by specific **Creator Name** or **Wallet Address**.
 - **🔗 Social Integration**: Connect your Discord, Telegram, YouTube, X (Twitter), and Facebook.
 
+## 📸 Screenshots
+
+| Map View | Event List |
+|----------|------------|
+| ![Map View](images/screenshot_map.png) | ![Event List](images/screenshot_list.png) |
+
+| Multi-Language Support |
+|------------------------|
+| ![Languages](images/screenshot_i18n.png) |
+
 ## 🚀 Quick Start (Judge's Guide)
 
 The easiest way to run the project is using Docker.

@@ -390,18 +390,7 @@ function renderMyEvents(events) {
 
 // ===== 刪除事件 =====
 async function deleteEvent(eventId, listItem) {
-
-    try {
-        const confirmMsg = t('deleteConfirm') || 'Are you sure?';
-        if (!window.confirm(confirmMsg)) {
-
-            return;
-        }
-    } catch (e) {
-        console.error('Confirm 錯誤:', e);
-        return;
-    }
-
+    // 直接執行刪除，不使用 window.confirm (因為可能被 Modal 擋住)
     const deleteBtn = listItem.querySelector('.btn-delete');
     if (deleteBtn) {
         deleteBtn.innerHTML = '⏳';

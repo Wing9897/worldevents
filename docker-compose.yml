@@ -28,6 +28,8 @@ services:
       - ./css:/app/css:ro
       - ./js:/app/js:ro
       - ./uploads:/app/uploads:ro
+      - ./images:/app/images:ro
+      - ./app.js:/app/app.js:ro
     depends_on:
       - app
     networks:

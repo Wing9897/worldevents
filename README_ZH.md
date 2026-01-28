@@ -46,7 +46,17 @@
   - 支援依特定 **創作者名稱** 或 **錢包地址** 搜尋。
 - **🔗 社群整合**：連結您的 Discord, Telegram, YouTube, X (Twitter) 和 Facebook 帳號。
 
-## 🚀 快速開始 (評審指南)
+## � 功能截圖
+
+| 地圖視圖 | 事件列表 |
+|----------|----------|
+| ![地圖視圖](images/screenshot_map.png) | ![事件列表](images/screenshot_list.png) |
+
+| 多語言支援 |
+|------------|
+| ![語言選擇](images/screenshot_i18n.png) |
+
+## �🚀 快速開始 (評審指南)
 
 使用 Docker 是運行本專案最簡單的方式。
 
