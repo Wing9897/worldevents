@@ -8,14 +8,14 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20App-FF1493?style=for-the-badge&logo=vercel)](https://worldevents.devents.tech/)
 
-> 🚀 **Live Demo for Solana Student Hackathon:** [https://worldevents.devents.tech/](https://worldevents.devents.tech/)
+> 🚀 **Live Demo for Solana Event:** [https://worldevents.devents.tech/](https://worldevents.devents.tech/)
 > Youtube video Demo : https://www.youtube.com/watch?v=d7KggUksrnY
 
 [English](README.md) | [中文](README_ZH.md)
 
 ## 💡 About The Project
 
-World Events Dashboard is a community-driven, interactive platform where users can explore, create, and manage events on a global map. Built for the **Solana Student Hackathon**, it bridges Web2 usability with Web3 identity.
+World Events Dashboard is a community-driven, interactive platform where users can explore, create, and manage events on a global map. Built for the **Solana Event**, it bridges Web2 usability with Web3 identity.
 
 **Why Solana?**
 We chose Solana for three critical reasons essential for a **Decentralized Event Network**:
@@ -108,7 +108,7 @@ Open **[http://localhost:9333](http://localhost:9333)** in your browser.
 
 ## ⚠️ Disclaimer
 
-This project was built for the **Solana Student Hackathon** as a proof-of-concept. While we have implemented standard security practices (JWT, Parameterized Queries, etc.), it has **not** undergone a professional security audit. 
+This project was built for the **Solana Event** as a proof-of-concept. While we have implemented standard security practices (JWT, Parameterized Queries, etc.), it has **not** undergone a professional security audit. 
 
 **Use at your own risk.** We recommend using this for educational purposes or hackathon demonstrations only. Do not use for production-grade financial applications without further auditing.
 

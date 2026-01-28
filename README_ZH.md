@@ -8,14 +8,14 @@
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20App-FF1493?style=for-the-badge&logo=vercel)](https://worldevents.devents.tech/)
 
-> 🚀 **Solana Student Hackathon 線上演示:** [https://worldevents.devents.tech/](https://worldevents.devents.tech/)
+> 🚀 **Solana 活動 線上演示:** [https://worldevents.devents.tech/](https://worldevents.devents.tech/)
 > Youtube 演示影片 : https://www.youtube.com/watch?v=d7KggUksrnY
 
 [English](README.md) | [中文](README_ZH.md)
 
 ## 💡 關於專案
 
-**世界事件儀表板 (World Events Dashboard)** 是一個社群驅動的互動平台，用戶可以在全球地圖上探索、創建和管理事件。本專案專為 **Solana Student Hackathon** 打造，旨在連接 Web2 的易用性與 Web3 的去中心化身份。
+**世界事件儀表板 (World Events Dashboard)** 是一個社群驅動的互動平台，用戶可以在全球地圖上探索、創建和管理事件。本專案專為 **Solana 活動** 打造，旨在連接 Web2 的易用性與 Web3 的去中心化身份。
 
 **為什麼選擇 Solana？**
 我們選擇 Solana 作為 **去中心化事件網絡** 的核心，基於以下三個關鍵原因：
@@ -108,7 +108,7 @@ docker-compose up -d --build
 
 ## ⚠️ 免責聲明
 
-本專案是為了 **Solana Student Hackathon** 建立的概念驗證 (PoC) 原型。雖然我們實施了標準的安全措施（如 JWT、參數化查詢等），但尚未經過專業的安全審計。
+本專案是為了 **Solana 活動** 建立的概念驗證 (PoC) 原型。雖然我們實施了標準的安全措施（如 JWT、參數化查詢等），但尚未經過專業的安全審計。
 
 **使用風險自負。** 我們建議僅將其用於教育目的或黑客松演示。在未經進一步審計的情況下，請勿用於生產級的金融應用。
 
