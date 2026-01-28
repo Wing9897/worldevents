@@ -139,6 +139,11 @@ def serve_upload(filename):
     """提供上傳的圖片"""
     return send_from_directory(UPLOAD_FOLDER, filename)
 
+@app.route('/app.js')
+def serve_app_js():
+    """提供根目錄的 app.js"""
+    return send_from_directory('.', 'app.js')
+
 @app.route('/api/upload', methods=['POST'])
 @token_required
 @rate_limit
