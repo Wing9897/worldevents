@@ -49,6 +49,11 @@ async function loadEvents() {
         if (region) params.append('language', region);
     }
 
+    // 關鍵字過濾
+    if (elements.eventTypeFilter && elements.eventTypeFilter.value.trim()) {
+        params.append('keywords', elements.eventTypeFilter.value.trim());
+    }
+
     try {
         const fetchOptions = {};
         if (accessToken) {
@@ -235,6 +240,10 @@ function showEventCard(event) {
     if (cardShareBtn) {
         cardShareBtn.dataset.eventName = event.name;
         cardShareBtn.dataset.eventId = event.id;
+        cardShareBtn.dataset.eventDesc = event.description || '';
+        cardShareBtn.dataset.eventDate = formatDisplayDate(event.start_date || event.date);
+        cardShareBtn.dataset.eventLat = event.lat?.toFixed(4) || '';
+        cardShareBtn.dataset.eventLng = event.lng?.toFixed(4) || '';
     }
 
     // 顯示創建者信息和訂閱按鈕
@@ -244,7 +253,7 @@ function showEventCard(event) {
 }
 
 // ===== 載入創建者資訊 =====
-async function loadCreatorInfo(creatorWallet) {
+async function loadCreatorInfo(creatorWallet, skipButtonState = false) {
     const roleLabels = {
         official: t('roleOfficial'),
         verified: t('roleVerified'),
@@ -271,25 +280,27 @@ async function loadCreatorInfo(creatorWallet) {
         const subCount = profile.subscriber_count || 0;
         elements.cardSubscriberCount.textContent = `${subCount} ${t('subscribers')}`;
 
-        // 設置訂閱按鈕狀態
+        // 設置訂閱按鈕狀態（除非被跳過）
         elements.cardSubscribeBtn.dataset.wallet = creatorWallet;
 
-        if (walletAddress && creatorWallet === walletAddress) {
-            elements.cardSubscribeBtn.classList.add('hidden');
-        } else {
-            elements.cardSubscribeBtn.classList.remove('hidden');
-
-            if (profile.is_following) {
-                elements.cardSubscribeBtn.classList.add('subscribed');
-                elements.cardSubscribeBtn.innerHTML = `<span>${t('subscribed')}</span>`;
+        if (!skipButtonState) {
+            if (walletAddress && creatorWallet === walletAddress) {
+                elements.cardSubscribeBtn.classList.add('hidden');
             } else {
-                elements.cardSubscribeBtn.classList.remove('subscribed');
-                elements.cardSubscribeBtn.innerHTML = `<span>${t('subscribe')}</span>`;
-            }
-        }
+                elements.cardSubscribeBtn.classList.remove('hidden');
 
-        if (!walletAddress) {
-            elements.cardSubscribeBtn.classList.add('hidden');
+                if (profile.is_following) {
+                    elements.cardSubscribeBtn.classList.add('subscribed');
+                    elements.cardSubscribeBtn.innerHTML = `<span>${t('subscribed')}</span>`;
+                } else {
+                    elements.cardSubscribeBtn.classList.remove('subscribed');
+                    elements.cardSubscribeBtn.innerHTML = `<span>${t('subscribe')}</span>`;
+                }
+            }
+
+            if (!walletAddress) {
+                elements.cardSubscribeBtn.classList.add('hidden');
+            }
         }
 
     } catch (err) {
@@ -297,7 +308,9 @@ async function loadCreatorInfo(creatorWallet) {
         elements.cardCreatorRole.textContent = roleLabels.user;
         elements.cardCreatorRole.className = 'creator-role-badge user';
         elements.cardSubscriberCount.textContent = '';
-        elements.cardSubscribeBtn.classList.add('hidden');
+        if (!skipButtonState) {
+            elements.cardSubscribeBtn.classList.add('hidden');
+        }
     }
 }
 
@@ -308,7 +321,14 @@ async function toggleSubscribe(targetWallet) {
         return;
     }
 
-    const isSubscribed = elements.cardSubscribeBtn.classList.contains('subscribed');
+    const btn = elements.cardSubscribeBtn;
+
+    // 防止重複點擊
+    if (btn.disabled) return;
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+
+    const isSubscribed = btn.classList.contains('subscribed');
     const endpoint = isSubscribed ? '/unsubscribe' : '/subscribe';
 
     try {
@@ -322,22 +342,26 @@ async function toggleSubscribe(targetWallet) {
 
         if (result.success) {
             if (isSubscribed) {
-                elements.cardSubscribeBtn.classList.remove('subscribed');
-                elements.cardSubscribeBtn.innerHTML = `<span>${t('subscribe')}</span>`;
+                btn.classList.remove('subscribed');
+                btn.innerHTML = `<span>${t('subscribe')}</span>`;
                 showToast(t('unsubscribe') + ' ✓', 'success');
             } else {
-                elements.cardSubscribeBtn.classList.add('subscribed');
-                elements.cardSubscribeBtn.innerHTML = `<span>${t('subscribed')}</span>`;
+                btn.classList.add('subscribed');
+                btn.innerHTML = `<span>${t('subscribed')}</span>`;
                 showToast(t('subscribe') + ' ✓', 'success');
             }
 
-            loadCreatorInfo(targetWallet);
+            loadCreatorInfo(targetWallet, true); // skipButtonState=true 避免覆蓋我們剛設置的按鈕狀態
         } else {
             showToast(result.error || 'Error', 'error');
         }
     } catch (err) {
         console.error('訂閱操作失敗:', err);
         showToast(t('networkError'), 'error');
+    } finally {
+        // 恢復按鈕狀態
+        btn.disabled = false;
+        btn.style.opacity = '1';
     }
 }
 

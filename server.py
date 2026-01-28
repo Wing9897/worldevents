@@ -261,6 +261,16 @@ def get_events():
         query += ' AND e.event_type LIKE ?'
         params.append(f'%{event_type}%')
     
+    # 關鍵字過濾（搜尋名稱和描述）
+    keywords = request.args.get('keywords')
+    if keywords:
+        # 支持多個關鍵字（逗號分隔），所有關鍵字必須匹配
+        keyword_list = [k.strip() for k in keywords.split(',') if k.strip()]
+        for kw in keyword_list:
+            query += ' AND (e.name LIKE ? OR e.description LIKE ?)'
+            params.append(f'%{kw}%')
+            params.append(f'%{kw}%')
+    
     # 地區過濾（注意：language 欄位存的是地區代碼，非語言代碼）
     language = request.args.get('language')
     if language:
