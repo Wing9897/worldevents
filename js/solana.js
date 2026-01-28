@@ -130,7 +130,8 @@ function prepareEventMemo(eventData) {
         ln: parseFloat(eventData.lng.toFixed(4)),  // longitude (4位小數)
         s: Math.floor(new Date(eventData.start_date).getTime() / 1000), // start timestamp
         ic: eventData.icon || '📍',   // icon
-        lang: eventData.language || 'en' // language (default to en)
+        lang: eventData.language || 'en', // language (default to en)
+        _: Date.now().toString(36) + Math.random().toString(36).substr(2, 4) // unique nonce
     };
 
     // 可選欄位 - 結束時間
