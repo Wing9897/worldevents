@@ -5,7 +5,7 @@ from database import (
     increment_user_event_count, decrement_user_event_count,
     get_user_role, set_user_role,
     subscribe, unsubscribe, get_subscriptions, is_subscribed, get_subscriber_count,
-    get_user_display_name, set_user_display_name, get_user_profile
+    get_user_display_name, set_user_profile, get_user_profile
 )
 from auth import auth_bp, token_required, token_optional
 import os
@@ -23,7 +23,7 @@ except ImportError:
     print("⚠️ Pillow not installed. Images will be saved without compression.")
     print("   Install with: pip install Pillow")
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+app = Flask(__name__)
 CORS(app)
 
 # 註冊認證模組
@@ -184,7 +184,7 @@ def get_events():
     cursor = conn.cursor()
     
     # 構建查詢
-    query = 'SELECT e.*, ul.role as creator_role FROM events e LEFT JOIN user_limits ul ON e.wallet_address = ul.wallet_address WHERE 1=1'
+    query = 'SELECT e.*, ul.role as creator_role, ul.display_name as creator_display_name FROM events e LEFT JOIN user_limits ul ON e.wallet_address = ul.wallet_address WHERE 1=1'
     params = []
     
     # 錢包地址過濾（精確匹配單一錢包，用於查看特定用戶的事件）
@@ -275,15 +275,97 @@ def get_events():
     rows = cursor.fetchall()
     conn.close()
     
-    events = []
-    for row in rows:
-        event = dict(row)
-        # 添加創建者的顯示名稱
-        creator_display_name = get_user_display_name(event.get('wallet_address'))
-        event['creator_display_name'] = creator_display_name
-        events.append(event)
+    events = [dict(row) for row in rows]
     
     return jsonify(events)
+
+# ===== 探索帳號公開 API =====
+@app.route('/api/explore/accounts', methods=['GET'])
+def get_explore_accounts():
+    """公開 API：獲取推薦帳號列表"""
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        
+        # 獲取所有具有特殊角色的帳號 (official, verified, community, institution)
+        # 及訂閱人數最多的普通用戶
+        # 接收搜尋參數
+        search_query = request.args.get('q', '').strip()
+        params = []
+        
+        sql = '''
+            SELECT 
+                ul.wallet_address,
+                ul.role,
+                ul.display_name,
+                ul.avatar_path,
+                ul.event_count,
+                (SELECT COUNT(*) FROM subscriptions s WHERE s.target_wallet = ul.wallet_address) as subscriber_count
+            FROM user_limits ul
+            WHERE 1=1
+        '''
+        
+        # 搜尋模式：允許搜尋任何用戶
+        if search_query:
+            sql += " AND (ul.display_name LIKE ? OR ul.wallet_address LIKE ?)"
+            params.extend([f'%{search_query}%', f'%{search_query}%'])
+        else:
+            # 非搜尋模式：只顯示推薦帳號（特殊角色或有訂閱）
+            sql += """ AND (ul.role IN ('official', 'verified', 'community', 'institution')
+               OR (SELECT COUNT(*) FROM subscriptions s WHERE s.target_wallet = ul.wallet_address) > 0)"""
+            
+        sql += '''
+            ORDER BY 
+                CASE ul.role
+                    WHEN 'official' THEN 1
+                    WHEN 'verified' THEN 2
+                    WHEN 'institution' THEN 3
+                    WHEN 'community' THEN 4
+                    ELSE 5
+                END,
+                subscriber_count DESC
+            LIMIT 50
+        '''
+        
+        cursor.execute(sql, params)
+        
+        rows = cursor.fetchall()
+        conn.close()
+        
+        accounts = [dict(row) for row in rows]
+        
+        return jsonify({'accounts': accounts})
+    except Exception as e:
+        print(f"Explore API Error: {e}")
+        return jsonify({'accounts': [], 'error': str(e)}), 500
+
+def validate_event_data(data):
+    """驗證事件輸入數據"""
+    # 驗證必填欄位
+    required = ['name', 'lat', 'lng', 'date', 'user']
+    for field in required:
+        if field not in data:
+            return f'缺少必填欄位: {field}'
+
+    # 驗證欄位長度與格式
+    name = data.get('name', '')
+    description = data.get('description', '')
+    storage_mode = data.get('storage_mode', 'local')
+
+    if len(name) > 100:
+        return '事件名稱過長 (Max 100)'
+    
+    if storage_mode == 'onchain':
+        if len(name) > 50:
+            return '上鏈事件名稱限制 50 字'
+        if len(description) > 100:
+             return '上鏈事件描述限制 100 字'
+    else:
+        # 本地模式
+        if len(description) > 2000:
+            return '描述過長 (Max 2000)'
+            
+    return None
 
 @app.route('/api/events', methods=['POST'])
 @token_required
@@ -295,11 +377,10 @@ def create_event():
     # 從 JWT Token 獲取已認證的錢包地址
     wallet_address = request.wallet_address
 
-    # 驗證必填欄位
-    required = ['name', 'lat', 'lng', 'date', 'user']
-    for field in required:
-        if field not in data:
-            return jsonify({'error': f'缺少必填欄位: {field}'}), 400
+    # 調用驗證 Helper
+    error = validate_event_data(data)
+    if error:
+        return jsonify({'error': error}), 400
 
     # 檢查用戶配額
     current_count = get_user_event_count(wallet_address)
@@ -493,33 +574,39 @@ def get_profile():
 @app.route('/api/profile', methods=['PUT'])
 @token_required
 def update_profile():
-    """更新用戶資料（目前只支援 display_name）"""
+    """更新用戶資料（display_name, avatar_path）"""
     wallet_address = request.wallet_address
     data = request.get_json()
     
-    display_name = data.get('display_name', '').strip()
+    display_name = data.get('display_name')
+    if display_name is not None:
+        display_name = display_name.strip()
+        if display_name == '':
+            display_name = None # Clear name
+            
+    avatar_path = data.get('avatar_path')
+    # avatar_path can be None (no change), empty string (remove?), or valid path
     
-    # 允許空字串（清除名稱）
-    if display_name == '':
-        display_name = None
+    set_user_profile(wallet_address, display_name=display_name, avatar_path=avatar_path)
     
-    set_user_display_name(wallet_address, display_name)
+    # Fetch updated profile to return
+    updated_profile = get_user_profile(wallet_address)
     
     return jsonify({
         'success': True,
-        'display_name': display_name
+        'profile': updated_profile
     })
 
 @app.route('/api/user/<wallet_address>', methods=['GET'])
 def get_user_info(wallet_address):
     """獲取指定用戶的公開資料"""
-    display_name = get_user_display_name(wallet_address)
-    role = get_user_role(wallet_address)
+    profile = get_user_profile(wallet_address)
     
     return jsonify({
         'wallet_address': wallet_address,
-        'display_name': display_name,
-        'role': role
+        'display_name': profile.get('display_name'),
+        'role': profile.get('role'),
+        'avatar_path': profile.get('avatar_path')
     })
 
 # ===== 訂閱相關 API =====

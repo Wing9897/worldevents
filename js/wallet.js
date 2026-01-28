@@ -3,16 +3,6 @@
  * Phantom 錢包連接、認證、狀態管理
  */
 
-// ===== Phantom 錢包檢查 =====
-function checkPhantomWallet() {
-    // 只檢查 Phantom 是否可用，不自動登入
-    // 用戶需要手動點擊「連接錢包」並簽名才能登入
-    if (!window.solana || !window.solana.isPhantom) {
-        // Phantom 錢包未安裝 - 無需日誌
-    }
-    // 不做任何自動連接，等待用戶手動點擊
-}
-
 // ===== 連接 Phantom 錢包 =====
 async function connectPhantom() {
     if (!window.solana || !window.solana.isPhantom) {

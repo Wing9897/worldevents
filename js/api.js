@@ -2,6 +2,7 @@
  * API 請求工具
  * 封裝帶認證的 HTTP 請求與 Token 管理
  */
+'use strict';
 
 /**
  * 帶認證的 fetch 請求

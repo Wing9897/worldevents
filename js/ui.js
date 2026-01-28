@@ -159,13 +159,7 @@ async function copyToClipboard(text) {
  * @returns {string}
  */
 
-/**
- * 縮短錢包地址顯示
- * @param {string} address - 完整地址
- * @param {number} startLen - 開頭保留長度
- * @param {number} endLen - 結尾保留長度
- * @returns {string}
- */
+
 function shortenAddress(address, startLen = 6, endLen = 4) {
     if (!address || address.length <= startLen + endLen) return address;
     return `${address.slice(0, startLen)}...${address.slice(-endLen)}`;
@@ -508,8 +502,8 @@ document.addEventListener('DOMContentLoaded', () => {
  * 初始化打賞按鈕
  */
 function initTipButton() {
-    const tipBtn = document.getElementById('cardTipBtn');
-    const tipOptions = document.getElementById('tipOptions');
+    const tipBtn = elements.cardTipBtn;
+    const tipOptions = elements.tipOptions;
 
     if (!tipBtn || !tipOptions) return;
 
@@ -560,13 +554,13 @@ function initTipButton() {
 
     // 點擊外部關閉
     document.addEventListener('click', (e) => {
-        if (!document.getElementById('tipDropdown')?.contains(e.target)) {
+        if (!elements.tipDropdown?.contains(e.target)) {
             tipOptions.classList.add('hidden');
         }
     });
 
     // 分享到 X 按鈕
-    const shareBtn = document.getElementById('cardShareBtn');
+    const shareBtn = elements.cardShareBtn;
     if (shareBtn) {
         shareBtn.addEventListener('click', () => {
             const eventName = shareBtn.dataset.eventName || '';

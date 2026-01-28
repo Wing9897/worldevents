@@ -2,6 +2,7 @@
  * Solana 區塊鏈整合
  * 支援 Mainnet / Devnet / Testnet 網路切換
  */
+'use strict';
 
 // Solana 網路配置
 const SOLANA_NETWORKS = {
@@ -55,7 +56,7 @@ function setSolanaNetwork(network) {
     if (SOLANA_NETWORKS[network]) {
         currentNetwork = network;
         solanaConnection = null; // 重置連接以使用新的 RPC
-        console.log(`[Solana] 已切換至 ${SOLANA_NETWORKS[network].name}`);
+        // console.log(`[Solana] 已切換至 ${SOLANA_NETWORKS[network].name}`);
         return true;
     }
     console.error(`[Solana] 未知網路: ${network}`);

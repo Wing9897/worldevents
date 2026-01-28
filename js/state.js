@@ -24,8 +24,6 @@ let isPanelCollapsed = false;
 
 // ===== 訂閱狀態 =====
 let selectedSubscriptions = [];
-let allRecommendedAccounts = [];
-let shownRecommendedCount = 0;
 
 /**
  * 從 localStorage 恢復狀態

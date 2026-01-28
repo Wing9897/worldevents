@@ -3,18 +3,11 @@
  * 訂閱列表、推薦帳號、訂閱/取消訂閱操作
  */
 
-// ===== 打開訂閱管理 Modal =====
-async function openSubscriptionsModal() {
-    elements.subscriptionsModal.classList.remove('hidden');
+// ===== 載入訂閱數據 =====
+async function loadSubscriptionsData() {
     elements.subscriptionsLoading.classList.remove('hidden');
     elements.subscriptionsList.innerHTML = '';
-    elements.recommendedList.innerHTML = '';
     elements.subscriptionsEmpty.classList.add('hidden');
-    elements.recommendedEmpty.classList.add('hidden');
-
-    if (elements.recommendedLoadMore) {
-        elements.recommendedLoadMore.classList.add('hidden');
-    }
 
     // 從 localStorage 恢復選定的訂閱
     const savedSubscriptions = localStorage.getItem('selectedSubscriptions');
@@ -34,15 +27,6 @@ async function openSubscriptionsModal() {
         } else {
             elements.subscriptionsEmpty.classList.remove('hidden');
         }
-
-        // 處理推薦帳號（分頁）
-        if (data.recommended && data.recommended.length > 0) {
-            allRecommendedAccounts = data.recommended;
-            shownRecommendedCount = 0;
-            loadMoreRecommended();
-        } else {
-            elements.recommendedEmpty.classList.remove('hidden');
-        }
     } catch (err) {
         console.error('載入訂閱列表失敗:', err);
         elements.subscriptionsLoading.classList.add('hidden');
@@ -50,29 +34,9 @@ async function openSubscriptionsModal() {
     }
 }
 
-// ===== 加載更多推薦 =====
-function loadMoreRecommended() {
-    const nextBatch = allRecommendedAccounts.slice(shownRecommendedCount, shownRecommendedCount + RECOMMENDED_BATCH_SIZE);
-
-    if (nextBatch.length > 0) {
-        const html = generateAccountsHTML(nextBatch, false);
-        elements.recommendedList.insertAdjacentHTML('beforeend', html);
-        shownRecommendedCount += nextBatch.length;
-    }
-
-    // 控制加載更多按鈕顯示
-    if (elements.recommendedLoadMore) {
-        if (shownRecommendedCount < allRecommendedAccounts.length) {
-            elements.recommendedLoadMore.classList.remove('hidden');
-        } else {
-            elements.recommendedLoadMore.classList.add('hidden');
-        }
-    }
-}
-
 // ===== 關閉訂閱管理 Modal =====
 function closeSubscriptionsModal() {
-    elements.subscriptionsModal.classList.add('hidden');
+    elements.managementModal.classList.add('hidden');
 }
 
 // ===== 生成帳號 HTML =====
@@ -154,14 +118,6 @@ function initSubscriptionListListeners() {
         elements.subscriptionsList.removeEventListener('click', handleAction);
         elements.subscriptionsList.addEventListener('click', handleAction);
     }
-
-    if (elements.recommendedList) {
-        elements.recommendedList.addEventListener('click', handleAction);
-    }
-
-    if (elements.loadMoreRecommendedBtn) {
-        elements.loadMoreRecommendedBtn.addEventListener('click', loadMoreRecommended);
-    }
 }
 
 // ===== 快速訂閱 =====
@@ -223,11 +179,11 @@ async function handleUnsubscribe(targetWallet) {
 // ===== 手動訂閱 =====
 async function handleManualSubscribe() {
     const input = elements.subscribeWalletInput;
-    const walletAddress = input.value.trim();
+    const targetWalletAddr = input.value.trim();
 
-    if (!walletAddress) return;
+    if (!targetWalletAddr) return;
 
-    if (walletAddress.length < 32 || walletAddress.length > 44) {
+    if (targetWalletAddr.length < 32 || targetWalletAddr.length > 44) {
         showToast(t('invalidWalletAddress', 'Invalid wallet address'), 'error');
         return;
     }
@@ -236,7 +192,7 @@ async function handleManualSubscribe() {
         const response = await authenticatedFetch(`${API_BASE}/subscribe`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ target_wallet: walletAddress })
+            body: JSON.stringify({ target_wallet: targetWalletAddr })
         });
 
         const data = await response.json();
@@ -245,8 +201,8 @@ async function handleManualSubscribe() {
             showToast(t('subscribeSuccess', 'Subscribed successfully'), 'success');
             input.value = '';
 
-            if (!selectedSubscriptions.includes(walletAddress)) {
-                selectedSubscriptions.push(walletAddress);
+            if (!selectedSubscriptions.includes(targetWalletAddr)) {
+                selectedSubscriptions.push(targetWalletAddr);
                 localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));
             }
 
@@ -263,12 +219,8 @@ async function handleManualSubscribe() {
 // ===== 應用訂閱過濾 =====
 function applySubscriptionFilter() {
     const subscriptionCheckboxes = elements.subscriptionsList.querySelectorAll('.subscription-checkbox:checked');
-    const recommendedCheckboxes = elements.recommendedList.querySelectorAll('.subscription-checkbox:checked');
 
-    const allChecked = [
-        ...Array.from(subscriptionCheckboxes).map(cb => cb.dataset.wallet),
-        ...Array.from(recommendedCheckboxes).map(cb => cb.dataset.wallet)
-    ];
+    const allChecked = Array.from(subscriptionCheckboxes).map(cb => cb.dataset.wallet);
 
     selectedSubscriptions = allChecked;
     localStorage.setItem('selectedSubscriptions', selectedSubscriptions.join(','));

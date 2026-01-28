@@ -55,8 +55,6 @@
         </div>
 
         <!-- 語言選擇器已移至 walletInfo -->
-        <div class="navbar-center"></div>
-
         <div class="navbar-wallet">
             <!-- 緊湊型語言選擇器 -->
             <div class="lang-compact" id="langCompact">
@@ -264,18 +262,23 @@
 
         <!-- 地圖區域 -->
         <!-- 視圖切換按鈕 -->
-        <!-- 視圖切換按鈕 -->
         <div class="view-toggle" id="viewToggle">
-            <button class="view-btn active" id="mapViewBtn" data-view="map" title="地圖視圖">
+            <button class="view-btn active" id="mapViewBtn" data-view="map" data-i18n-title="mapView" title="地圖視圖">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
             </button>
-            <button class="view-btn" id="listViewBtn" data-view="list" title="列表視圖">
+            <button class="view-btn" id="listViewBtn" data-view="list" data-i18n-title="listView" title="列表視圖">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+            </button>
+            <button class="view-btn" id="exploreViewBtn" data-view="explore" data-i18n-title="exploreView" title="探索帳號">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                 </svg>
             </button>
         </div>
@@ -298,6 +301,31 @@
             </div>
             <div class="event-grid" id="eventGrid">
                 <!-- 事件卡片由 JS 動態生成 -->
+            </div>
+        </div>
+
+        <!-- 探索帳號視圖 -->
+        <div class="explore-view-container hidden" id="exploreView">
+            <div class="explore-view-header">
+                <div class="explore-header">
+                    <h2 data-i18n="exploreAccounts">⭐ 探索帳號</h2>
+                    <div class="explore-search-container">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input type="text" id="exploreSearchInput" data-i18n-placeholder="searchUserOrAddress"
+                            placeholder="搜尋用戶或地址..." class="search-input">
+                    </div>
+                </div>
+                <span class="account-count" id="exploreAccountCount"></span>
+            </div>
+            <div id="exploreLoading" class="loading-spinner hidden">Loading...</div>
+            <div class="account-grid" id="accountGrid">
+                <!-- 帳號卡片由 JS 動態生成 -->
+            </div>
+            <div id="exploreEmpty" class="empty-state hidden" data-i18n="noRecommendedAccounts">
+                暫無推薦帳號
             </div>
         </div>
     </main>
@@ -677,8 +705,21 @@
                 <!-- 個人資料分頁 -->
                 <div id="profileTabContent" class="tab-content active">
                     <div class="profile-section">
+                        <div class="profile-avatar" id="currentAvatarBtn">
+                            <img id="profileAvatarImg" src="" alt="Avatar" class="hidden">
+                            <span id="profileAvatarEmoji">👤</span>
+                            <div class="avatar-upload-overlay">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <input type="file" id="avatarUploadInput" accept="image/*" class="hidden">
                         <div class="profile-name-row">
-                            <span id="displayNameText" class="profile-name-display" data-i18n="noNameSet">未設定名稱</span>
                             <span id="displayNameText" class="profile-name-display" data-i18n="noNameSet">未設定名稱</span>
                             <button id="editNameBtn" class="icon-btn" title="編輯">
                                 <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
@@ -704,6 +745,7 @@
                                 </svg>
                             </button>
                         </div>
+                        <div id="profileWallet" class="profile-wallet" title="點擊複製"></div>
                     </div>
                 </div>
 
@@ -749,29 +791,8 @@
                         </div>
                     </div>
 
-                    <!-- 推薦帳號 -->
-                    <div class="subscriptions-section">
-                        <div class="section-header">
-                            <span class="section-icon">
-                                <svg class="icon-svg" style="width:18px;height:18px;" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 01-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                                </svg>
-                            </span>
-                            <span data-i18n="recommendedAccounts">推薦帳號</span>
-                        </div>
-                        <div id="recommendedList" class="subscriptions-list">
-                            <!-- 推薦帳號將動態插入這裡 -->
-                        </div>
-                        <div id="recommendedLoadMore" class="load-more-container hidden">
-                            <button id="loadMoreRecommendedBtn" class="btn btn-secondary btn-sm"
-                                data-i18n="loadMore">加載更多</button>
-                        </div>
-                        <div id="recommendedEmpty" class="empty-hint hidden">
-                            暫無推薦
-                        </div>
-                    </div>
+                    <!-- 推薦帳號 (已移至探索視圖) -->
+                    <!-- Removed Recommended Accounts Section -->
                 </div>
             </div>
 
@@ -801,20 +822,21 @@
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
     <!-- 模組化 JS -->
-    <script src="js/config.js?v=2"></script>
-    <script src="js/i18n.js?v=2"></script>
-    <script src="js/state.js?v=2"></script>
-    <script src="js/dom.js?v=2"></script>
-    <script src="js/ui.js?v=2"></script>
-    <script src="js/api.js?v=2"></script>
-    <script src="js/solana.js?v=2"></script>
-    <script src="js/map.js?v=2"></script>
-    <script src="js/wallet.js?v=2"></script>
-    <script src="js/forms.js?v=2"></script>
-    <script src="js/events.js?v=2"></script>
-    <script src="js/myevents.js?v=2"></script>
-    <script src="js/subscription.js?v=2"></script>
-    <script src="js/social.js?v=2"></script>
+    <script src="js/config.js?v=release"></script>
+    <script src="js/i18n.js?v=release"></script>
+    <script src="js/state.js?v=release"></script>
+    <script src="js/dom.js?v=release"></script>
+    <script src="js/ui.js?v=release"></script>
+    <script src="js/api.js?v=release"></script>
+    <script src="js/solana.js?v=release"></script>
+    <script src="js/map.js?v=release"></script>
+    <script src="js/wallet.js?v=release"></script>
+    <script src="js/forms.js?v=release"></script>
+    <script src="js/events.js?v=release"></script>
+    <script src="js/myevents.js?v=release"></script>
+    <script src="js/subscription.js?v=release"></script>
+    <script src="js/explore.js?v=release"></script>
+    <script src="js/social.js?v=release"></script>
 
     <!-- Confetti Logic -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>

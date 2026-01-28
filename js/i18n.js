@@ -135,6 +135,9 @@ const I18N = {
         manageSubscriptions: '📋 訂閱管理',
         mySubscriptions: '我的訂閱',
         recommendedAccounts: '推薦帳號',
+        exploreView: '探索帳號',
+        exploreAccounts: '探索帳號',
+        noRecommendedAccounts: '暫無推薦帳號',
         noSubscriptions: '尚無訂閱的帳號',
         confirmUnsubscribe: '確定要取消訂閱此帳號嗎？',
         loadMore: '加載更多',
@@ -144,9 +147,8 @@ const I18N = {
         storageOnchainDesc: '永久記錄在 Solana 區塊鏈 (字數限制)',
         storageLocal: '本地儲存',
         storageLocalDesc: '儲存在伺服器資料庫 (大容量)',
-        noSubscriptions: '尚無訂閱的帳號',
-        confirmUnsubscribe: '確定要取消訂閱此帳號嗎？',
         unsubscribeSuccess: '取消訂閱成功',
+        searchUserOrAddress: '搜尋用戶或地址...',
 
         // IPFS
         ipfsImage: 'IPFS 圖片',

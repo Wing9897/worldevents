@@ -427,7 +427,6 @@
 }
 
 /* Navbar Icon Buttons */
-/* Navbar Icon Buttons */
 .icon-only-btn {
     padding: 0;
     width: 38px;
@@ -449,18 +448,6 @@
 .icon-only-btn svg {
     width: 22px;
     height: 22px;
-}
-
-/* Ensure wallet address text doesn't overflow */
-.wallet-address-full {
-    font-family: 'Inter', monospace;
-    font-size: 0.85rem;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 /* ===== 主容器 ===== */
@@ -494,29 +481,14 @@
     transition: left var(--transition-normal), transform var(--transition-fast);
 }
 
-.panel-toggle:hover {
-    background: var(--accent-gradient);
-}
-
-.toggle-icon {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    transition: transform var(--transition-normal);
-}
-
-.panel-toggle:hover .toggle-icon {
-    color: white;
-}
-
-.panel-toggle.collapsed {
+body.sidebar-collapsed .panel-toggle {
     left: 0;
 }
 
-.panel-toggle.collapsed .toggle-icon {
+body.sidebar-collapsed .toggle-icon {
     transform: rotate(180deg);
 }
 
-/* ===== 過濾器面板 ===== */
 /* ===== 過濾器面板 (Floating Glass) ===== */
 .filter-panel {
     position: absolute;
@@ -539,8 +511,8 @@
     transition: transform var(--transition-normal), opacity var(--transition-normal);
 }
 
-.filter-panel.collapsed {
-    margin-left: calc(-1 * var(--panel-width));
+body.sidebar-collapsed .filter-panel {
+    transform: translateX(calc(-1 * (var(--panel-width) + 40px)));
     opacity: 0;
     pointer-events: none;
 }
@@ -789,22 +761,25 @@
     flex: 1;
     padding: var(--spacing-xl);
     padding-top: 100px;
-    /* Increased to clear navbar nicely */
     padding-left: calc(var(--panel-width) + 40px);
-    /* Push content to right of panel */
     overflow-y: auto;
     background: var(--bg-primary);
     width: 100%;
+    transition: padding-left var(--transition-normal);
 }
+
+body.sidebar-collapsed .list-view-container {
+    padding-left: 40px;
+}
+
+
 
 .event-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: var(--spacing-xl);
     max-width: 1400px;
-    /* Limit max width for readability */
     margin: 0 auto;
-    /* Center the grid */
 }
 
 /* Mobile responsive adjustment */
@@ -812,6 +787,10 @@
     .list-view-container {
         padding-left: var(--spacing-xl);
         /* On smaller screens, allow overlap or rely on toggle */
+    }
+
+    .main-container.sidebar-collapsed .list-view-container {
+        padding-left: var(--spacing-xl);
     }
 }
 
@@ -1008,7 +987,7 @@
 }
 
 /* 側欄折疊時隱藏社交圖標 */
-.filter-panel.collapsed .social-links {
+body.sidebar-collapsed .social-links {
     display: none;
 }
 
@@ -1019,16 +998,257 @@
     vertical-align: middle;
 }
 
-.label-with-icon {
+/* ===== 探索視圖 ===== */
+.explore-view-container {
+    padding: var(--spacing-xl);
+    padding-top: 100px;
+    /* Clear Navbar */
+    padding-left: calc(var(--panel-width) + 40px);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    transition: padding-left var(--transition-normal);
+    /* Smooth dynamic layout */
+}
+
+/* Sidebar Collapsed State for Explore View */
+body.sidebar-collapsed .explore-view-container {
+    padding-left: 40px;
+    /* Expand to fill space */
+}
+
+@media (max-width: 1024px) {
+    .explore-view-container {
+        padding-left: var(--spacing-xl);
+    }
+
+    body.sidebar-collapsed .explore-view-container {
+        padding-left: var(--spacing-xl);
+    }
+}
+
+.explore-view-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.explore-header {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+/* 探索搜索欄 */
+.explore-search-container {
+    position: relative;
+    width: 320px;
+}
+
+.explore-search-container .search-input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-glass);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.explore-search-container .search-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    background: var(--bg-primary);
+}
+
+.explore-search-container .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
     color: var(--text-secondary);
+    pointer-events: none;
+}
+
+/* 帳號網格 (Equal Height) */
+.account-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.account-card {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all var(--transition-normal);
+    position: relative;
+    height: 100%;
+    /* Force equal height */
+}
+
+.account-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-primary);
+}
+
+.account-card-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    width: 100%;
+    flex: 1;
+    /* Push footer down */
+}
+
+.account-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+    border: 3px solid var(--bg-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.account-avatar-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: var(--spacing-sm);
+    border: 3px solid var(--bg-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.account-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.account-wallet {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: monospace;
+    background: var(--bg-secondary);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.account-role {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
     font-weight: 600;
+    margin-top: 8px;
+}
+
+.account-role.user {
+    display: none;
+}
+
+.account-role.official {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.account-role.verified {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.account-role.institution {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+}
+
+.account-role.community {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.account-card-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    width: 100%;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
     font-size: 0.9rem;
-    margin-bottom: var(--spacing-xs);
-    cursor: help;
-    /* Hint that it has a tooltip */
+    font-weight: 500;
+}
+
+.btn-subscribe-card {
+    width: 100%;
+    padding: 10px;
+    border-radius: 50px;
+    font-weight: 600;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-subscribe-card:hover {
+    background: var(--accent-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Event Grid Layout Fix */
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+    align-items: start;
+    /* Prevent stretching if content differs wildly, though flex col usually handles it */
+}
+
+/* Adjust Empty State */
+.list-empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
 }
 
 /* Adjust button text for compact view */
@@ -1143,7 +1363,7 @@
         /* Highlight when collapsed (to open) */
     }
 
-    .panel-toggle.collapsed .toggle-icon {
+    body.sidebar-collapsed .panel-toggle .toggle-icon {
         /* Collapsed (Panel Hidden) -> Icon Right (>). Rotate -90 -> Up (^) to open */
         transform: rotate(-90deg);
         color: white;
