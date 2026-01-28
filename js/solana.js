@@ -330,6 +330,12 @@ async function sendTip(recipientWallet, amountSOL) {
             throw new Error(t('errorTipAmountTooSmall', 'Tip amount must be > 0'));
         }
 
+        // 強制創建新連接（避免舊連接快取問題）
+        const freshConnection = new solanaWeb3.Connection(
+            SOLANA_CONFIG.RPC_URL,
+            { commitment: 'confirmed', confirmTransactionInitialTimeout: 60000 }
+        );
+
         // 創建轉帳指令
         const transaction = new solanaWeb3.Transaction().add(
             solanaWeb3.SystemProgram.transfer({
@@ -340,19 +346,20 @@ async function sendTip(recipientWallet, amountSOL) {
         );
 
         // 獲取最新區塊哈希
-        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
+        const { blockhash, lastValidBlockHeight } = await freshConnection.getLatestBlockhash('finalized');
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = window.solana.publicKey;
 
         // 簽名並發送
         const signedTransaction = await window.solana.signTransaction(transaction);
-        const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
-            skipPreflight: false,
-            preflightCommitment: 'confirmed'
+        const signature = await freshConnection.sendRawTransaction(signedTransaction.serialize(), {
+            skipPreflight: true,  // 跳過預檢避免重複交易錯誤
+            preflightCommitment: 'confirmed',
+            maxRetries: 3
         });
 
         // 等待確認
-        const confirmation = await connection.confirmTransaction({
+        const confirmation = await freshConnection.confirmTransaction({
             signature,
             blockhash,
             lastValidBlockHeight
