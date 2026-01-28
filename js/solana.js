@@ -186,25 +186,32 @@ async function publishEventToSolana(eventData) {
             throw new Error('事件數據過大，請縮短描述或減少標籤');
         }
 
+        // 強制創建新連接（避免舊連接快取問題）
+        const freshConnection = new solanaWeb3.Connection(
+            SOLANA_CONFIG.RPC_URL,
+            { commitment: 'confirmed', confirmTransactionInitialTimeout: 60000 }
+        );
+
         // 創建交易
         const transaction = new solanaWeb3.Transaction();
         transaction.add(createMemoInstruction(memoContent));
 
         // 獲取最新區塊哈希
-        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
+        const { blockhash, lastValidBlockHeight } = await freshConnection.getLatestBlockhash('finalized');
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = window.solana.publicKey;
 
         // 使用 signTransaction + sendRawTransaction
         const signedTransaction = await window.solana.signTransaction(transaction);
 
-        const signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
-            skipPreflight: false,
-            preflightCommitment: 'confirmed'
+        const signature = await freshConnection.sendRawTransaction(signedTransaction.serialize(), {
+            skipPreflight: true,  // 跳過預檢避免重複交易錯誤
+            preflightCommitment: 'confirmed',
+            maxRetries: 3
         });
 
         // 等待確認
-        const confirmation = await connection.confirmTransaction({
+        const confirmation = await freshConnection.confirmTransaction({
             signature,
             blockhash,
             lastValidBlockHeight
