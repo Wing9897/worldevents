@@ -564,10 +564,21 @@ function initTipButton() {
     if (shareBtn) {
         shareBtn.addEventListener('click', () => {
             const eventName = shareBtn.dataset.eventName || '';
-            const shareText = `${eventName} - World Events Dashboard`;
-            const shareUrl = window.location.href;
+            const eventDesc = shareBtn.dataset.eventDesc || '';
+            const eventDate = shareBtn.dataset.eventDate || '';
+            const eventLat = shareBtn.dataset.eventLat || '';
+            const eventLng = shareBtn.dataset.eventLng || '';
+
+            // 構建分享文字
+            let shareText = `🌍 ${eventName}`;
+            if (eventDate) shareText += `\n📅 ${eventDate}`;
+            if (eventLat && eventLng) shareText += `\n📍 ${eventLat}, ${eventLng}`;
+            if (eventDesc) shareText += `\n\n${eventDesc.substring(0, 100)}${eventDesc.length > 100 ? '...' : ''}`;
+            shareText += `\n\n#WorldEvents #Solana`;
+
+            const shareUrl = window.location.origin;
             const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
-            window.open(twitterUrl, '_blank', 'width=600,height=400');
+            window.open(twitterUrl, '_blank', 'width=600,height=500');
         });
     }
 }

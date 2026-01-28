@@ -3,6 +3,9 @@
  * 公開顯示推薦帳號，無需登入即可查看
  */
 
+// 緩存訂閱狀態
+let subscribedWallets = new Set();
+
 // ===== 載入推薦帳號 =====
 async function loadExploreAccounts(query = '') {
     const loading = document.getElementById('exploreLoading');
@@ -17,6 +20,17 @@ async function loadExploreAccounts(query = '') {
     empty.classList.add('hidden');
 
     try {
+        // 如果已登入，先獲取訂閱列表
+        if (walletAddress && accessToken) {
+            try {
+                const subResponse = await authenticatedFetch(`${API_BASE}/subscriptions`);
+                const subData = await subResponse.json();
+                subscribedWallets = new Set((subData.subscriptions || []).map(s => s.wallet_address));
+            } catch (e) {
+                console.warn('獲取訂閱列表失敗:', e);
+            }
+        }
+
         // 公開 API，無需認證
         const url = query
             ? `${API_BASE}/explore/accounts?q=${encodeURIComponent(query)}`
@@ -90,6 +104,20 @@ function renderExploreAccounts(accounts, container) {
             ? `<img class="account-avatar-img" src="${escapeHtml(account.avatar_path)}" alt="avatar" onerror="this.outerHTML='<span class=\\'account-avatar\\'>👤</span>'">`
             : '<span class="account-avatar">👤</span>';
 
+        // 檢查是否已訂閱
+        const isSubscribed = subscribedWallets.has(account.wallet_address);
+        const isOwnAccount = walletAddress === account.wallet_address;
+
+        // 按鈕狀態
+        let buttonHtml = '';
+        if (isOwnAccount) {
+            buttonHtml = ''; // 不顯示訂閱按鈕給自己
+        } else if (isSubscribed) {
+            buttonHtml = `<button class="btn btn-subscribe-card subscribed" data-wallet="${account.wallet_address}">${t('subscribed', '已訂閱')}</button>`;
+        } else {
+            buttonHtml = `<button class="btn btn-subscribe-card" data-wallet="${account.wallet_address}">${t('subscribe', '訂閱')}</button>`;
+        }
+
         card.innerHTML = `
             <div class="account-card-header">
                 ${avatarHtml}
@@ -113,28 +141,36 @@ function renderExploreAccounts(accounts, container) {
                     ${account.subscriber_count || 0} ${t('subscribers', '訂閱者')}
                 </span>
             </div>
-            <button class="btn btn-subscribe-card" data-wallet="${account.wallet_address}">
-                ${t('subscribe', '訂閱')}
-            </button>
+            ${buttonHtml}
         `;
 
-        // 訂閱按鈕事件
+        // 訂閱/取消訂閱按鈕事件
         const subscribeBtn = card.querySelector('.btn-subscribe-card');
-        subscribeBtn.addEventListener('click', () => handleExploreSubscribe(account.wallet_address));
+        if (subscribeBtn) {
+            subscribeBtn.addEventListener('click', () => handleExploreSubscribe(account.wallet_address, subscribeBtn));
+        }
 
         container.appendChild(card);
     });
 }
 
-// ===== 處理訂閱 =====
-async function handleExploreSubscribe(targetWallet) {
+// ===== 處理訂閱/取消訂閱 =====
+async function handleExploreSubscribe(targetWallet, btn) {
     if (!walletAddress) {
         showToast(t('pleaseConnectWallet'), 'error');
         return;
     }
 
+    // 防止重複點擊
+    if (btn.disabled) return;
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+
+    const isSubscribed = btn.classList.contains('subscribed');
+    const endpoint = isSubscribed ? '/unsubscribe' : '/subscribe';
+
     try {
-        const response = await authenticatedFetch(`${API_BASE}/subscribe`, {
+        const response = await authenticatedFetch(`${API_BASE}${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ target_wallet: targetWallet })
@@ -143,15 +179,26 @@ async function handleExploreSubscribe(targetWallet) {
         const data = await response.json();
 
         if (data.success) {
-            showToast(t('subscribeSuccess', 'Subscribed!'), 'success');
-            // 重新載入以更新按鈕狀態
-            loadExploreAccounts();
+            if (isSubscribed) {
+                btn.classList.remove('subscribed');
+                btn.textContent = t('subscribe', '訂閱');
+                subscribedWallets.delete(targetWallet);
+                showToast(t('unsubscribe', '取消訂閱') + ' ✓', 'success');
+            } else {
+                btn.classList.add('subscribed');
+                btn.textContent = t('subscribed', '已訂閱');
+                subscribedWallets.add(targetWallet);
+                showToast(t('subscribe', '訂閱') + ' ✓', 'success');
+            }
         } else {
             showToast(data.error || t('subscribeFailed'), 'error');
         }
     } catch (err) {
-        console.error('訂閱失敗:', err);
+        console.error('訂閱操作失敗:', err);
         showToast(t('subscribeFailed'), 'error');
+    } finally {
+        btn.disabled = false;
+        btn.style.opacity = '1';
     }
 }
 
