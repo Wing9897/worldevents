@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:,">
     <title>World Events Dashboard</title>
-    <meta name="description" content="互�?式�??�地?��?件追蹤系統�?使用 Phantom ?��??�入">
+    <meta name="description" content="互動式世界地圖事件追蹤系統，使用 Phantom 錢包登入">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- 模�???CSS -->
+    <!-- 模組化 CSS -->
     <link rel="stylesheet" href="css/variables.css?v=release3">
     <link rel="stylesheet" href="css/base.css?v=release3">
 
@@ -32,7 +32,7 @@
 </head>
 
 <body>
-    <!-- ?�部導航�?-->
+    <!-- 頂部導航欄 -->
     <header class="navbar">
         <div class="navbar-brand">
             <div class="logo-wrapper">
@@ -41,10 +41,10 @@
                         d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <h1 data-i18n="title">世�?事件 Dashboard</h1>
+            <h1 data-i18n="title">世界事件 Dashboard</h1>
 
-            <!-- ?��?主�??��? -->
-            <button class="theme-toggle" id="themeToggle" data-i18n-title="toggleTheme" title="?��??��?主�?">
+            <!-- 地圖主題切換 -->
+            <button class="theme-toggle" id="themeToggle" data-i18n-title="toggleTheme" title="切換地圖主題">
                 <span class="theme-icon" id="themeIcon">
                     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -54,11 +54,11 @@
             </button>
         </div>
 
-        <!-- 語�??��??�已移至 walletInfo -->
+        <!-- 語言選擇器已移至 walletInfo -->
         <div class="navbar-wallet">
-            <!-- 緊�??��?言?��???-->
+            <!-- 緊湊型語言選擇器 -->
             <div class="lang-compact" id="langCompact">
-                <button class="lang-btn-compact" id="langBtnCompact" data-i18n-title="selectLanguage" title="?��?語�?">
+                <button class="lang-btn-compact" id="langBtnCompact" data-i18n-title="selectLanguage" title="選擇語言">
                     <img class="flag-icon-sm" id="currentFlagCompact" src="" alt="" />
                 </button>
                 <div class="lang-dropdown-compact hidden" id="langDropdownCompact"></div>
@@ -74,17 +74,17 @@
                 <span data-i18n="connectWalletShort">Connect</span>
             </button>
             <div id="walletInfo" class="wallet-info hidden">
-                <span id="walletAddress" class="wallet-address-full" data-i18n-title="clickToCopy" title="點�?複製"></span>
+                <span id="walletAddress" class="wallet-address-full" data-i18n-title="clickToCopy" title="點擊複製"></span>
                 <span id="eventLimit" class="event-limit"></span>
                 <button id="myEventsBtn" class="btn btn-outline hidden icon-only-btn" data-i18n-title="managementCenter"
-                    title="管�?中�?">
+                    title="管理中心">
                     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </button>
                 <button id="disconnectWallet" class="btn btn-ghost icon-only-btn" data-i18n-title="disconnect"
-                    title="?��???��">
+                    title="斷開連接">
                     <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -94,10 +94,10 @@
         </div>
     </header>
 
-    <!-- 主�??�容?� -->
+    <!-- 主要內容區 -->
     <main class="main-container">
-        <!-- ?�濾?�面?�收起�???-->
-        <button class="panel-toggle" id="panelToggle" data-i18n-title="toggleFilterPanel" title="?�起/展�??�濾??>
+        <!-- 過濾器面板收起按鈕 -->
+        <button class="panel-toggle" id="panelToggle" data-i18n-title="toggleFilterPanel" title="收起/展開過濾器">
             <span class="toggle-icon" id="toggleIcon">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -105,7 +105,7 @@
             </span>
         </button>
 
-        <!-- ?�濾?�面??-->
+        <!-- 過濾器面板 -->
         <aside class="filter-panel" id="filterPanel">
             <div class="panel-header">
                 <h2 data-i18n="filters" style="display:flex;align-items:center;gap:8px;">
@@ -125,34 +125,34 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <!-- <span data-i18n="timeRange">?��?範�?</span> -->
+                    <!-- <span data-i18n="timeRange">時間範圍</span> -->
                 </div>
                 <div class="quick-dates">
-                    <button class="quick-btn" data-range="1h" data-i18n="hour1">1小�?</button>
-                    <button class="quick-btn" data-range="3h" data-i18n="hour3">3小�?</button>
-                    <button class="quick-btn" data-range="6h" data-i18n="hour6">6小�?</button>
-                    <button class="quick-btn" data-range="12h" data-i18n="hour12">12小�?</button>
+                    <button class="quick-btn" data-range="1h" data-i18n="hour1">1小時</button>
+                    <button class="quick-btn" data-range="3h" data-i18n="hour3">3小時</button>
+                    <button class="quick-btn" data-range="6h" data-i18n="hour6">6小時</button>
+                    <button class="quick-btn" data-range="12h" data-i18n="hour12">12小時</button>
                     <button class="quick-btn active" data-range="today" data-i18n="today">今日</button>
                 </div>
                 <div class="quick-dates">
-                    <button class="quick-btn" data-range="week" data-i18n="week">?��?/button>
-                    <button class="quick-btn" data-range="month" data-i18n="month">?��?</button>
-                    <button class="quick-btn" data-range="year" data-i18n="year">?�年</button>
-                    <button class="quick-btn" data-range="all" data-i18n="all">?�部</button>
+                    <button class="quick-btn" data-range="week" data-i18n="week">本週</button>
+                    <button class="quick-btn" data-range="month" data-i18n="month">本月</button>
+                    <button class="quick-btn" data-range="year" data-i18n="year">本年</button>
+                    <button class="quick-btn" data-range="all" data-i18n="all">全部</button>
                 </div>
                 <div class="date-inputs">
                     <div class="date-field">
-                        <span class="date-label" data-i18n="from">�?/span>
+                        <span class="date-label" data-i18n="from">從</span>
                         <div class="date-input-wrapper">
                             <input type="datetime-local" id="startDate" class="input date-input" required>
-                            <span class="date-placeholder" data-i18n="selectDateTime">?��??��??��?</span>
+                            <span class="date-placeholder" data-i18n="selectDateTime">選擇日期時間</span>
                         </div>
                     </div>
                     <div class="date-field">
-                        <span class="date-label" data-i18n="to">??/span>
+                        <span class="date-label" data-i18n="to">至</span>
                         <div class="date-input-wrapper">
                             <input type="datetime-local" id="endDate" class="input date-input" required>
-                            <span class="date-placeholder" data-i18n="selectDateTime">?��??��??��?</span>
+                            <span class="date-placeholder" data-i18n="selectDateTime">選擇日期時間</span>
                         </div>
                     </div>
                 </div>
@@ -166,8 +166,8 @@
                     </svg>
                 </div>
                 <select id="dateFilterMode" class="input">
-                    <option value="start" data-i18n="modeStart">?��???/option>
-                    <option value="end" data-i18n="modeEnd">結�???/option>
+                    <option value="start" data-i18n="modeStart">開始於</option>
+                    <option value="end" data-i18n="modeEnd">結束於</option>
                 </select>
             </div>
 
@@ -181,8 +181,8 @@
                 <div class="region-selector" id="regionSelector">
                     <button class="region-btn" id="regionBtn">
                         <img class="flag-icon" id="currentRegionFlag" src="" alt="" />
-                        <span id="currentRegionName" data-i18n="allRegions">?�部?��?</span>
-                        <span class="dropdown-arrow">??/span>
+                        <span id="currentRegionName" data-i18n="allRegions">全部地區</span>
+                        <span class="dropdown-arrow">▼</span>
                     </button>
                     <div class="region-dropdown hidden" id="regionDropdown"></div>
                 </div>
@@ -196,8 +196,8 @@
                     </svg>
                 </div>
                 <input type="text" id="eventTypeFilter" class="input" data-i18n-placeholder="keywordsPlaceholder"
-                    data-i18n-placeholder="keywordsPlaceholder" placeholder="輸入?�鍵�?..">
-                <p class="filter-hint" data-i18n="keywordsHint">多個�??��??�逗�??��?</p>
+                    data-i18n-placeholder="keywordsPlaceholder" placeholder="輸入關鍵字...">
+                <p class="filter-hint" data-i18n="keywordsHint">多個關鍵字用逗號分隔</p>
             </div>
 
             <div class="filter-group">
@@ -208,9 +208,9 @@
                     </svg>
                 </div>
                 <select id="onchainFilter" class="input">
-                    <option value="all" data-i18n="filterAll">?�部</option>
-                    <option value="onchain" data-i18n="filterOnchain">已�???/option>
-                    <option value="local" data-i18n="filterLocal">?�本??/option>
+                    <option value="all" data-i18n="filterAll">全部</option>
+                    <option value="onchain" data-i18n="filterOnchain">已上鏈</option>
+                    <option value="local" data-i18n="filterLocal">僅本地</option>
                 </select>
             </div>
 
@@ -222,10 +222,10 @@
                     </svg>
                 </div>
                 <select id="sourceFilter" class="input">
-                    <option value="all" data-i18n="filterAll">?�部</option>
-                    <option value="subscribed" data-i18n="sourceSubscribed">已�???/option>
-                    <option value="official" data-i18n="sourceOfficial">官方/認�?</option>
-                    <option value="my" data-i18n="sourceMy">?��?事件</option>
+                    <option value="all" data-i18n="filterAll">全部</option>
+                    <option value="subscribed" data-i18n="sourceSubscribed">已訂閱</option>
+                    <option value="official" data-i18n="sourceOfficial">官方/認證</option>
+                    <option value="my" data-i18n="sourceMy">我的事件</option>
                 </select>
             </div>
 
@@ -238,12 +238,12 @@
                     </svg>
                 </div>
                 <input type="text" id="creatorFilter" class="input" data-i18n-placeholder="creatorPlaceholder"
-                    placeholder="輸入?�稱?�錢?�地?�...">
+                    placeholder="輸入名稱或錢包地址...">
             </div>
 
-            <button id="applyFilters" class="btn btn-primary btn-block" data-i18n="applyFilters">套用?�濾??/button>
+            <button id="applyFilters" class="btn btn-primary btn-block" data-i18n="applyFilters">套用過濾器</button>
 
-            <!-- ?��?事件?��? -->
+            <!-- 新增事件按鈕 -->
             <div class="add-event-section">
                 <button id="showAddEvent" class="btn btn-accent btn-block" disabled data-i18n="addEvent"
                     style="display:flex;align-items:center;justify-content:center;gap:8px;">
@@ -251,31 +251,31 @@
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    ?��?事件
+                    新增事件
                 </button>
-                <p class="add-event-hint" data-i18n="addEventHint">??��?��?後�??�鍵?��??�直?�新增�?�?/p>
+                <p class="add-event-hint" data-i18n="addEventHint">連接錢包後，右鍵地圖可直接新增事件</p>
             </div>
 
-            <!-- 社交媒�???? (??JS ?��??��?) -->
+            <!-- 社交媒體連結 (由 JS 動態生成) -->
             <div id="socialLinks" class="social-links"></div>
         </aside>
 
-        <!-- ?��??�??-->
-        <!-- 視�??��??��? -->
+        <!-- 地圖區域 -->
+        <!-- 視圖切換按鈕 -->
         <div class="view-toggle" id="viewToggle">
-            <button class="view-btn active" id="mapViewBtn" data-view="map" data-i18n-title="mapView" title="?��?視�?">
+            <button class="view-btn active" id="mapViewBtn" data-view="map" data-i18n-title="mapView" title="地圖視圖">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                 </svg>
             </button>
-            <button class="view-btn" id="listViewBtn" data-view="list" data-i18n-title="listView" title="?�表視�?">
+            <button class="view-btn" id="listViewBtn" data-view="list" data-i18n-title="listView" title="列表視圖">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                 </svg>
             </button>
-            <button class="view-btn" id="exploreViewBtn" data-view="explore" data-i18n-title="exploreView" title="?�索帳�?">
+            <button class="view-btn" id="exploreViewBtn" data-view="explore" data-i18n-title="exploreView" title="探索帳號">
                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -283,54 +283,54 @@
             </button>
         </div>
 
-        <!-- ?��?視�? -->
+        <!-- 地圖視圖 -->
         <div class="map-container" id="mapView">
             <div id="map"></div>
 
-            <!-- ?�鍵?�建事件?��?位置?��?（簡潔�?�?-->
+            <!-- 右鍵創建事件時的位置指針（簡潔版） -->
             <div id="locationMarker" class="location-marker hidden">
                 <div class="marker-dot"></div>
             </div>
         </div>
 
-        <!-- ?�表視�? -->
+        <!-- 列表視圖 -->
         <div class="list-view-container hidden" id="listView">
             <div class="list-view-header">
-                <h2 data-i18n="eventList">?? 事件?�表</h2>
+                <h2 data-i18n="eventList">📋 事件列表</h2>
                 <span class="event-count" id="listEventCount">0 事件</span>
             </div>
             <div class="event-grid" id="eventGrid">
-                <!-- 事件?��???JS ?��??��? -->
+                <!-- 事件卡片由 JS 動態生成 -->
             </div>
         </div>
 
-        <!-- ?�索帳�?視�? -->
+        <!-- 探索帳號視圖 -->
         <div class="explore-view-container hidden" id="exploreView">
             <div class="explore-view-header">
                 <div class="explore-header">
-                    <h2 data-i18n="exploreAccounts">�??�索帳�?</h2>
+                    <h2 data-i18n="exploreAccounts">⭐ 探索帳號</h2>
                     <div class="explore-search-container">
                         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         <input type="text" id="exploreSearchInput" data-i18n-placeholder="searchUserOrAddress"
-                            placeholder="?��??�戶?�地?�..." class="search-input">
+                            placeholder="搜尋用戶或地址..." class="search-input">
                     </div>
                 </div>
                 <span class="account-count" id="exploreAccountCount"></span>
             </div>
             <div id="exploreLoading" class="loading-spinner hidden">Loading...</div>
             <div class="account-grid" id="accountGrid">
-                <!-- 帳�??��???JS ?��??��? -->
+                <!-- 帳號卡片由 JS 動態生成 -->
             </div>
             <div id="exploreEmpty" class="empty-state hidden" data-i18n="noRecommendedAccounts">
-                ?�無?�薦帳�?
+                暫無推薦帳號
             </div>
         </div>
     </main>
 
-    <!-- ?�鍵?�單 -->
+    <!-- 右鍵選單 -->
     <div id="contextMenu" class="context-menu hidden">
         <div class="context-coords" id="contextCoords">
             <span class="coords-label" data-i18n="lat">緯度</span>: <span id="contextLat">0.0000</span>
@@ -345,17 +345,17 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                 </span>
-                <span data-i18n="addEventHere">?�此位置?��?事件</span>
+                <span data-i18n="addEventHere">在此位置新增事件</span>
             </div>
         </div>
     </div>
 
-    <!-- 事件詳�??��? -->
+    <!-- 事件詳情卡片 -->
     <div id="eventCard" class="event-card hidden">
-        <button id="closeCard" class="card-close">??/button>
-        <!-- 事件?��? -->
+        <button id="closeCard" class="card-close">✕</button>
+        <!-- 事件圖片 -->
         <div class="card-image hidden" id="cardImage">
-            <img id="cardImg" src="" alt="事件?��?">
+            <img id="cardImg" src="" alt="事件圖片">
         </div>
         <div class="card-header">
             <h3 id="cardTitle"></h3>
@@ -408,9 +408,9 @@
             </div>
             <p id="cardDescription" class="card-description"></p>
             <div class="card-end-time" id="cardEndTimeRow">
-                <!-- ?��?填�?，由 JavaScript ?��?多�?言 -->
+                <!-- 動態填充，由 JavaScript 處理多語言 -->
             </div>
-            <!-- Solana 交�???? -->
+            <!-- Solana 交易連結 -->
             <div class="card-solana-tx hidden" id="cardSolanaTx">
                 <a id="cardSolanaTxLink" href="" target="_blank" class="solana-tx-link">
                     <span class="solana-icon">
@@ -419,7 +419,7 @@
                                 d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7zm263.5-82.7c-2.4 2.4-5.7 3.8-9.2 3.8H1.6c-5.8 0-8.7-7-4.6-11.1l62.7-62.7c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7zM64.6 3.8C67 1.4 70.3 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" />
                         </svg>
                     </span>
-                    <span data-i18n="viewOnSolana">??Solana Explorer ?��?</span>
+                    <span data-i18n="viewOnSolana">在 Solana Explorer 查看</span>
                 </a>
                 <span class="poe-badge" title="Proof of Event: Immutable on-chain record">
                     <svg class="icon-svg"
@@ -431,7 +431,7 @@
                     PoE Verified
                 </span>
             </div>
-            <!-- 訂閱?��??�??-->
+            <!-- 訂閱按鈕區域 -->
             <div class="card-creator-actions" id="cardCreatorActions">
                 <div class="creator-info">
                     <span class="creator-role-badge" id="cardCreatorRole"></span>
@@ -441,7 +441,7 @@
                     <button id="cardSubscribeBtn" class="btn btn-subscribe" data-wallet="">
                         <span data-i18n="subscribe">訂閱</span>
                     </button>
-                    <!-- ?��??��? -->
+                    <!-- 打賞按鈕 -->
                     <div class="tip-dropdown" id="tipDropdown">
                         <button id="cardTipBtn" class="btn btn-tip" data-wallet="">
                             <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -449,7 +449,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                             </svg>
-                            <span data-i18n="tip">?��?</span>
+                            <span data-i18n="tip">打賞</span>
                         </button>
                         <div class="tip-options hidden" id="tipOptions">
                             <button class="tip-option" data-amount="0.0001">0.0001 SOL</button>
@@ -459,7 +459,7 @@
                             <button class="tip-option" data-amount="0.1">0.1 SOL</button>
                         </div>
                     </div>
-                    <!-- ?�享??X ?��? -->
+                    <!-- 分享到 X 按鈕 -->
                     <button id="cardShareBtn" class="btn btn-share" title="Share to X">
                         <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor" stroke="none">
                             <path
@@ -471,7 +471,7 @@
         </div>
     </div>
 
-    <!-- ?��?事件彈�? -->
+    <!-- 新增事件彈窗 -->
     <div id="addEventModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -481,18 +481,18 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    ?��?事件
+                    新增事件
                 </h3>
-                <button id="closeModal" class="card-close">??/button>
+                <button id="closeModal" class="card-close">✕</button>
             </div>
             <form id="addEventForm" class="modal-form">
                 <div class="form-group">
-                    <label data-i18n="eventName">事件?�稱 * <span class="char-limit onchain-only">(?��?0�?</span></label>
+                    <label data-i18n="eventName">事件名稱 * <span class="char-limit onchain-only">(最多50字)</span></label>
                     <input type="text" id="eventName" class="input" required
                         data-i18n-placeholder="eventNamePlaceholder">
                 </div>
                 <div class="form-group">
-                    <label data-i18n="description">?�述 <span class="char-limit onchain-only">(?��?00�?</span></label>
+                    <label data-i18n="description">描述 <span class="char-limit onchain-only">(最多100字)</span></label>
                     <textarea id="eventDescription" class="input textarea"
                         data-i18n-placeholder="eventDescPlaceholder"></textarea>
                 </div>
@@ -507,10 +507,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="startDateTime">?��??��??��???*</label>
+                    <label data-i18n="startDateTime">開始日期與時間 *</label>
                     <div class="datetime-input-wrapper">
                         <input type="datetime-local" id="eventStartDate" class="input" required lang="en">
-                        <button type="button" class="datetime-btn" id="openStartDatePicker" title="?��??��??��?"
+                        <button type="button" class="datetime-btn" id="openStartDatePicker" title="選擇開始時間"
                             data-i18n-title="selectStartTime">
                             <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2">
@@ -521,10 +521,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="endDateTime">結�??��??��???(?�選)</label>
+                    <label data-i18n="endDateTime">結束日期與時間 (可選)</label>
                     <div class="datetime-input-wrapper">
                         <input type="datetime-local" id="eventEndDate" class="input" lang="en">
-                        <button type="button" class="datetime-btn" id="openEndDatePicker" title="?��?結�??��?"
+                        <button type="button" class="datetime-btn" id="openEndDatePicker" title="選擇結束時間"
                             data-i18n-title="selectEndTime">
                             <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2">
@@ -535,36 +535,36 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label data-i18n="keywords">?�鍵字�?�?/label>
+                    <label data-i18n="keywords">關鍵字標籤</label>
                     <input type="text" id="eventTags" class="input" data-i18n-placeholder="tagsPlaceholder"
-                        placeholder="?�議, 科�?, ?�塊�?...">
-                    <p class="filter-hint" data-i18n="keywordsHint">?�逗�??��?多個�??��?</p>
+                        placeholder="會議, 科技, 區塊鏈...">
+                    <p class="filter-hint" data-i18n="keywordsHint">用逗號分隔多個關鍵字</p>
                 </div>
                 <div class="form-group hidden">
-                    <label data-i18n="region">?��?</label>
+                    <label data-i18n="region">地區</label>
                     <input type="hidden" id="eventLanguage" value="en">
                 </div>
 
-                <!-- ?��??��???-->
+                <!-- 圖標選擇器 -->
                 <div class="form-group">
-                    <label data-i18n="selectIcon">?��??��?</label>
+                    <label data-i18n="selectIcon">選擇圖標</label>
                     <div class="icon-picker" id="iconPicker">
-                        <!-- ??JavaScript ?��? -->
+                        <!-- 由 JavaScript 生成 -->
                     </div>
-                    <input type="hidden" id="eventIcon" value="??">
+                    <input type="hidden" id="eventIcon" value="📍">
                 </div>
 
-                <!-- IPFS ?��? -->
+                <!-- IPFS 圖片 -->
                 <div class="form-group">
-                    <label data-i18n="ipfsImage">IPFS ?��?</label>
+                    <label data-i18n="ipfsImage">IPFS 圖片</label>
                     <input type="text" id="eventIpfsHash" class="input" placeholder="Qm... or bafy..."
                         data-i18n-placeholder="ipfsPlaceholder">
-                    <p class="filter-hint" data-i18n="ipfsHint">?�援 IPFS hash，�??��?永�?存儲?�去中�??�網�?/p>
+                    <p class="filter-hint" data-i18n="ipfsHint">支援 IPFS hash，圖片將永久存儲在去中心化網絡</p>
                 </div>
 
-                <!-- ?��?上傳 -->
+                <!-- 圖片上傳 -->
                 <div class="form-group">
-                    <label data-i18n="uploadImage">上傳?��? <span class="quota-info" id="imageQuotaInfo"></span></label>
+                    <label data-i18n="uploadImage">上傳圖片 <span class="quota-info" id="imageQuotaInfo"></span></label>
                     <div class="image-upload-area" id="imageUploadArea">
                         <input type="file" id="eventImage" accept="image/*" class="hidden">
                         <div class="upload-placeholder" id="uploadPlaceholder">
@@ -577,19 +577,19 @@
                                         d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                             </span>
-                            <span data-i18n="clickToUpload">點�??��??��??��???/span>
+                            <span data-i18n="clickToUpload">點擊或拖拽上傳圖片</span>
                         </div>
                         <div class="image-preview hidden" id="imagePreview">
-                            <img id="previewImg" src="" alt="?�覽">
-                            <button type="button" class="remove-image" id="removeImage">??/button>
+                            <img id="previewImg" src="" alt="預覽">
+                            <button type="button" class="remove-image" id="removeImage">✕</button>
                         </div>
                     </div>
                     <input type="hidden" id="eventImagePath" value="">
                 </div>
 
-                <!-- ?��?模�??��? -->
+                <!-- 儲存模式選擇 -->
                 <div class="form-group storage-mode-group">
-                    <label data-i18n="storageMode">?��?模�?</label>
+                    <label data-i18n="storageMode">儲存模式</label>
                     <div class="storage-mode-options">
                         <label class="storage-option">
                             <input type="radio" name="storageMode" value="onchain" checked>
@@ -602,8 +602,8 @@
                                     </svg>
                                 </span>
                                 <span class="option-text">
-                                    <strong data-i18n="storageOnchain">上�??��?</strong>
-                                    <small data-i18n="storageOnchainDesc">永�?記�???Solana ?�塊�? (字數?�制)</small>
+                                    <strong data-i18n="storageOnchain">上鏈儲存</strong>
+                                    <small data-i18n="storageOnchainDesc">永久記錄在 Solana 區塊鏈 (字數限制)</small>
                                 </span>
                             </span>
                         </label>
@@ -618,23 +618,23 @@
                                     </svg>
                                 </span>
                                 <span class="option-text">
-                                    <strong data-i18n="storageLocal">?�地?��?</strong>
-                                    <small data-i18n="storageLocalDesc">?��??�伺?�器資�?�?(大容??</small>
+                                    <strong data-i18n="storageLocal">本地儲存</strong>
+                                    <small data-i18n="storageLocalDesc">儲存在伺服器資料庫 (大容量)</small>
                                 </span>
                             </span>
                         </label>
                     </div>
                 </div>
 
-                <!-- 網路?��?（�?上�?模�??�顯示�? -->
+                <!-- 網路選擇（僅上鏈模式時顯示） -->
                 <div class="form-group network-selector-group" id="networkSelectorGroup">
-                    <label data-i18n="selectNetwork">?��?網路</label>
+                    <label data-i18n="selectNetwork">選擇網路</label>
                     <select id="networkSelector" class="input">
-                        <option value="devnet" data-i18n="networkDevnet">?�� Devnet (Testing)</option>
-                        <option value="mainnet" data-i18n="networkMainnet">?? Mainnet (Production)</option>
-                        <option value="testnet" data-i18n="networkTestnet">?�� Testnet</option>
+                        <option value="devnet" data-i18n="networkDevnet">🧪 Devnet (Testing)</option>
+                        <option value="mainnet" data-i18n="networkMainnet">🌐 Mainnet (Production)</option>
+                        <option value="testnet" data-i18n="networkTestnet">🔬 Testnet</option>
                     </select>
-                    <p class="filter-hint" id="networkHint" data-i18n="networkHint">Devnet 使用測試 SOL，無?�?�實費用</p>
+                    <p class="filter-hint" id="networkHint" data-i18n="networkHint">Devnet 使用測試 SOL，無需真實費用</p>
                 </div>
 
                 <div class="location-info" id="locationInfo">
@@ -645,11 +645,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </span>
-                    <span id="locationText" data-i18n="locationNotSelected">尚未?��?位置</span>
+                    <span id="locationText" data-i18n="locationNotSelected">尚未選擇位置</span>
                 </div>
                 <div class="form-actions">
-                    <button type="button" id="cancelAdd" class="btn btn-ghost" data-i18n="cancel">?��?</button>
-                    <button type="submit" class="btn btn-primary" data-i18n="create">?�建事件</button>
+                    <button type="button" id="cancelAdd" class="btn btn-ghost" data-i18n="cancel">取消</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="create">創建事件</button>
                 </div>
             </form>
         </div>
@@ -657,7 +657,7 @@
 
     </div>
 
-    <!-- 統�?管�?中�? Modal -->
+    <!-- 統一管理中心 Modal -->
     <div id="managementModal" class="modal hidden">
         <div class="modal-content management-modal">
             <div class="modal-header">
@@ -668,12 +668,12 @@
                             d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    管�?中�?
+                    管理中心
                 </h3>
-                <button id="closeManagementModal" class="card-close">??/button>
+                <button id="closeManagementModal" class="card-close">✕</button>
             </div>
 
-            <!-- ?��?標籤 -->
+            <!-- 分頁標籤 -->
             <div class="management-tabs">
                 <button class="tab-btn active" data-tab="profile">
                     <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
@@ -681,7 +681,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <span data-i18n="profileTab">?�人資�?</span>
+                    <span data-i18n="profileTab">個人資料</span>
                 </button>
                 <button class="tab-btn" data-tab="myevents">
                     <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
@@ -689,7 +689,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
-                    <span data-i18n="myEventsTab">?��?事件</span>
+                    <span data-i18n="myEventsTab">我的事件</span>
                 </button>
                 <button class="tab-btn" data-tab="subscriptions">
                     <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
@@ -697,17 +697,17 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
-                    <span data-i18n="subscriptionsTab">訂閱管�?</span>
+                    <span data-i18n="subscriptionsTab">訂閱管理</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                <!-- ?�人資�??��? -->
+                <!-- 個人資料分頁 -->
                 <div id="profileTabContent" class="tab-content active">
                     <div class="profile-section">
                         <div class="profile-avatar" id="currentAvatarBtn">
                             <img id="profileAvatarImg" src="" alt="Avatar" class="hidden">
-                            <span id="profileAvatarEmoji">?��</span>
+                            <span id="profileAvatarEmoji">👤</span>
                             <div class="avatar-upload-overlay">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
@@ -720,7 +720,7 @@
                         </div>
                         <input type="file" id="avatarUploadInput" accept="image/*" class="hidden">
                         <div class="profile-name-row">
-                            <span id="displayNameText" class="profile-name-display" data-i18n="noNameSet">?�設定�?�?/span>
+                            <span id="displayNameText" class="profile-name-display" data-i18n="noNameSet">未設定名稱</span>
                             <button id="editNameBtn" class="icon-btn" title="編輯">
                                 <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
@@ -731,40 +731,40 @@
                         </div>
                         <div id="editNameRow" class="profile-name-edit hidden">
                             <input type="text" id="displayNameInput" class="input"
-                                data-i18n-placeholder="displayNamePlaceholder" placeholder="輸入你�??�稱..." maxlength="50">
-                            <button id="saveProfileBtn" class="icon-btn save" title="?��?">
+                                data-i18n-placeholder="displayNamePlaceholder" placeholder="輸入你的名稱..." maxlength="50">
+                            <button id="saveProfileBtn" class="icon-btn save" title="儲存">
                                 <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                             </button>
-                            <button id="cancelEditBtn" class="icon-btn cancel" title="?��?">
+                            <button id="cancelEditBtn" class="icon-btn cancel" title="取消">
                                 <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none"
                                     stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
-                        <div id="profileWallet" class="profile-wallet" title="點�?複製"></div>
+                        <div id="profileWallet" class="profile-wallet" title="點擊複製"></div>
                     </div>
                 </div>
 
-                <!-- ?��?事件?��? -->
+                <!-- 我的事件分頁 -->
                 <div id="myeventsTabContent" class="tab-content">
                     <div id="myEventsLoading" class="loading-spinner hidden">Loading...</div>
                     <div id="myEventsList" class="my-events-list">
-                        <!-- 事件?�表將�??��??�這裡 -->
+                        <!-- 事件列表將動態插入這裡 -->
                     </div>
                     <div id="myEventsEmpty" class="empty-state hidden" data-i18n="noEvents">
-                        尚無建�??��?�?
+                        尚無建立的事件
                     </div>
                 </div>
 
-                <!-- 訂閱管�??��? -->
+                <!-- 訂閱管理分頁 -->
                 <div id="subscriptionsTabContent" class="tab-content">
                     <div id="subscriptionsLoading" class="loading-spinner hidden">Loading...</div>
 
-                    <!-- ?��?訂閱 -->
+                    <!-- 我的訂閱 -->
                     <div class="subscriptions-section">
                         <div class="section-header">
                             <span class="section-icon">
@@ -774,41 +774,41 @@
                                         d="M16 4v12l-4-2-4 2V4M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </span>
-                            <span data-i18n="mySubscriptions">?��?訂閱</span>
+                            <span data-i18n="mySubscriptions">我的訂閱</span>
                         </div>
                         <div class="add-subscription-row">
                             <input type="text" id="subscribeWalletInput" class="input"
-                                data-i18n-placeholder="walletPlaceholder" placeholder="輸入?��??��?...">
+                                data-i18n-placeholder="walletPlaceholder" placeholder="輸入錢包地址...">
                             <button id="addSubscriptionBtn" class="btn btn-primary btn-sm">
                                 <span data-i18n="subscribe">訂閱</span>
                             </button>
                         </div>
                         <div id="subscriptionsList" class="subscriptions-list">
-                            <!-- 訂閱?�表將�??��??�這裡 -->
+                            <!-- 訂閱列表將動態插入這裡 -->
                         </div>
                         <div id="subscriptionsEmpty" class="empty-hint hidden" data-i18n="noSubscriptions">
-                            尚無訂閱?�帳??
+                            尚無訂閱的帳號
                         </div>
                     </div>
 
-                    <!-- ?�薦帳�? (已移?�探索�??? -->
+                    <!-- 推薦帳號 (已移至探索視圖) -->
                     <!-- Removed Recommended Accounts Section -->
                 </div>
             </div>
 
-            <!-- 底部?��?（�??��??��??��? -->
+            <!-- 底部按鈕（訂閱分頁專用） -->
             <div id="subscriptionFooter" class="modal-footer hidden">
-                <button id="cancelSubscriptionFilter" class="btn btn-ghost" data-i18n="cancel">?��?</button>
-                <button id="applySubscriptionFilter" class="btn btn-primary" data-i18n="confirm">確�?</button>
+                <button id="cancelSubscriptionFilter" class="btn btn-ghost" data-i18n="cancel">取消</button>
+                <button id="applySubscriptionFilter" class="btn btn-primary" data-i18n="confirm">確定</button>
             </div>
         </div>
     </div>
 
-    <!-- ?�示訊息 -->
+    <!-- 提示訊息 -->
     <div id="toastContainer" class="toast-container"></div>
     <div id="toast" class="toast hidden"></div>
 
-    <!-- ?��??�大 Lightbox -->
+    <!-- 圖片放大 Lightbox -->
     <div id="lightboxModal" class="lightbox-modal hidden">
         <span class="lightbox-close" id="lightboxClose">&times;</span>
         <img class="lightbox-content" id="lightboxImage">
@@ -821,7 +821,7 @@
     <!-- Solana Web3 -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
-    <!-- 模�???JS -->
+    <!-- 模組化 JS -->
     <script src="js/config.js?v=release3"></script>
     <script src="js/i18n.js?v=release3"></script>
     <script src="js/state.js?v=release3"></script>
@@ -841,7 +841,7 @@
     <!-- Confetti Logic -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <!-- 主�???-->
+    <!-- 主應用 -->
     <script src="app.js"></script>
 </body>
 
