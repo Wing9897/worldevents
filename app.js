@@ -22,11 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (typeof initQuickDates === 'function') initQuickDates(); // js/ui.js
     if (typeof initLangCompact === 'function') initLangCompact(); // js/ui.js
     if (typeof initRegionFilter === 'function') initRegionFilter(); // js/ui.js
-    if (typeof detectBrowserLanguage === 'function') detectBrowserLanguage(); // js/i18n.js or js/ui.js
     if (typeof setDefaultDateRange === 'function') setDefaultDateRange('today'); // js/ui.js
 
     // 3. 恢復狀態與數據
-    restoreSelectedSubscriptions(); // js/subscription.js
+    if (typeof restoreSelectedSubscriptions === 'function') restoreSelectedSubscriptions(); // js/subscription.js
     await loadEvents(); // js/events.js
 
     // 4. 初始化事件監聽
@@ -35,9 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 5. 恢復認證狀態
     if (typeof loadTokensFromStorage === 'function' && await loadTokensFromStorage()) { // js/api.js
         handleWalletConnected(walletAddress); // js/wallet.js
-    } else {
-        checkPhantomWallet(); // js/wallet.js
     }
+    // 如果沒有已存儲的 token，用戶將通過點擊「連接錢包」按鈕手動連接
 });
 
 // ===== 事件監聽器 =====
@@ -76,21 +74,32 @@ function initEventListeners() {
 
     // 訂閱管理 (JS/Subscription.js)
     if (elements.manageSubscriptionsBtn) elements.manageSubscriptionsBtn.addEventListener('click', openSubscriptionsModal);
-    if (elements.closeSubscriptionsModal) elements.closeSubscriptionsModal.addEventListener('click', closeSubscriptionsModal);
-    if (elements.subscriptionsModal) elements.subscriptionsModal.addEventListener('click', (e) => {
-        if (e.target === elements.subscriptionsModal) closeSubscriptionsModal();
-    });
+
     if (elements.applySubscriptionFilter) elements.applySubscriptionFilter.addEventListener('click', applySubscriptionFilter);
     if (elements.cancelSubscriptionFilter) elements.cancelSubscriptionFilter.addEventListener('click', closeSubscriptionsModal);
 
     if (typeof initSubscriptionListListeners === 'function') initSubscriptionListListeners();
 
     // 我的事件 (JS/MyEvents.js)
-    if (elements.myEventsBtn) elements.myEventsBtn.addEventListener('click', openMyEventsModal);
-    if (elements.closeMyEventsModal) elements.closeMyEventsModal.addEventListener('click', closeMyEventsModal);
-    if (elements.myEventsModal) elements.myEventsModal.addEventListener('click', (e) => {
-        if (e.target === elements.myEventsModal) closeMyEventsModal();
-    });
+    // Unified Management Modal (replaces My Events & Subscriptions legacy handlers)
+    if (elements.myEventsBtn) {
+        elements.myEventsBtn.addEventListener('click', () => {
+            if (typeof openManagementModal === 'function') {
+                openManagementModal('myevents');
+            }
+        });
+    }
+
+    // Close button for management modal is handled in myevents.js initProfileEvents()
+
+    // Click outside to close
+    if (elements.managementModal) {
+        elements.managementModal.addEventListener('click', (e) => {
+            if (e.target === elements.managementModal) {
+                elements.managementModal.classList.add('hidden');
+            }
+        });
+    }
 
     // 個人資料（Profile）
     if (typeof initProfileEvents === 'function') initProfileEvents();

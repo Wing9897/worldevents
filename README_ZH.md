@@ -56,7 +56,7 @@
 
 ### 1. 下載與配置
 ```bash
-git clone https://github.com/your-username/worldevents.git
+git clone https://github.com/Wing9897/worldevents.git
 cd worldevents
 
 # 建立環境變數配置

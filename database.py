@@ -30,7 +30,7 @@ def init_db():
     conn = get_db()
     cursor = conn.cursor()
     
-    # 創建事件表
+    # 創建事件表 (完整 Schema)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,28 +47,15 @@ def init_db():
             language TEXT DEFAULT 'en',
             image_path TEXT,
             icon TEXT DEFAULT '📍',
+            tx_signature TEXT,
+            tx_network TEXT,
+            storage_mode TEXT DEFAULT 'local',
+            ipfs_hash TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     
-    # 遷移：添加缺失欄位
-    migrations = [
-        'ALTER TABLE events ADD COLUMN image_path TEXT',
-        "ALTER TABLE events ADD COLUMN icon TEXT DEFAULT '📍'",
-        'ALTER TABLE events ADD COLUMN start_date TEXT',
-        'ALTER TABLE events ADD COLUMN end_date TEXT',
-        'ALTER TABLE events ADD COLUMN tx_signature TEXT',
-        'ALTER TABLE events ADD COLUMN tx_network TEXT',
-        "ALTER TABLE events ADD COLUMN storage_mode TEXT DEFAULT 'local'",
-        'ALTER TABLE events ADD COLUMN ipfs_hash TEXT'
-    ]
-    for migration in migrations:
-        try:
-            cursor.execute(migration)
-        except:
-            pass
-    
-    # 創建用戶配額表
+    # 創建用戶配額表 (完整 Schema)
     cursor.execute(f'''
         CREATE TABLE IF NOT EXISTS user_limits (
             wallet_address TEXT PRIMARY KEY,
@@ -78,24 +65,6 @@ def init_db():
             display_name TEXT
         )
     ''')
-    
-    # 遷移：添加 quota 欄位
-    try:
-        cursor.execute(f'ALTER TABLE user_limits ADD COLUMN quota INTEGER DEFAULT {DEFAULT_USER_QUOTA}')
-    except:
-        pass
-    
-    # 遷移：添加 role 欄位
-    try:
-        cursor.execute("ALTER TABLE user_limits ADD COLUMN role TEXT DEFAULT 'user'")
-    except:
-        pass
-    
-    # 遷移：添加 display_name 欄位
-    try:
-        cursor.execute('ALTER TABLE user_limits ADD COLUMN display_name TEXT')
-    except:
-        pass
     
     # 創建訂閱表
     cursor.execute('''
@@ -109,6 +78,18 @@ def init_db():
     ''')
     
     conn.commit()
+    
+    # 為了兼容舊開發環境，保留一個簡單的遷移檢查 (可選)
+    # 若確定是全新部署，這段其實可以移除。保留以防萬一。
+    try:
+        cursor.execute("ALTER TABLE events ADD COLUMN ipfs_hash TEXT")
+    except:
+        pass
+
+    try:
+        cursor.execute("ALTER TABLE user_limits ADD COLUMN avatar_path TEXT")
+    except:
+        pass
     
     # 同步角色權限 Helper
     def sync_role_from_env(wallet_list, role_name, quota_limit):
@@ -144,6 +125,16 @@ def init_db():
     sync_role_from_env(COMMUNITY_WALLETS, 'community', 200)
     sync_role_from_env(INSTITUTION_WALLETS, 'institution', 500)
     
+    # ===== 性能優化索引 =====
+    try:
+        # 加速 get_explore_accounts 和 get_user_profile
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_user_role ON user_limits(role)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_user_name ON user_limits(display_name)")
+        # 加速訂閱計算
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_sub_target ON subscriptions(target_wallet)")
+    except Exception as e:
+        print(f"Index creation warning: {e}")
+
     conn.commit()
     
     conn.close()
@@ -223,19 +214,30 @@ def get_user_display_name(wallet_address):
     conn.close()
     return row['display_name'] if row and row['display_name'] else None
 
-def set_user_display_name(wallet_address, display_name):
-    """設置用戶顯示名稱"""
-    # 限制名稱長度
-    if display_name and len(display_name) > 50:
-        display_name = display_name[:50]
-    
+def set_user_profile(wallet_address, display_name=None, avatar_path=None):
+    """設置用戶資料 (顯示名稱, 頭像)"""
     conn = get_db()
     cursor = conn.cursor()
+    
+    # Check existing
+    cursor.execute('SELECT display_name, avatar_path FROM user_limits WHERE wallet_address = ?', (wallet_address,))
+    row = cursor.fetchone()
+    
+    current_name = row['display_name'] if row else None
+    current_avatar = row['avatar_path'] if row else None
+    
+    # Determine new values (if None passed, keep existing, unless explicit empty string logic handled by caller)
+    new_name = display_name if display_name is not None else current_name
+    new_avatar = avatar_path if avatar_path is not None else current_avatar
+
+    if new_name and len(new_name) > 50:
+        new_name = new_name[:50]
+    
     cursor.execute('''
-        INSERT INTO user_limits (wallet_address, display_name) 
-        VALUES (?, ?)
-        ON CONFLICT(wallet_address) DO UPDATE SET display_name = ?
-    ''', (wallet_address, display_name, display_name))
+        INSERT INTO user_limits (wallet_address, display_name, avatar_path) 
+        VALUES (?, ?, ?)
+        ON CONFLICT(wallet_address) DO UPDATE SET display_name = ?, avatar_path = ?
+    ''', (wallet_address, new_name, new_avatar, new_name, new_avatar))
     conn.commit()
     conn.close()
     return True
@@ -245,7 +247,7 @@ def get_user_profile(wallet_address):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT wallet_address, event_count, quota, role, display_name 
+        SELECT wallet_address, event_count, quota, role, display_name, avatar_path
         FROM user_limits WHERE wallet_address = ?
     ''', (wallet_address,))
     row = cursor.fetchone()
@@ -257,7 +259,8 @@ def get_user_profile(wallet_address):
             'event_count': row['event_count'],
             'quota': row['quota'],
             'role': row['role'],
-            'display_name': row['display_name']
+            'display_name': row['display_name'],
+            'avatar_path': row['avatar_path']
         }
     else:
         return {
@@ -265,7 +268,8 @@ def get_user_profile(wallet_address):
             'event_count': 0,
             'quota': DEFAULT_USER_QUOTA,
             'role': 'user',
-            'display_name': None
+            'display_name': None,
+            'avatar_path': None
         }
 
 def set_user_role(wallet_address, role):

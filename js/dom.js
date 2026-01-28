@@ -47,10 +47,6 @@ const elements = {
     subscriptionsList: document.getElementById('subscriptionsList'),
     subscriptionsLoading: document.getElementById('subscriptionsLoading'),
     subscriptionsEmpty: document.getElementById('subscriptionsEmpty'),
-    recommendedList: document.getElementById('recommendedList'),
-    recommendedEmpty: document.getElementById('recommendedEmpty'),
-    recommendedLoadMore: document.getElementById('recommendedLoadMore'),
-    loadMoreRecommendedBtn: document.getElementById('loadMoreRecommendedBtn'),
     subscribeWalletInput: document.getElementById('subscribeWalletInput'),
     addSubscriptionBtn: document.getElementById('addSubscriptionBtn'),
     applySubscriptionFilter: document.getElementById('applySubscriptionFilter'),
@@ -94,6 +90,17 @@ const elements = {
     cardCreatorRole: document.getElementById('cardCreatorRole'),
     cardSubscriberCount: document.getElementById('cardSubscriberCount'),
     cardSubscribeBtn: document.getElementById('cardSubscribeBtn'),
+    cardTipBtn: document.getElementById('cardTipBtn'),
+    cardShareBtn: document.getElementById('cardShareBtn'),
+    tipOptions: document.getElementById('tipOptions'),
+    tipDropdown: document.getElementById('tipDropdown'),
+
+    // Event Card Details (New)
+    cardStartDateOnly: document.getElementById('cardStartDateOnly'),
+    cardStartTimeOnly: document.getElementById('cardStartTimeOnly'),
+    cardEndTimeRow: document.getElementById('cardEndTimeRow'),
+    cardSolanaTx: document.getElementById('cardSolanaTx'),
+    cardSolanaTxLink: document.getElementById('cardSolanaTxLink'),
 
     // 圖片上傳 (forms.js)
     iconPicker: document.getElementById('iconPicker'),
@@ -111,10 +118,6 @@ const elements = {
     myEventsList: document.getElementById('myEventsList'),
     myEventsLoading: document.getElementById('myEventsLoading'),
     myEventsEmpty: document.getElementById('myEventsEmpty'),
-
-    // 向後兼容 - 舊名稱映射到新元素
-    get myEventsModal() { return this.managementModal; },
-    get subscriptionsModal() { return this.managementModal; },
 
     // Toast
     toast: document.getElementById('toast')

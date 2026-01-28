@@ -6,7 +6,6 @@ from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 import base58
 import secrets
-import hashlib
 
 auth_bp = Blueprint('auth', __name__)
 

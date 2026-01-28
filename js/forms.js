@@ -2,6 +2,7 @@
  * 表單處理邏輯
  * 包含新增事件、圖片上傳、圖標選擇等
  */
+'use strict';
 
 const Forms = {
     elements: {},
@@ -164,10 +165,10 @@ const Forms = {
                     const supportedRegions = ['tw', 'cn', 'gb', 'us', 'jp', 'kr', 'es', 'fr', 'de', 'br', 'ru'];
                     if (supportedRegions.includes(countryCode)) {
                         els.eventLanguage.value = countryCode;
-                        console.log(`[Auto-Detect] Region set to: ${countryCode}`);
+                        // console.log(`[Auto-Detect] Region set to: ${countryCode}`);
                     } else {
                         els.eventLanguage.value = 'en'; // 默認英語區
-                        console.log(`[Auto-Detect] Region not supported (${countryCode}), defaulting to 'en'`);
+                        // console.log(`[Auto-Detect] Region not supported (${countryCode}), defaulting to 'en'`);
                     }
                 }
             } catch (err) {
@@ -201,6 +202,7 @@ const Forms = {
     async handleAddEvent(e) {
         e.preventDefault();
         const els = this.elements;
+        let beforeUnloadHandler = null;
 
         if (!walletAddress) {
             showToast(t('pleaseConnectWallet'), 'error');
@@ -256,7 +258,7 @@ const Forms = {
                 showToast(t('sendingToSolana'), 'info');
 
                 // 添加頁面離開警告
-                const beforeUnloadHandler = (e) => {
+                beforeUnloadHandler = (e) => {
                     e.preventDefault();
                     e.returnValue = '交易正在進行中，離開可能導致失敗！';
                     return e.returnValue;
@@ -303,6 +305,11 @@ const Forms = {
                     }
                 }
                 serverData.storage_mode = 'local';
+            }
+
+            // 移除頁面離開警告 (確保在發送 API 前移除，或在 finally 移除)
+            if (storageMode === 'onchain') {
+                window.removeEventListener('beforeunload', beforeUnloadHandler);
             }
 
             // 使用 api.js 的 authenticatedFetch
@@ -425,11 +432,8 @@ const Forms = {
         formData.append('image', this.pendingImageFile);
 
         try {
-            const response = await fetch(`${API_BASE}/upload`, {
+            const response = await authenticatedFetch(`${API_BASE}/upload`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                },
                 body: formData
             });
 

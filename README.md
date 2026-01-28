@@ -56,7 +56,7 @@ The easiest way to run the project is using Docker.
 
 ### 1. Clone & Configure
 ```bash
-git clone https://github.com/your-username/worldevents.git
+git clone https://github.com/Wing9897/worldevents.git
 cd worldevents
 
 # Create environment config

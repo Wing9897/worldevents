@@ -115,24 +115,19 @@ function toggleMapTheme() {
 // ===== 面板收起/展開 =====
 function togglePanel() {
     isPanelCollapsed = !isPanelCollapsed;
-    const filterPanel = document.querySelector('.filter-panel');
-    const panelToggle = document.querySelector('.panel-toggle');
 
-    if (filterPanel) {
-        filterPanel.classList.toggle('collapsed', isPanelCollapsed);
-    }
-    if (panelToggle) {
-        panelToggle.classList.toggle('collapsed', isPanelCollapsed);
-    }
+    // Single Source of Truth: Body Class
+    document.body.classList.toggle('sidebar-collapsed', isPanelCollapsed);
 
+    // Update Icon
     if (elements.toggleIcon) {
         elements.toggleIcon.innerHTML = isPanelCollapsed ? ICONS.chevronRight : ICONS.chevronLeft;
     }
 
-    // 等待 CSS 過渡動畫完成後，通知 Leaflet 重新計算地圖尺寸
+    // Leaflet Resize (wait for transition)
     setTimeout(() => {
         if (map) {
             map.invalidateSize();
         }
-    }, 350); // 略大於 CSS transition duration (通常 300ms)
+    }, 350);
 }

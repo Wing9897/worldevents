@@ -2,6 +2,7 @@
  * 事件管理模組
  * 事件載入、顯示、創建、刪除
  */
+'use strict';
 
 // ===== 事件載入 =====
 async function loadEvents() {
@@ -89,9 +90,9 @@ function displayEvents(events) {
 
         const marker = L.marker([event.lat, event.lng], {
             icon: L.divIcon({
-                className: 'custom-marker-svg', // Changed class name
+                className: 'custom-marker-svg',
                 html: eventIcon,
-                iconSize: [30, 30], // Adjusted to 30x30 (User Request: "Smaller again")
+                iconSize: [30, 30],
                 iconAnchor: [15, 30]
             })
         });
@@ -125,9 +126,9 @@ function showEventCard(event) {
     });
 
     // 顯示開始日期和時間
-    const cardStartDateOnly = document.getElementById('cardStartDateOnly');
-    const cardStartTimeOnly = document.getElementById('cardStartTimeOnly');
-    const cardEndTimeRow = document.getElementById('cardEndTimeRow');
+    const cardStartDateOnly = elements.cardStartDateOnly;
+    const cardStartTimeOnly = elements.cardStartTimeOnly;
+    const cardEndTimeRow = elements.cardEndTimeRow;
 
     const startDate = new Date(event.start_date || event.date || event.timestamp);
     const validDate = !isNaN(startDate.getTime());
@@ -200,8 +201,8 @@ function showEventCard(event) {
     }
 
     // 顯示 Solana 交易連結 (如果是上鏈事件)
-    const cardSolanaTx = document.getElementById('cardSolanaTx');
-    const cardSolanaTxLink = document.getElementById('cardSolanaTxLink');
+    const cardSolanaTx = elements.cardSolanaTx;
+    const cardSolanaTxLink = elements.cardSolanaTxLink;
     if (event.tx_signature && event.storage_mode === 'onchain' && cardSolanaTx && cardSolanaTxLink) {
         const network = event.tx_network || 'devnet';
         // Mainnet 不需要 cluster 參數
@@ -215,8 +216,8 @@ function showEventCard(event) {
     }
 
     // 設置打賞按鈕
-    const cardTipBtn = document.getElementById('cardTipBtn');
-    const tipOptions = document.getElementById('tipOptions');
+    const cardTipBtn = elements.cardTipBtn;
+    const tipOptions = elements.tipOptions;
     if (cardTipBtn) {
         cardTipBtn.dataset.wallet = event.wallet_address;
         // 不能打賞自己
@@ -230,7 +231,7 @@ function showEventCard(event) {
     }
 
     // 設置分享按鈕
-    const cardShareBtn = document.getElementById('cardShareBtn');
+    const cardShareBtn = elements.cardShareBtn;
     if (cardShareBtn) {
         cardShareBtn.dataset.eventName = event.name;
         cardShareBtn.dataset.eventId = event.id;
@@ -485,31 +486,53 @@ function renderEventGrid(events) {
 function initViewToggle() {
     const mapViewBtn = document.getElementById('mapViewBtn');
     const listViewBtn = document.getElementById('listViewBtn');
+    const exploreViewBtn = document.getElementById('exploreViewBtn');
     const mapView = document.getElementById('mapView');
     const listView = document.getElementById('listView');
+    const exploreView = document.getElementById('exploreView');
 
     if (!mapViewBtn || !listViewBtn || !mapView || !listView) return;
 
-    function switchToMapView() {
-        mapViewBtn.classList.add('active');
+    function deactivateAllViews() {
+        mapViewBtn.classList.remove('active');
         listViewBtn.classList.remove('active');
-        mapView.classList.remove('hidden');
+        if (exploreViewBtn) exploreViewBtn.classList.remove('active');
+        mapView.classList.add('hidden');
         listView.classList.add('hidden');
+        if (exploreView) exploreView.classList.add('hidden');
+    }
+
+    function switchToMapView() {
+        deactivateAllViews();
+        mapViewBtn.classList.add('active');
+        mapView.classList.remove('hidden');
         // 修復地圖尺寸
         if (map) map.invalidateSize();
     }
 
     function switchToListView() {
+        deactivateAllViews();
         listViewBtn.classList.add('active');
-        mapViewBtn.classList.remove('active');
         listView.classList.remove('hidden');
-        mapView.classList.add('hidden');
         // 重新渲染列表
         renderEventGrid(currentEventsData);
     }
 
+    function switchToExploreView() {
+        deactivateAllViews();
+        if (exploreViewBtn) exploreViewBtn.classList.add('active');
+        if (exploreView) exploreView.classList.remove('hidden');
+        // 載入推薦帳號
+        if (typeof loadExploreAccounts === 'function') {
+            loadExploreAccounts();
+        }
+    }
+
     mapViewBtn.addEventListener('click', switchToMapView);
     listViewBtn.addEventListener('click', switchToListView);
+    if (exploreViewBtn) {
+        exploreViewBtn.addEventListener('click', switchToExploreView);
+    }
 }
 
 // 在 DOMContentLoaded 時初始化

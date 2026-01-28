@@ -14,6 +14,18 @@ function openManagementModal(tab = 'profile') {
     hideEditMode();
     loadProfile();
 
+    // 顯示錢包地址
+    const profileWallet = document.getElementById('profileWallet');
+    if (profileWallet && walletAddress) {
+        const short = walletAddress.substring(0, 8) + '...' + walletAddress.slice(-4);
+        profileWallet.textContent = short;
+        profileWallet.onclick = () => {
+            navigator.clipboard.writeText(walletAddress).then(() => {
+                showToast(t('addressCopied'), 'success');
+            });
+        };
+    }
+
     // 預載入數據
     if (tab === 'myevents') {
         loadMyEvents();
@@ -22,11 +34,7 @@ function openManagementModal(tab = 'profile') {
     }
 }
 
-// 向後兼容舊函數
-function openMyEventsModal() {
-    openManagementModal('profile');
-    loadMyEvents(); // 同時預載入事件
-}
+
 
 function openSubscriptionsModal() {
     openManagementModal('subscriptions');
@@ -58,13 +66,7 @@ function switchTab(tabName) {
     }
 }
 
-// ===== 載入訂閱數據（委託給 subscription.js） =====
-function loadSubscriptionsData() {
-    // 觸發訂閱模組的載入邏輯
-    if (typeof openSubscriptionsModal === 'function') {
-        openSubscriptionsModal();
-    }
-}
+// (Delegated to subscription.js loadSubscriptionsData)
 
 // ===== 載入用戶資料 =====
 async function loadProfile() {
@@ -89,10 +91,25 @@ async function loadProfile() {
                 }
             }
 
+            // 更新頭像
+            const avatarImg = document.getElementById('profileAvatarImg');
+            const avatarEmoji = document.getElementById('profileAvatarEmoji');
+            if (avatarImg && avatarEmoji) {
+                if (profile.avatar_path) {
+                    avatarImg.src = profile.avatar_path;
+                    avatarImg.classList.remove('hidden');
+                    avatarEmoji.classList.add('hidden');
+                } else {
+                    avatarImg.classList.add('hidden');
+                    avatarEmoji.classList.remove('hidden');
+                }
+            }
+
             if (displayNameInput) displayNameInput.value = profile.display_name || '';
 
             // 保存全局
             window.currentUserDisplayName = profile.display_name || null;
+            window.currentUserAvatar = profile.avatar_path || null;
         }
     } catch (err) {
         console.error('載入用戶資料失敗:', err);
@@ -128,16 +145,28 @@ async function saveProfile() {
 
     const displayName = displayNameInput.value.trim();
 
+    // 獲取頭像路徑 (優先使用新上傳的，否則使用舊的)
+    const avatarBtn = document.getElementById('currentAvatarBtn');
+    let avatarPath = window.currentUserAvatar; // 默認舊的
+    if (avatarBtn && avatarBtn.dataset.tempAvatarPath) {
+        avatarPath = avatarBtn.dataset.tempAvatarPath;
+    }
+
     // 禁用按鈕
     saveBtn.disabled = true;
     const originalText = saveBtn.innerHTML;
     saveBtn.innerHTML = '⏳';
 
     try {
+        const payload = {
+            display_name: displayName,
+            avatar_path: avatarPath
+        };
+
         const response = await authenticatedFetch(`${CONFIG.API_BASE}/profile`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ display_name: displayName })
+            body: JSON.stringify(payload)
         });
 
         if (response.ok) {
@@ -157,6 +186,10 @@ async function saveProfile() {
 
             // 更新全局變數
             window.currentUserDisplayName = displayName || null;
+            window.currentUserAvatar = avatarPath || null;
+
+            // 清除暫存
+            if (avatarBtn) delete avatarBtn.dataset.tempAvatarPath;
 
             // 返回顯示模式
             hideEditMode();
@@ -191,6 +224,71 @@ function initProfileEvents() {
         });
     }
 
+    // 頭像上傳
+    const avatarBtn = document.getElementById('currentAvatarBtn');
+    const avatarInput = document.getElementById('avatarUploadInput');
+
+    if (avatarBtn && avatarInput) {
+        avatarBtn.addEventListener('click', () => {
+            // 只有在編輯模式下允許？或者隨時允許？
+            // 當前設計是 profile section 一直顯示，點擊頭像直接換似乎更直覺
+            // 但為了安全，我們可以讓它隨時觸發，但保存需要點擊 Save Profile?
+            // 設計決定：點擊頭像 -> 選圖 -> 上傳 -> 預覽 -> 點擊 Save Profile 才會提交 DB。
+            // 或是：上傳成功後直接存入 DB?
+            // 根據 plan: "Update saveProfile: Include avatar_path in JSON payload."
+            // 所以是：選圖 -> 上傳到 /upload (獲取 path) -> saveProfile 提交 path.
+            avatarInput.click();
+        });
+
+        avatarInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // 顯示上傳中
+            const avatarEmoji = document.getElementById('profileAvatarEmoji');
+            if (avatarEmoji) avatarEmoji.textContent = '⏳';
+
+            // 執行上傳
+            try {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const response = await authenticatedFetch(`${CONFIG.API_BASE}/upload`, {
+                    method: 'POST',
+                    body: formData
+                    // Content-Type header will be set automatically with boundary
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+
+                    // 預覽
+                    const avatarImg = document.getElementById('profileAvatarImg');
+                    if (avatarImg && avatarEmoji) {
+                        avatarImg.src = result.image_path;
+                        avatarImg.classList.remove('hidden');
+                        avatarEmoji.classList.add('hidden');
+                    }
+
+                    // 暫存 path 供 saveProfile 使用 (例如存在 DOM dataset 或全局變數)
+                    avatarBtn.dataset.tempAvatarPath = result.image_path;
+
+                    // 自動進入編輯模式，提示用戶保存
+                    showEditMode();
+
+                    showToast(t('uploadSuccess', 'Upload success'), 'success');
+                } else {
+                    showToast(t('uploadFailed', 'Upload failed'), 'error');
+                    if (avatarEmoji) avatarEmoji.textContent = '👤';
+                }
+            } catch (err) {
+                console.error(err);
+                showToast(t('errorNetwork', 'Network error'), 'error');
+                if (avatarEmoji) avatarEmoji.textContent = '👤';
+            }
+        });
+    }
+
     // 分頁標籤點擊
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -208,11 +306,6 @@ function initProfileEvents() {
 // ===== 關閉管理中心 Modal =====
 function closeManagementModal() {
     elements.managementModal.classList.add('hidden');
-}
-
-// 向後兼容
-function closeMyEventsModal() {
-    closeManagementModal();
 }
 
 // ===== 載入我的事件 =====
@@ -247,6 +340,15 @@ function renderMyEvents(events) {
     events.forEach(event => {
         const item = document.createElement('div');
         item.className = 'my-event-item';
+        item.style.cursor = 'pointer'; // 顯示可點擊手勢
+
+        // 點擊卡片顯示詳情
+        item.onclick = (e) => {
+            // 如果點擊的是刪除按鈕，不觸發詳情
+            if (e.target.closest('.btn-delete')) return;
+            closeManagementModal(); // 自動關閉管理中心
+            showEventCard(event);
+        };
 
         const dateStr = formatDisplayDate(event.date);
 
@@ -273,7 +375,11 @@ function renderMyEvents(events) {
         deleteBtn.className = 'btn-delete';
         deleteBtn.title = t('delete');
         deleteBtn.textContent = '🗑️';
-        deleteBtn.addEventListener('click', () => deleteEvent(event.id, item));
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            deleteEvent(event.id, item);
+        });
 
         item.appendChild(infoDiv);
         item.appendChild(deleteBtn);
@@ -286,7 +392,9 @@ function renderMyEvents(events) {
 async function deleteEvent(eventId, listItem) {
 
     try {
-        if (!window.confirm(t('deleteConfirm'))) {
+        const confirmMsg = t('deleteConfirm') || 'Are you sure?';
+        if (!window.confirm(confirmMsg)) {
+
             return;
         }
     } catch (e) {
