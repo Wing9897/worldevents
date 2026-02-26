@@ -22,7 +22,7 @@ We chose Solana for three critical reasons essential for a **Decentralized Event
 
 1.  **🚫 Censorship Resistance & Proof of Event (PoE)**:
     Events are stored safely on-chain or IPFS, creating an immutable **"Proof of Event"**.
-    > *"Prevents state-level revisionism. Once it's on-chain, history cannot be rewritten."*
+    > *"Once it's on-chain, history cannot be rewritten."*
 
 2.  **💸 Creator Economy (創作者經濟)**:
     Direct **P2P Tipping** with 0% platform fees.
